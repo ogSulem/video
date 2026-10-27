@@ -4,7 +4,7 @@ Production workspace for a premium cinematic commercial for a sports rehabilitat
 
 ## Current status
 
-**Stage 2 — master exterior generated; awaiting user approval.** Exactly one image exists at `references/architecture/REF-ARC-01-master-exterior.png`. No video, character, interior, or equipment assets have been generated. The exterior is not canonical until the user approves it.
+**Stage 3 — master skier generated; awaiting user approval.** The approved canonical exterior is `references/architecture/REF-ARC-01-master-exterior.png`; the single skier reference candidate is `references/characters/REF-CHAR-01-master-skier.png`. No video, injury, rehabilitation, interior, or equipment assets have been generated.
 
 ## Production documents
 

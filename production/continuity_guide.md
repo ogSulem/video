@@ -1,19 +1,21 @@
 # Continuity guide — RETURN TO THE SLOPE
 
-**Status:** Stage 1 proposed continuity rules. Character and architecture are not yet generated or approved.
+**Status:** Stage 2 architecture approved by user. Stage 3 skier reference generated and awaiting user visual approval; do not treat it as locked until approved.
 
-## Master skier — proposed, pending approval
+## Master skier — REF-CHAR-01 candidate
 
-- Male, approximately 32; lean, powerful athletic build; realistic weathered skin; grey-blue eyes; subtle eyebrow scar.
-- Dark navy technical jacket and pants, restrained orange accents, matte black helmet, dark mirrored goggles, black gloves, believable ski boots and alpine skis.
-- Do not generate until Stage 3. Once approved, designate a single approved master reference and preserve it; never silently replace it. Record the approved reference filename/ID and any accepted variations in the asset manifest.
-- Keep facial landmarks, scar, age, build, proportions, hair visibility, kit construction/colors, helmet, goggles, gloves, boots, and ski design stable. Injury-to-return progression changes emotion and performance confidence, not identity or unexplained wardrobe.
-- In rehab scenes, the athlete may remove helmet/goggles as motivated by location; maintain recognizable face and scar. Ski equipment remains only where physically appropriate.
+- Reference image: `references/characters/REF-CHAR-01-master-skier.png` (1376 × 768 PNG). Generated once; awaiting approval.
+- Depicted as one adult male skier, approximately early 30s, realistic athletic build, short light-brown/dark-blond hair, subtle stubble, natural approachable face. No celebrity resemblance intended. Do not add an eyebrow scar or other identifying mark that is not visible in the approved image.
+- Wardrobe in the reference: deep navy technical ski jacket with very restrained orange zipper/trim details; dark charcoal ski pants; matte black helmet; dark reflective goggles resting above the eyes; dark gloves; technically plausible dark ski boots and alpine skis. Two ski poles are also visible. No readable logos or marks.
+- Preserve the depicted face, age impression, body proportions, hair, facial hair, color placement, garment silhouette, helmet, goggles, gloves, boots, skis, and poles consistently in Scene 2 (injury) and Scene 9 (return). Do not redesign between scenes. The emotional change is from pain/disappointment to recovered confidence; identity and recognizable outfit remain the same.
+- Scene 2 may show a safe, non-graphic fall and concern about the knee. Do not add visible injury, damage to gear, or unexplained wardrobe changes. Scene 9 returns to confident skiing in the same recognizable kit and equipment.
+- In rehab scenes, remove helmet/goggles only when motivated by location; preserve facial identity, hair, stubble, and build. Ski equipment appears only where physically appropriate.
+- After explicit user approval, mark REF-CHAR-01 as the canonical character reference. Do not replace or alter the original without explicit approval.
 
 ## Architecture and locations
 
-- Stage 2's approved exterior is the visual source of truth. Do not generate a competing exterior without explicit approval.
-- Keep stone base, dark timber/vertical slats, charcoal steel, glazing rhythm, roofline, entrance, railings, scale, snow conditions, and mountain orientation stable.
+- Stage 2 exterior reference `references/architecture/REF-ARC-01-master-exterior.png` is approved and is the visual source of truth. Reuse this unchanged reference for exterior scenes; do not generate a competing building.
+- Keep its stone base, dark timber/vertical slats, charcoal steel, glazing rhythm, roofline, entrance, railings, scale, snow conditions, and mountain orientation stable.
 - Interiors should plausibly belong to that building: related timber/steel/stone palette, window proportions, warm practical light, and credible circulation. Avoid changing the center into unrelated generic clinic spaces.
 - No signage, facility name, or logo in generated images; typeset verified branding in post.
 
