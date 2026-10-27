@@ -1,6 +1,6 @@
 # Continuity guide — RETURN TO THE SLOPE
 
-**Status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01 ski descent, and REF-SCENE-03 center exterior reveal are APPROVED — LOCKED. Preserve all approved originals unchanged. REF-SCENE-02 v1 remains archived and unapproved. No video has been generated.
+**Status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01 ski descent, and REF-SCENE-03 center exterior reveal are APPROVED — LOCKED. REF-SCENE-04 reception welcome is generated and awaiting approval; it is not canonical. Preserve all approved originals unchanged. REF-SCENE-02 v1 remains archived and unapproved. No video has been generated.
 
 ## Master skier — REF-CHAR-01 (approved canonical)
 
@@ -30,6 +30,7 @@
 - Keep its natural stone base, dark timber/vertical slats, charcoal steel, glazing rhythm, roofline, entrance, railings, scale, snowy terrain, and Altai mountain orientation stable.
 - **REF-SCENE-03 center exterior reveal:** `references/scenes/REF-SCENE-03-center-exterior-reveal.png` (PNG, 1376 × 768, 2,630,607 bytes; SHA-256 `3cff05af0b82055281a203e5187ac4a0266cd4f53d6b05440de280dc74543ac0`) is APPROVED — LOCKED as the canonical exterior reveal still. Generated using REF-ARC-01 as the sole architectural reference. Preserve this image unchanged; REF-ARC-01 remains the master architecture source for any subsequent exterior scene.
 - **REF-INT-01 revised reception:** `references/interiors/REF-INT-01-master-reception.png`, PNG, 1376 × 768, 2,772,482 bytes, approved and locked canonical interior. Preserve unchanged.
+- **REF-SCENE-04 reception welcome candidate:** `references/scenes/REF-SCENE-04-reception-welcome.png` (PNG, 1376 × 768, 2,773,335 bytes; SHA-256 `dcc6b97af2e1452d9a09a6bf5397ab1b8282a56c08aac864cecf9db7a6f00320`), generated once using locked REF-INT-01 for the reception and locked REF-CHAR-01 for skier identity and clothing. Status: GENERATED — AWAITING APPROVAL; not canonical. Keep the skier's approved face, build and navy/orange/charcoal outfit consistent; the welcome is calm and non-diagnostic, with one team member in understated non-branded attire. Preserve both source references unchanged.
 - **Initial reception draft:** `references/interiors/REF-INT-01-master-reception-v1-original.png`, PNG, 1376 × 768, 2,673,858 bytes, archived and unapproved; never treat as canonical.
 - **REF-INT-02 rehabilitation/exercise room:** `references/interiors/REF-INT-02-master-rehabilitation-room.png`, PNG, 1376 × 768, 2,690,673 bytes, approved and locked canonical reference. Preserve unchanged. Its generic furnishings are illustrative, not verified center inventory.
 - No signage, facility name, or logo in generated images; typeset verified branding in post.
