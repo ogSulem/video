@@ -1,7 +1,7 @@
 # Injury and return continuity — REF-SCENE-02
 
-**Status:** REF-SCENE-02 v2 and REF-SCENE-01 descent are APPROVED — LOCKED; REF-SCENE-02 v1 is archived and unapproved. No video has been generated.
-**Approved references:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, and REF-SCENE-02 v2. Preserve all unchanged.
+**Status:** REF-SCENE-02 v2, REF-SCENE-01 descent, REF-SCENE-03 center exterior reveal, and REF-SCENE-04 reception welcome are APPROVED — LOCKED; REF-SCENE-02 v1 is archived and unapproved. No video has been generated.
+**Approved references:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01, REF-SCENE-03, and REF-SCENE-04. Preserve all unchanged.
 **V1 archive:** `references/scenes/REF-SCENE-02-injury-aftermath.png`, PNG, 1376 × 768, 2,274,093 bytes; retain unchanged, unapproved.
 **Canonical v2:** `references/scenes/REF-SCENE-02-injury-aftermath-v2.png`, PNG, 1376 × 768, 2,045,368 bytes; approved and locked.
 **REF-SCENE-01 canonical output:** `references/scenes/REF-SCENE-01-ski-descent.png`, PNG, 1376 × 768, 2,247,593 bytes; APPROVED — LOCKED; generated using REF-CHAR-01 primary and REF-SCENE-02 v2 secondary reference. Preserve unchanged.
@@ -27,7 +27,7 @@
 
 ## V2 generation record — REF-SCENE-02-injury-aftermath-v2
 
-**Status:** Generated once; awaiting user visual approval. Not canonical.
+**Status:** Generated once and APPROVED — LOCKED by user. Preserve unchanged.
 **File:** `references/scenes/REF-SCENE-02-injury-aftermath-v2.png` (PNG, 1376 × 768, 2,045,368 bytes).
 **Reference input:** REF-CHAR-01 only.
 **SHA-256:** `4b4e21eed7a5b62d368782c4c5b805f836e07fd1ac9ecba932bf3a6fd0ac5074`.
@@ -62,6 +62,25 @@
 
 **Status:** Generated exactly once and approved/locked by user. No variants, collage, or video.
 **QC note:** The image shows a controlled carve with skis contacting the snow, the skier traveling upper-right to lower-left, and an Altai-like snowy conifer/mountain background. The goggles are worn over the eyes for active skiing, so eye-level facial landmarks are less visible than in REF-CHAR-01; retain REF-CHAR-01 as the identity anchor for future shots.
+
+## REF-SCENE-04 — reception welcome
+
+**Status:** APPROVED — LOCKED by user. Preserve the image unchanged.
+**Output:** `references/scenes/REF-SCENE-04-reception-welcome.png`, PNG, 1376 × 768, 2,773,335 bytes.
+**SHA-256:** `dcc6b97af2e1452d9a09a6bf5397ab1b8282a56c08aac864cecf9db7a6f00320`.
+**References used:** Locked REF-INT-01 for reception setting; locked REF-CHAR-01 for skier identity and clothing.
+
+### Exact generation prompt used — REF-SCENE-04-reception-welcome
+
+> Create exactly ONE standalone photorealistic cinematic 16:9 landscape continuity still for asset REF-SCENE-04-reception-welcome. Use the approved REF-INT-01-master-reception image as the authoritative and only reference for the reception architecture, finishes, desk, lighting, window layout and decorative details. Use the approved REF-CHAR-01-master-skier image as the authoritative and only reference for the skier's identity and established clothing. Preserve both references unchanged; do not merge or redesign their content.
+>
+> Show the same adult male skier, approximately 30–35 years old, clearly recognizable from REF-CHAR-01, inside the exact reception environment from REF-INT-01 after arriving for help. Preserve his face, hair, subtle stubble, athletic build, proportions, navy ski jacket with restrained orange details, and dark charcoal ski pants. He is not wearing skis or poles indoors. His matte black helmet and dark goggles may be carried naturally in one hand or set neatly beside him, without changing the rest of his appearance. He looks a little tired and uncertain, but is physically stable, uninjured and not visibly distressed.
+>
+> Across the existing reception desk, a single friendly, professional rehabilitation team member welcomes him. The team member wears understated, non-branded sports-clinic attire, not a white coat. They exchange natural eye contact with relaxed, respectful posture and a genuine calm greeting—quiet human warmth, not a staged stock-photo handshake or exaggerated smile. Both people should be clearly readable, naturally proportioned, with anatomically credible faces and hands. Keep the interaction emotionally reassuring without implying a diagnosis or treatment.
+>
+> Use a medium-wide cinematic composition at natural standing eye level, framing both people and making the reception unmistakable. Keep the existing reception desk, timber and stone finishes, panoramic glazing and decorative elements consistent with REF-INT-01; do not add or rearrange architectural features. Through the windows, any visible mountain setting should be plausible snowy Altai terrain. Preserve the interior's warm amber light balanced with cool winter daylight and the established premium sports-commercial visual style. Refined contrast, realistic materials and skin, subtle depth of field and restrained film grain.
+>
+> No white coats, hospital beds, operating rooms, invented medical devices, crutches, bandages, visible injury, diagnosis, additional people, extra architectural features, readable signage, fabricated logos, text, watermarks, extra fingers, distorted faces, exaggerated emotion, collage, alternate views, or additional images. No medical claims. One image only.
 
 ## Production cautions
 
