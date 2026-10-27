@@ -1,6 +1,6 @@
 # Continuity guide — RETURN TO THE SLOPE
 
-**Status:** REF-ARC-01 exterior, REF-CHAR-01 skier, REF-INT-01 reception, and REF-INT-02 rehabilitation room are approved and locked. Preserve all four originals unchanged. The proposed next scene reference is not generated; its prompt awaits user approval.
+**Status:** REF-ARC-01 exterior, REF-CHAR-01 skier, REF-INT-01 reception, and REF-INT-02 rehabilitation room are approved and locked. Preserve all four originals unchanged. `REF-SCENE-02-injury-aftermath` is generated and awaiting visual approval; it is not canonical yet.
 
 ## Master skier — REF-CHAR-01 (approved canonical)
 
@@ -13,7 +13,7 @@
 ## Accident, uncertainty, recovery, and return continuity plan
 
 - **Scene 2 accident (shot 03, approximately 3.5 seconds):** one controlled, low-energy loss of balance into soft powder, no violent collision or extreme twisting. Use a medium tracking view and preserve the established slope travel direction. Show no graphic injury, blood, visible deformity, torn clothing, or damaged equipment. A still reference cannot represent the full action; later video prompts should treat this as a short, safe fall beat.
-- **Immediate aftermath (shot 04, approximately 3.5 seconds):** athlete sits upright in disturbed powder, visibly disappointed and uncertain but not in theatrical agony. One gloved hand rests lightly near the knee; no diagnosis is implied. Keep face recognizable; goggles can be raised as in REF-CHAR-01 to reveal his face. Keep skis, boots, and poles plausible and undamaged, placed naturally nearby. Maintain the same snow, kit, helmet, gloves, and action axis.
+- **Immediate aftermath (shot 04, approximately 3.5 seconds):** `references/scenes/REF-SCENE-02-injury-aftermath.png` (PNG, 1376 × 768, 2,274,093 bytes) is generated and awaiting approval. The image shows the athlete seated in snow, visibly disappointed and uncertain but not in theatrical agony; a gloved hand rests near the knee. It does not establish a diagnosis. Compare identity against REF-CHAR-01; keep skis and poles plausible and undamaged. This is a candidate continuity still, not yet canonical.
 - **Brief frustration during recovery:** place a restrained, non-verbal pause within an early generic supervised exercise beat: he stops, exhales, looks down briefly, shoulders soften; a professional listens or offers a calm cue. No breakdown, pain spectacle, diagnostic inference, or claim that all recovery follows one path. Do not show an unverified specialized device or service. Avoid implying a fixed timeline.
 - **Scene 9 return (shots 18–19):** the same skier, recognizable face and same navy/charcoal ski outfit with restrained orange accents, helmet, goggles, gloves, boots, skis and poles where appropriate. Performance is controlled, technically plausible and confident; the emotion is earned, not superhuman. Preserve the action axis/terrain cues where possible. Do not imply guaranteed outcomes or a specific injury-to-return timeline.
 - Draft VO/title lines naming fractures or ligament tears are not an athlete-specific diagnosis. Do not assign any such diagnosis or treatment to this character without substantiation and explicit approval.

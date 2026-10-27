@@ -1,18 +1,18 @@
-# Injury and return continuity — proposed plan and next asset
+# Injury and return continuity — REF-SCENE-02
 
-**Status:** Planning only; awaiting user approval. No scene image or video has been generated.  
-**Approved references:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02. Preserve all unchanged.  
-**Proposed next asset:** `references/scenes/REF-SCENE-02-injury-aftermath.png` — one still reference for the skier's immediate post-fall state.  
-**Reference input plan:** Use only the approved REF-CHAR-01 image as the character identity reference. No approved slope reference exists; do not use unrelated facility references.
+**Status:** One image generated; **awaiting user visual approval**, not canonical. No video or recovery image has been generated.
+**Approved references:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02. Preserve all unchanged.
+**Asset:** `references/scenes/REF-SCENE-02-injury-aftermath.png`, PNG, 1376 × 768, 2,274,093 bytes.
+**Reference input used:** Only approved REF-CHAR-01 as character identity reference. No approved slope reference exists; no facility references were used.
 
 ## Narrative continuity plan
 
 - **Accident, Scene 2 / shot 03 (about 3.5 seconds):** later video coverage should show a single controlled loss of balance into soft snow, not an extreme or graphic crash. Keep the action axis consistent with the opening descent and the return.
-- **Aftermath, Scene 2 / shot 04 (about 3.5 seconds):** the proposed still locks a believable seated pose, non-specific knee concern, visible face, and recognizable kit immediately after the fall. Emotion: brief disappointment and uncertainty, not panic or theatrical pain.
+- **Aftermath, Scene 2 / shot 04 (about 3.5 seconds):** the generated candidate shows a seated pose, non-specific knee concern, visible face, and recognizable kit immediately after the fall. It remains unapproved. Emotion is brief disappointment and uncertainty, not panic or theatrical pain.
 - **Frustration/recovery beat:** later in an early, generic supervised exercise moment, show a short pause, exhale, lowered gaze and a calm cue/listening response. Keep the setback human and understated; no breakdown, pain spectacle, diagnosis, treatment claim, fixed timeline, or guaranteed recovery implication. Avoid unverified equipment.
 - **Return, Scene 9 / shots 18–19:** same face, proportions, navy/charcoal outfit, orange details, helmet, goggles, gloves, boots and skis. Show controlled, plausible confidence rather than a miraculous or superhuman performance. Preserve the action axis/terrain cues where possible. Do not imply an injury type or universal outcome.
 
-## Exact proposed generation prompt — REF-SCENE-02-injury-aftermath
+## Exact generation prompt used — REF-SCENE-02-injury-aftermath
 
 > Create exactly ONE standalone photorealistic 16:9 landscape character-continuity still for asset REF-SCENE-02-injury-aftermath. Use the supplied approved REF-CHAR-01 image as the primary and only character reference. Depict the exact same male skier from REF-CHAR-01: preserve his recognizable face, light-brown/dark-blond hair, subtle stubble, realistic athletic build and proportions, deep navy technical ski jacket with its restrained orange details, dark charcoal ski pants, matte black helmet, dark reflective goggles, dark gloves, ski boots, skis and poles. Do not redesign him, add a scar, change gear, add logos, or introduce another person.
 >
