@@ -3,8 +3,9 @@
 **REF-INT-01 status:** Approved and locked as the canonical reception reference.
 **Canonical image:** `references/interiors/REF-INT-01-master-reception.png`, PNG, 1376 × 768, 2,772,482 bytes. Preserve unchanged.
 **Archived original:** `references/interiors/REF-INT-01-master-reception-v1-original.png`, PNG, 1376 × 768, 2,673,858 bytes; archived unapproved draft, not canonical. Preserve unchanged.
-**REF-INT-02 status:** Exact prompt prepared; awaiting user approval. No treatment-room image has been generated.
-**Equipment verification:** Existing project documents confirm no actual center equipment or services. Keep the proposed room generic and unbranded; specialized devices are excluded pending real-world verification.
+**REF-INT-02 status:** Generated once; awaiting user visual approval. Not approved or locked.
+**REF-INT-02 output:** `references/interiors/REF-INT-02-master-rehabilitation-room.png`, PNG, 1376 × 768, 2,690,673 bytes.
+**Equipment verification:** Existing project documents confirm no actual center equipment or services. The generated room uses generic illustrative furnishings only; specialized devices are excluded pending real-world verification.
 
 ## Why reception first
 
@@ -34,15 +35,15 @@ Reception is the first interior audience sees after the exterior reveal and supp
 
 ## REF-INT-02 — master rehabilitation and exercise room
 
-**Status:** Proposed exact prompt; awaiting user approval. Do not generate yet.
-**Output path if approved:** `references/interiors/REF-INT-02-master-rehabilitation-room.png`
-**Reference plan:** Use approved REF-ARC-01 as the primary architecture input and approved REF-INT-01 as secondary interior-material and circulation reference. Do not use REF-CHAR-01; no people in this room reference.
+**Status:** Generated exactly once; awaiting user visual approval. Do not mark approved or locked.
+**Output path:** `references/interiors/REF-INT-02-master-rehabilitation-room.png` (PNG, 1376 × 768, 2,690,673 bytes).
+**Reference inputs used:** Approved REF-ARC-01 as primary architecture reference and approved REF-INT-01 as secondary interior-material/circulation reference. REF-CHAR-01 was not used; no people appear.
 
 ### Equipment verification findings
 
 The existing brief, shot list, continuity guide, and asset records do not verify any actual equipment or service availability at the center. Therefore the prompt below excludes cryotherapy/cold therapy, anti-gravity treadmills, therapy pools, stabilometric platforms, SkyTech or other ski simulators, treadmills/sensors, and all other specialized devices. Generic furnishings are illustrative design elements only, not a claim about actual inventory. Confirm any equipment with the facility before depiction in later assets.
 
-### Exact proposed generation prompt — REF-INT-02
+### Exact generation prompt used — REF-INT-02
 
 > Create exactly ONE photorealistic cinematic 16:9 landscape architectural reference image for REF-INT-02, the main rehabilitation and supervised exercise room of the same premium sports rehabilitation center in the Altai Mountains. Use the supplied approved exterior REF-ARC-01 as the primary architectural reference and the approved reception REF-INT-01 as the secondary interior continuity reference. The room must plausibly exist within that exact building. Preserve the shared contemporary architecture and materials: dark timber with restrained vertical slat details, natural grey stone or mineral-finish surfaces, charcoal steel framing, generous but realistic panoramic glazing, restrained deep-blue accents and a very small orange accent. Do not redesign either approved reference.
 >

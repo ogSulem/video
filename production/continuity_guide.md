@@ -1,6 +1,6 @@
 # Continuity guide — RETURN TO THE SLOPE
 
-**Status:** REF-ARC-01, REF-CHAR-01, and revised REF-INT-01 are approved and locked. Preserve all three originals unchanged. REF-INT-02 is at prompt-review stage; no treatment-space image has been generated.
+**Status:** REF-ARC-01 exterior, REF-CHAR-01 skier, and REF-INT-01 reception are approved and locked. REF-INT-02 rehabilitation-room image is generated and awaiting user review; do not treat it as canonical until approved. Preserve all three approved originals unchanged.
 
 ## Master skier — REF-CHAR-01 (approved canonical)
 
@@ -18,8 +18,9 @@
 - Keep its stone base, dark timber/vertical slats, charcoal steel, glazing rhythm, roofline, entrance, railings, scale, snow conditions, and mountain orientation stable.
 - **REF-INT-01 revised reception:** `references/interiors/REF-INT-01-master-reception.png`, PNG, 1376 × 768, 2,772,482 bytes, approved and locked canonical interior. Preserve unchanged. Use its dark timber, stone, steel, glazing, sports-photo wall, restrained ski detail, accessible circulation, and warm/cool light balance consistently.
 - **Initial reception draft:** `references/interiors/REF-INT-01-master-reception-v1-original.png`, PNG, 1376 × 768, 2,673,858 bytes, archived and unapproved. Retain unchanged as history; never treat as canonical.
-- **REF-INT-02 treatment/exercise room:** prompt prepared in `prompts/interiors.md`, awaiting user approval; not generated. When approved, use REF-ARC-01 as primary architecture reference and REF-INT-01 as secondary interior-material/circulation reference. Keep the room plausibly within the same building, with dark timber, stone, charcoal steel, panoramic glazing, restrained brand accents, natural daylight, and warm practicals.
-- Keep REF-INT-02 empty of people and readable branding. Until actual inventory is confirmed, depict only generic, unbranded rehabilitation furniture and open supervised-movement space; no specialized devices or implied service claims.
+- **REF-INT-02 treatment/exercise room:** `references/interiors/REF-INT-02-master-rehabilitation-room.png`, PNG, 1376 × 768, 2,690,673 bytes, generated using REF-ARC-01 as primary and REF-INT-01 as secondary reference. It is awaiting approval and is not canonical. Exact prompt is in `prompts/interiors.md`.
+- The REF-INT-02 image depicts only generic illustrative furnishings (treatment plinth, low bench, mats, resistance bands) and open floor space. These are not verified center inventory. Do not claim availability. No specialized devices or people were generated.
+- If REF-INT-02 is approved, reuse its room layout and furniture consistently; preserve the approved exterior/reception architectural language. Do not alter or regenerate approved references.
 - No signage, facility name, or logo in generated images; typeset verified branding in post.
 
 ## Screen direction and time
