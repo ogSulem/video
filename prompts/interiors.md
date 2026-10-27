@@ -35,7 +35,7 @@ Reception is the first interior audience sees after the exterior reveal and supp
 
 ## REF-INT-02 — master rehabilitation and exercise room
 
-**Status:** Generated exactly once; awaiting user visual approval. Do not mark approved or locked.
+**Status:** APPROVED — LOCKED as the canonical rehabilitation/exercise-room reference. Preserve the original unchanged.
 **Output path:** `references/interiors/REF-INT-02-master-rehabilitation-room.png` (PNG, 1376 × 768, 2,690,673 bytes).
 **Reference inputs used:** Approved REF-ARC-01 as primary architecture reference and approved REF-INT-01 as secondary interior-material/circulation reference. REF-CHAR-01 was not used; no people appear.
 
@@ -57,4 +57,4 @@ The existing brief, shot list, continuity guide, and asset records do not verify
 
 ## Later interior/equipment assets — gated
 
-Do not generate any other interior or equipment image until REF-INT-02 and each later asset pass their approval gates. Confirm actual equipment/service availability with the facility before preparing device-specific imagery. Add any verified details to the manifest and continuity guide with source and approval notes. Keep titles, interfaces, branding, and patient data out of generated imagery; use approved graphics in post.
+REF-INT-02 is approved and locked. Any subsequent interior or equipment asset remains separately gated. Confirm actual equipment/service availability with the facility before preparing device-specific imagery. Add verified details to the manifest and continuity guide with source and approval notes. Keep titles, interfaces, branding, and patient data out of generated imagery; use approved graphics in post.

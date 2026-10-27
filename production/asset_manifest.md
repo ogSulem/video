@@ -1,15 +1,15 @@
 # Approval workflow and asset manifest
 
-**Project status:** REF-ARC-01, REF-CHAR-01, and REF-INT-01 are approved and locked. REF-INT-02 was generated once and is awaiting user approval.
-**Repository:** Workspace checkout `ogSulem/video`, branch `arena/f2208454-video`. Repository updates are tracked via the configured Git CLI.
+**Project status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, and REF-INT-02 are approved and locked. A prompt for `REF-SCENE-02-injury-aftermath.png` is prepared and awaiting user approval; no new image or video has been generated for the injury/recovery sequence.
+**Repository:** Workspace checkout `ogSulem/video`, branch `arena/f2208454-video`.
 
 ## Sequential approval gates
 
 1. **Stage 1 — setup and creative direction:** approved.
 2. **Stage 2 — master exterior architecture:** REF-ARC-01 generated once and approved; locked canonical facility exterior.
 3. **Stage 3 — master skier:** REF-CHAR-01 generated once and approved; locked canonical skier identity and wardrobe.
-4. **Stage 4 — interiors and equipment:** REF-INT-01 revised reception generated, approved, and locked. REF-INT-02 rehabilitation/exercise room generated exactly once and awaiting user visual approval. No further interior/equipment asset until approval.
-5. **Stage 5 — shot prompts:** write individual prompts using approved references; obtain approval before generation.
+4. **Stage 4 — interiors and equipment:** REF-INT-01 reception and REF-INT-02 rehabilitation room approved and locked. Specialized equipment remains unverified.
+5. **Stage 5 — shot/continuity prompts:** injury/aftermath still prompt prepared in `prompts/scene_prompts.md`; awaiting user approval before image generation.
 6. **Stage 6 — video:** generate clips in narrative order and review each batch before continuing.
 7. **Stage 7 — finishing:** edit, sound, VO, Russian titles, verified brand card, and separately composed vertical cut.
 
@@ -19,23 +19,23 @@ No paid operation without explicit authorization. Do not skip gates or replace a
 
 | Filename / ID | Purpose | Status | Dependencies / notes |
 |---|---|---|---|
-| `references/architecture/REF-ARC-01-master-exterior.png` | Master exterior architecture reference | Approved — canonical | Original PNG; 1376 × 768; 2,688,465 bytes; preserve unchanged |
-| `references/characters/REF-CHAR-01-master-skier.png` | Master skier identity and wardrobe reference | Approved — canonical | Original PNG; 1376 × 768; 2,180,293 bytes; preserve unchanged |
-| `references/interiors/REF-INT-01-master-reception.png` | Revised master reception reference | APPROVED — LOCKED, canonical | PNG; 1376 × 768; 2,772,482 bytes; exact prompt in `prompts/interiors.md`; preserve unchanged |
+| `references/architecture/REF-ARC-01-master-exterior.png` | Master exterior architecture reference | APPROVED — LOCKED | PNG; 1376 × 768; 2,688,465 bytes; preserve unchanged |
+| `references/characters/REF-CHAR-01-master-skier.png` | Master skier identity and wardrobe reference | APPROVED — LOCKED | PNG; 1376 × 768; 2,180,293 bytes; preserve unchanged |
+| `references/interiors/REF-INT-01-master-reception.png` | Revised master reception reference | APPROVED — LOCKED | PNG; 1376 × 768; 2,772,482 bytes; preserve unchanged |
 | `references/interiors/REF-INT-01-master-reception-v1-original.png` | Initial reception draft | Archived — unapproved, not canonical | PNG; 1376 × 768; 2,673,858 bytes; preserved byte-identically; SHA-256 `3d9cb7781d1c5efd20b8a7be9901a9717645150d5d9131c248fdc4279881353b` |
-| `references/interiors/REF-INT-02-master-rehabilitation-room.png` | Master rehabilitation/exercise room | GENERATED — AWAITING APPROVAL | PNG; 1376 × 768; 2,690,673 bytes; generated once using REF-ARC-01 primary and REF-INT-01 secondary image references; exact prompt in `prompts/interiors.md` |
+| `references/interiors/REF-INT-02-master-rehabilitation-room.png` | Master rehabilitation/exercise room | APPROVED — LOCKED | PNG; 1376 × 768; 2,690,673 bytes; preserve unchanged; generic furnishings are illustrative, not a verified inventory |
+| `references/scenes/REF-SCENE-02-injury-aftermath.png` | Proposed still reference for the skier's non-graphic post-fall state | Not generated — prompt awaiting approval | Use REF-CHAR-01 for identity; exact prompt and continuity plan in `prompts/scene_prompts.md` |
+| `prompts/scene_prompts.md` | Injury/recovery continuity plan and next still prompt | Draft — awaiting user approval | No image or video generated |
 | `production/creative_brief.md` | Project goals and guardrails | Stage 1 approved | Brand details and factual claims still need verification |
-| `production/visual_style_guide.md` | Shared look, light, camera, credibility rules | Approved baseline | Refine consistently with approved references |
+| `production/visual_style_guide.md` | Shared look, light, camera, credibility rules | Approved baseline | Maintain reference continuity |
 | `production/master_script.md` | 10-beat timing, Russian titles and VO | Stage 1 approved | Brand, URL, medical claims unverified |
 | `production/shot_list.md` | 20-shot production plan | Stage 1 approved | Service/equipment shots are conditional |
-| `production/continuity_guide.md` | Character, facility, action-axis rules | Updated — REF-INT-02 awaiting approval | REF-ARC-01, REF-CHAR-01, REF-INT-01 locked; REF-INT-02 is not locked |
-| `prompts/architecture.md` | Stage 2 exterior image brief and generation record | Approved reference | Original reference preserved |
-| `prompts/character.md` | Stage 3 skier brief and generation record | Approved reference | Original reference preserved |
-| `prompts/interiors.md` | REF-INT-01 record and REF-INT-02 prompt/generation record | REF-INT-01 approved; REF-INT-02 awaiting approval | Exact generation prompt and image metadata recorded |
+| `production/continuity_guide.md` | Character, facility, action-axis rules | Updated — four references locked | Injury-state plan is proposed; no scene still generated |
+| `prompts/interiors.md` | Interior prompts and generation records | REF-INT-01 and REF-INT-02 approved | Approved reference images preserved; equipment availability remains unverified |
 
 ## Equipment verification status
 
-The current project documents do not confirm the center's actual equipment inventory or service availability. Specifically unconfirmed: cryotherapy/cold therapy; anti-gravity treadmill; therapy pool/aquatic rehabilitation; stabilometric platform; SkyTech or any other named ski simulator; biomechanical treadmills/sensors; and any other specialized diagnostic or exercise device. The generated REF-INT-02 uses only generic, unbranded furnishings as illustrative design elements, not a verified inventory or a claim about available services. Confirm actual equipment with the facility before depicting it in later assets.
+The project documents do not confirm the center's actual equipment inventory or service availability. Specifically unconfirmed: cryotherapy/cold therapy; anti-gravity treadmill; therapy pool/aquatic rehabilitation; stabilometric platform; SkyTech or any other named ski simulator; biomechanical treadmills/sensors; and any other specialized diagnostic or exercise device. Do not depict or claim these until the facility confirms them and supplies references where needed. Generic furnishings in REF-INT-02 are illustrative, not verified inventory.
 
 ## Status vocabulary
 

@@ -1,6 +1,6 @@
 # Continuity guide — RETURN TO THE SLOPE
 
-**Status:** REF-ARC-01 exterior, REF-CHAR-01 skier, and REF-INT-01 reception are approved and locked. REF-INT-02 rehabilitation-room image is generated and awaiting user review; do not treat it as canonical until approved. Preserve all three approved originals unchanged.
+**Status:** REF-ARC-01 exterior, REF-CHAR-01 skier, REF-INT-01 reception, and REF-INT-02 rehabilitation room are approved and locked. Preserve all four originals unchanged. The proposed next scene reference is not generated; its prompt awaits user approval.
 
 ## Master skier — REF-CHAR-01 (approved canonical)
 
@@ -8,35 +8,36 @@
 - Adult male, approximately early 30s, realistic athletic build, short light-brown/dark-blond hair, subtle stubble, natural approachable face. No celebrity resemblance intended. Do not add an eyebrow scar or other identifying mark not visible in the approved image.
 - Wardrobe: deep navy technical ski jacket with very restrained orange zipper/trim details; dark charcoal ski pants; matte black helmet; dark reflective goggles resting above the eyes; dark gloves; technically plausible dark ski boots and alpine skis. Two ski poles are also visible. No readable logos or marks.
 - Preserve the depicted face, age impression, body proportions, hair, facial hair, color placement, garment silhouette, helmet, goggles, gloves, boots, skis, and poles consistently in Scene 2 (injury) and Scene 9 (return). Do not redesign between scenes. Emotional change is from pain/disappointment to recovered confidence; identity and recognizable outfit remain the same.
-- Scene 2 may show a safe, non-graphic fall and concern about the knee. Do not add visible injury, damage to gear, or unexplained wardrobe changes. Scene 9 returns to confident skiing in the same recognizable kit and equipment.
-- In rehab scenes, remove helmet/goggles only when motivated by location; preserve facial identity, hair, stubble, and build. Ski equipment appears only where physically appropriate.
-- Do not modify or regenerate the approved character reference without explicit user approval.
+- Ski gear remains consistent for mountain scenes. Indoors, helmet/goggles/skis/poles are removed only when motivated by location; preserve face, hair, stubble, build, and use only an approved, plausible non-branded sports outfit. Do not invent a new identifying feature.
 
-## Architecture and locations
+## Accident, uncertainty, recovery, and return continuity plan
 
-- Stage 2 exterior reference `references/architecture/REF-ARC-01-master-exterior.png` is approved and is the visual source of truth. Reuse this unchanged reference for exterior scenes; do not generate a competing building.
-- Keep its stone base, dark timber/vertical slats, charcoal steel, glazing rhythm, roofline, entrance, railings, scale, snow conditions, and mountain orientation stable.
-- **REF-INT-01 revised reception:** `references/interiors/REF-INT-01-master-reception.png`, PNG, 1376 × 768, 2,772,482 bytes, approved and locked canonical interior. Preserve unchanged. Use its dark timber, stone, steel, glazing, sports-photo wall, restrained ski detail, accessible circulation, and warm/cool light balance consistently.
-- **Initial reception draft:** `references/interiors/REF-INT-01-master-reception-v1-original.png`, PNG, 1376 × 768, 2,673,858 bytes, archived and unapproved. Retain unchanged as history; never treat as canonical.
-- **REF-INT-02 treatment/exercise room:** `references/interiors/REF-INT-02-master-rehabilitation-room.png`, PNG, 1376 × 768, 2,690,673 bytes, generated using REF-ARC-01 as primary and REF-INT-01 as secondary reference. It is awaiting approval and is not canonical. Exact prompt is in `prompts/interiors.md`.
-- The REF-INT-02 image depicts only generic illustrative furnishings (treatment plinth, low bench, mats, resistance bands) and open floor space. These are not verified center inventory. Do not claim availability. No specialized devices or people were generated.
-- If REF-INT-02 is approved, reuse its room layout and furniture consistently; preserve the approved exterior/reception architectural language. Do not alter or regenerate approved references.
+- **Scene 2 accident (shot 03, approximately 3.5 seconds):** one controlled, low-energy loss of balance into soft powder, no violent collision or extreme twisting. Use a medium tracking view and preserve the established slope travel direction. Show no graphic injury, blood, visible deformity, torn clothing, or damaged equipment. A still reference cannot represent the full action; later video prompts should treat this as a short, safe fall beat.
+- **Immediate aftermath (shot 04, approximately 3.5 seconds):** athlete sits upright in disturbed powder, visibly disappointed and uncertain but not in theatrical agony. One gloved hand rests lightly near the knee; no diagnosis is implied. Keep face recognizable; goggles can be raised as in REF-CHAR-01 to reveal his face. Keep skis, boots, and poles plausible and undamaged, placed naturally nearby. Maintain the same snow, kit, helmet, gloves, and action axis.
+- **Brief frustration during recovery:** place a restrained, non-verbal pause within an early generic supervised exercise beat: he stops, exhales, looks down briefly, shoulders soften; a professional listens or offers a calm cue. No breakdown, pain spectacle, diagnostic inference, or claim that all recovery follows one path. Do not show an unverified specialized device or service. Avoid implying a fixed timeline.
+- **Scene 9 return (shots 18–19):** the same skier, recognizable face and same navy/charcoal ski outfit with restrained orange accents, helmet, goggles, gloves, boots, skis and poles where appropriate. Performance is controlled, technically plausible and confident; the emotion is earned, not superhuman. Preserve the action axis/terrain cues where possible. Do not imply guaranteed outcomes or a specific injury-to-return timeline.
+- Draft VO/title lines naming fractures or ligament tears are not an athlete-specific diagnosis. Do not assign any such diagnosis or treatment to this character without substantiation and explicit approval.
+
+## Approved architecture and interiors
+
+- Stage 2 exterior `references/architecture/REF-ARC-01-master-exterior.png` is approved and canonical. Reuse it unchanged for exterior scenes; do not invent a competing building.
+- Keep its natural stone base, dark timber/vertical slats, charcoal steel, glazing rhythm, roofline, entrance, railings, scale, snowy terrain, and Altai mountain orientation stable.
+- **REF-INT-01 revised reception:** `references/interiors/REF-INT-01-master-reception.png`, PNG, 1376 × 768, 2,772,482 bytes, approved and locked canonical interior. Preserve unchanged.
+- **Initial reception draft:** `references/interiors/REF-INT-01-master-reception-v1-original.png`, PNG, 1376 × 768, 2,673,858 bytes, archived and unapproved; never treat as canonical.
+- **REF-INT-02 rehabilitation/exercise room:** `references/interiors/REF-INT-02-master-rehabilitation-room.png`, PNG, 1376 × 768, 2,690,673 bytes, approved and locked canonical reference. Preserve unchanged. Its generic furnishings are illustrative, not verified center inventory.
 - No signage, facility name, or logo in generated images; typeset verified branding in post.
 
-## Screen direction and time
+## Equipment, clinical, and claims continuity
 
-- Establish the opening slope's travel direction and preserve the action axis across the fall and comeback, unless a clear establishing shot motivates reversal.
-- Dawn/sun direction and snow condition should remain coherent for the narrative pair of ski scenes. If the return intentionally occurs later, make the progression apparent and preserve recognizable terrain.
-- Cold exterior light / warm interior shift is an emotional transition, not a filter jump; protect skin and snow detail.
-
-## Clinical and equipment continuity
-
-- No equipment or specialist service is confirmed as available by the project documents. Verify inventory and services with the actual facility before depiction or claims.
+- No equipment or specialist service is confirmed as available by the project documents. Verify actual inventory and services before depiction or claims.
 - Specifically unconfirmed: cryotherapy/cold therapy, anti-gravity treadmill, therapy pool/aquatic rehabilitation, stabilometric platform, named ski simulator (including SkyTech), treadmill/sensor biomechanics, and other specialized diagnostic/exercise devices.
-- Validate any later-supplied equipment references and clinical review. Sensor placement, belts/harnesses, screens, pool supervision, clothing, and patient posture must make physical sense if their use is verified.
-- Monitors and interfaces should have graphics and patient data replaced or added in post. No random text or real patient information.
-- Team composition/credentials and any apparent clinical intervention must be approved and factually accurate. No white coats by default; use approved professional sports-medical clothing.
+- Generic plinths, benches, mats, and resistance bands in REF-INT-02 are illustrative only; they do not establish the actual facility inventory.
+- Validate any later-supplied equipment references and obtain clinical review. Sensor placement, belts/harnesses, screens, clothing, patient posture, and safety must make physical sense if an offering is verified.
+- Monitors/interfaces should have graphics and patient data replaced or added in post. No random text or real patient information.
+- Team roles/credentials and any apparent clinical intervention must be factually approved. No white coats by default; use approved professional sports-medical clothing.
 
-## Asset, generation, and review discipline
+## Screen direction, light, and review discipline
 
-For each asset, record ID/filename, purpose, status, approvals, source/reference dependencies, prompt version, and known limitations in `asset_manifest.md`. Reuse approved assets; do not overwrite an approved reference without explicit authorization. Review anatomy, motion, materials, architecture, lighting, identity, artifacts, text/logos, and cross-shot continuity before approval. Keep final type/logo in post. Do not advance to the next production gate until the user approves the current one.
+- Establish the opening slope's travel direction and preserve the action axis across fall and comeback unless a clear establishing shot motivates reversal.
+- Keep the opening and return terrain/weather coherent. Outdoor light remains natural and cool; interior support is warmer without a filter jump. Protect skin and snow detail.
+- For each asset, record ID/filename, purpose, status, approvals, reference dependencies, prompt version, and limitations in `asset_manifest.md`. Never overwrite or regenerate approved references without explicit approval. Review anatomy, movement, materials, architecture, lighting, identity, artifacts, logos/text, and cross-shot continuity. Do not advance to the next asset until the user approves the current one.

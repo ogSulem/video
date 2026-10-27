@@ -4,7 +4,7 @@ Production workspace for a premium cinematic commercial for a sports rehabilitat
 
 ## Current status
 
-**REF-ARC-01, REF-CHAR-01, and revised REF-INT-01 are approved and locked.** The initial reception draft remains preserved as an archived, unapproved version. REF-INT-02 has been generated once and is awaiting user visual approval; no video, injury, or specialized-equipment asset has been generated.
+**REF-ARC-01, REF-CHAR-01, REF-INT-01, and REF-INT-02 are approved and locked.** The initial reception draft remains preserved as an archived, unapproved version. The next proposed asset is a single Scene 2 injury-aftermath still; its prompt awaits user approval. No injury/recovery image or video has been generated.
 
 ## Production documents
 
