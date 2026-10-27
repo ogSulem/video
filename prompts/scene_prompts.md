@@ -1,15 +1,15 @@
 # Injury and return continuity — REF-SCENE-02
 
-**Status:** V1 and revised v2 are generated candidates; v2 is **awaiting user visual approval** and neither still is canonical. No video or recovery image has been generated.
-**Approved references:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02. Preserve all unchanged.
-**V1:** `references/scenes/REF-SCENE-02-injury-aftermath.png`, PNG, 1376 × 768, 2,274,093 bytes; retain for comparison.
-**V2:** `references/scenes/REF-SCENE-02-injury-aftermath-v2.png`, PNG, 1376 × 768, 2,045,368 bytes; raised goggles for clearer face visibility; awaiting approval.
-**Reference input for both versions:** Only approved REF-CHAR-01 as character identity reference. No approved slope reference exists; no facility references were used.
+**Status:** REF-SCENE-02 v2 is approved and locked; v1 is archived and unapproved. REF-SCENE-01 descent prompt is prepared and awaiting user approval. No descent image or video has been generated.
+**Approved references:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, and REF-SCENE-02 v2. Preserve all unchanged.
+**V1 archive:** `references/scenes/REF-SCENE-02-injury-aftermath.png`, PNG, 1376 × 768, 2,274,093 bytes; retain unchanged, unapproved.
+**Canonical v2:** `references/scenes/REF-SCENE-02-injury-aftermath-v2.png`, PNG, 1376 × 768, 2,045,368 bytes; approved and locked.
+**REF-SCENE-01 reference plan:** Use REF-CHAR-01 as the primary identity input and REF-SCENE-02 v2 as a secondary slope/camera-axis continuity reference; do not copy its seated pose.
 
 ## Narrative continuity plan
 
 - **Accident, Scene 2 / shot 03 (about 3.5 seconds):** later video coverage should show a single controlled loss of balance into soft snow, not an extreme or graphic crash. Keep the action axis consistent with the opening descent and the return.
-- **Aftermath, Scene 2 / shot 04 (about 3.5 seconds):** two candidates are retained for review. V1 shows a seated pose and non-specific knee concern; v2 raises the goggles onto the helmet/forehead to make the face and eyes clearer. Both remain unapproved. Emotion is brief disappointment and uncertainty, not panic or theatrical pain.
+- **Aftermath, Scene 2 / shot 04 (about 3.5 seconds):** canonical still is approved/locked v2 with goggles raised for facial visibility. V1 remains archived and unapproved. The image depicts only non-specific knee concern; no diagnosis. Emotion is brief disappointment and uncertainty, not panic or theatrical pain.
 - **Frustration/recovery beat:** later in an early, generic supervised exercise moment, show a short pause, exhale, lowered gaze and a calm cue/listening response. Keep the setback human and understated; no breakdown, pain spectacle, diagnosis, treatment claim, fixed timeline, or guaranteed recovery implication. Avoid unverified equipment.
 - **Return, Scene 9 / shots 18–19:** same face, proportions, navy/charcoal outfit, orange details, helmet, goggles, gloves, boots and skis. Show controlled, plausible confidence rather than a miraculous or superhuman performance. Preserve the action axis/terrain cues where possible. Do not imply an injury type or universal outcome.
 
@@ -39,6 +39,22 @@
 > Use a medium-wide three-quarter view at a slightly elevated natural camera position, showing his face, seated pose, knee position, and enough lightly disturbed powder to suggest a recent fall. Preserve clear visual continuity with the REF-CHAR-01 outfit and equipment. Background is an understated snowy Altai mountainside with a dark conifer edge, natural cold daylight, realistic snow texture, and restrained alpine blue/white cinematic color. Match the premium photorealistic sports-advertising style of REF-CHAR-01. No rehabilitation center in frame.
 >
 > No specific injury, diagnosis, fracture, ligament tear, treatment, or recovery timeline. No blood, wounds, bruising, visible deformity, graphic injury, medical equipment, dramatic agony, panic, text, signage, logos, watermarks, collage, alternate views, or additional images. Natural anatomy, realistic technical fabric and ski equipment, controlled exposure, subtle film grain, refined cinematic grade; no CGI gloss, excessive HDR, oversaturation, or obvious AI artifacts.
+
+## REF-SCENE-01 — pre-fall ski descent still
+
+**Status:** Exact prompt prepared; awaiting user approval. Do not generate yet.
+**Proposed output:** `references/scenes/REF-SCENE-01-ski-descent.png`.
+**Reference plan:** REF-CHAR-01 is primary identity input; approved REF-SCENE-02 v2 is secondary only for slope/snow/camera-axis continuity. Do not copy its seated pose or injury state.
+
+### Exact proposed generation prompt — REF-SCENE-01-ski-descent
+
+> Create exactly ONE standalone photorealistic 16:9 landscape pre-fall skiing continuity still for asset REF-SCENE-01-ski-descent. Use the supplied approved REF-CHAR-01 image as the primary character-identity reference and approved REF-SCENE-02 v2 only as a secondary reference for snow/slope character, camera side, and screen-direction continuity. Do not copy the seated pose or injury state from REF-SCENE-02 v2. Preserve the exact same skier's recognizable face and proportions, light-brown/dark-blond hair, subtle stubble, realistic athletic build, deep navy ski jacket with restrained orange details, dark charcoal pants, matte black helmet, the same dark reflective goggles, gloves, boots, skis, and poles. Do not redesign him, add identifying marks, change equipment, add logos, or introduce other people.
+>
+> Show him confidently and in control during a plausible, moderate-speed descent on an authentic snowy Altai mountain slope. This is immediately before the later accident: no fall, loss of balance, injury, or distress. Use a natural athletic skiing stance with flexed knees, balanced hips, stable upper body, skis edged and contacting the snow, and a clean controlled carve. Keep the movement technically plausible; no jump, airborne skis, extreme lean, unsafe contortion, or oversized snow explosion. A restrained powder trail may follow the ski edges.
+>
+> Establish the slope and athlete together in a medium-wide three-quarter tracking composition, with the full skier and ski-to-snow contact legible, snow-covered conifers and distant Altai peaks providing authentic scale. Set the proposed screen direction from upper right toward lower left, downhill, with the camera tracking from the downhill/front-quarter side on the same side of the action axis as REF-SCENE-02 v2. Keep natural perspective and straight, non-distorted terrain cues. Do not cross the action axis; leave a plausible motion path that can cut into the seated aftermath still.
+>
+> Natural early-winter daylight with cool snow shadows and subtle warm edge light, realistic snow texture, subdued deep alpine blue and white palette, premium cinematic sports-advertising photography, photorealistic anatomy, technical fabric, helmet, goggles, skis and bindings, controlled exposure, subtle film grain, refined color grade. No text, signage, logos, watermarks, collage, alternate views, extra images, medical equipment, or facility in frame. Avoid fantasy mountains, generic resort styling, artificial CGI gloss, excessive HDR, oversaturation, impossible skiing technique, or obvious AI artifacts.
 
 ## Production cautions
 
