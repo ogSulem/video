@@ -1,6 +1,6 @@
 # Approval workflow and asset manifest
 
-**Project status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, and REF-SCENE-01 are approved and locked. REF-SCENE-03 center exterior reveal was generated once and is awaiting user visual approval. No video has been generated.
+**Project status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01, and REF-SCENE-03 center exterior reveal are approved and locked. Preserve all approved references unchanged. No video has been generated.
 **Repository:** Workspace checkout `ogSulem/video`, branch `arena/f2208454-video`.
 
 ## Sequential approval gates
@@ -9,7 +9,7 @@
 2. **Stage 2 — master exterior architecture:** REF-ARC-01 generated once and approved; locked canonical facility exterior.
 3. **Stage 3 — master skier:** REF-CHAR-01 generated once and approved; locked canonical skier identity and wardrobe.
 4. **Stage 4 — interiors and equipment:** REF-INT-01 reception and REF-INT-02 rehabilitation room approved and locked. Specialized equipment remains unverified.
-5. **Stage 5 — scene continuity stills:** REF-SCENE-02 v2 and REF-SCENE-01 pre-fall descent are approved and locked; REF-SCENE-02 v1 is archived and unapproved. REF-SCENE-03 center exterior reveal is generated and awaiting approval.
+5. **Stage 5 — scene continuity stills:** REF-SCENE-02 v2, REF-SCENE-01 pre-fall descent, and REF-SCENE-03 center exterior reveal are approved and locked; REF-SCENE-02 v1 is archived and unapproved.
 6. **Stage 6 — video:** generate clips in narrative order and review each batch before continuing.
 7. **Stage 7 — finishing:** edit, sound, VO, Russian titles, verified brand card, and separately composed vertical cut.
 
@@ -27,13 +27,13 @@ No paid operation without explicit authorization. Do not skip gates or replace a
 | `references/scenes/REF-SCENE-02-injury-aftermath.png` | First post-fall still candidate (v1) | Archived — unapproved alternative | PNG; 1376 × 768; 2,274,093 bytes; retain unchanged for comparison |
 | `references/scenes/REF-SCENE-02-injury-aftermath-v2.png` | Canonical non-graphic post-fall still | APPROVED — LOCKED | PNG; 1376 × 768; 2,045,368 bytes; preserve unchanged; face visible with goggles raised |
 | `references/scenes/REF-SCENE-01-ski-descent.png` | Canonical pre-fall descent continuity still | APPROVED — LOCKED | PNG; 1376 × 768; 2,247,593 bytes; REF-CHAR-01 primary and REF-SCENE-02 v2 secondary references; preserve unchanged; exact prompt and hash in `prompts/scene_prompts.md` |
-| `references/scenes/REF-SCENE-03-center-exterior-reveal.png` | Center exterior reveal frame | GENERATED — AWAITING APPROVAL | PNG; 1376 × 768; 2,630,607 bytes; SHA-256 `3cff05af0b82055281a203e5187ac4a0266cd4f53d6b05440de280dc74543ac0`; REF-ARC-01 sole architectural reference; generated once; do not lock until approved |
+| `references/scenes/REF-SCENE-03-center-exterior-reveal.png` | Canonical center exterior reveal still | APPROVED — LOCKED | PNG; 1376 × 768; 2,630,607 bytes; SHA-256 `3cff05af0b82055281a203e5187ac4a0266cd4f53d6b05440de280dc74543ac0`; REF-ARC-01 sole architectural reference; preserve image unchanged |
 | `prompts/scene_prompts.md` | Scene 1 and Scene 2 prompt and generation records | Updated — Scene 1 and Scene 2 v2 approved | Exact prompts and metadata recorded; no video generated |
 | `production/creative_brief.md` | Project goals and guardrails | Stage 1 approved | Brand details and factual claims still need verification |
 | `production/visual_style_guide.md` | Shared look, light, camera, credibility rules | Approved baseline | Maintain reference continuity |
 | `production/master_script.md` | 10-beat timing, Russian titles and VO | Stage 1 approved | Brand, URL, medical claims unverified |
 | `production/shot_list.md` | 20-shot production plan | Stage 1 approved | Service/equipment shots are conditional |
-| `production/continuity_guide.md` | Character, facility, action-axis rules | Updated — six references locked; REF-SCENE-03 awaiting approval | Exterior reveal frame is checked against REF-ARC-01 without modifying the canonical design |
+| `production/continuity_guide.md` | Character, facility, action-axis rules | Updated — seven references locked | REF-SCENE-03 is the approved exterior reveal; REF-ARC-01 remains the master architecture source |
 | `prompts/interiors.md` | Interior prompts and generation records | REF-INT-01 and REF-INT-02 approved | Approved reference images preserved; equipment availability remains unverified |
 
 ## Equipment verification status
