@@ -1,6 +1,6 @@
 # Continuity guide — RETURN TO THE SLOPE
 
-**Status:** REF-ARC-01 exterior and REF-CHAR-01 skier approved by user. Revised REF-INT-01 reception candidate generated and awaiting visual review; it is not locked. Do not alter/regenerate the approved exterior or skier references.
+**Status:** REF-ARC-01, REF-CHAR-01, and revised REF-INT-01 are approved and locked. Preserve all three originals unchanged. REF-INT-02 is at prompt-review stage; no treatment-space image has been generated.
 
 ## Master skier — REF-CHAR-01 (approved canonical)
 
@@ -16,9 +16,10 @@
 
 - Stage 2 exterior reference `references/architecture/REF-ARC-01-master-exterior.png` is approved and is the visual source of truth. Reuse this unchanged reference for exterior scenes; do not generate a competing building.
 - Keep its stone base, dark timber/vertical slats, charcoal steel, glazing rhythm, roofline, entrance, railings, scale, snow conditions, and mountain orientation stable.
-- **REF-INT-01 revised reception candidate:** `references/interiors/REF-INT-01-master-reception.png`, PNG, 1376 × 768, 2,772,482 bytes. Generated with REF-ARC-01 as the sole image reference; REF-CHAR-01 was not used. It is awaiting user visual review and is not canonical yet. Exact prompt is in `prompts/interiors.md`.
-- **Initial reception draft preserved:** `references/interiors/REF-INT-01-master-reception-v1-original.png`, byte-identical copy of the earlier unapproved reception image. It is retained for record only and is not canonical.
-- Do not use either reception version as a locked interior until the user explicitly approves the revised candidate. If approved, use the reception's counter, slat/stone details, accessible circulation, sports-photo wall, restrained ski detail, windows, and warm/cool light balance consistently; keep the approved exterior language and Altai context.
+- **REF-INT-01 revised reception:** `references/interiors/REF-INT-01-master-reception.png`, PNG, 1376 × 768, 2,772,482 bytes, approved and locked canonical interior. Preserve unchanged. Use its dark timber, stone, steel, glazing, sports-photo wall, restrained ski detail, accessible circulation, and warm/cool light balance consistently.
+- **Initial reception draft:** `references/interiors/REF-INT-01-master-reception-v1-original.png`, PNG, 1376 × 768, 2,673,858 bytes, archived and unapproved. Retain unchanged as history; never treat as canonical.
+- **REF-INT-02 treatment/exercise room:** prompt prepared in `prompts/interiors.md`, awaiting user approval; not generated. When approved, use REF-ARC-01 as primary architecture reference and REF-INT-01 as secondary interior-material/circulation reference. Keep the room plausibly within the same building, with dark timber, stone, charcoal steel, panoramic glazing, restrained brand accents, natural daylight, and warm practicals.
+- Keep REF-INT-02 empty of people and readable branding. Until actual inventory is confirmed, depict only generic, unbranded rehabilitation furniture and open supervised-movement space; no specialized devices or implied service claims.
 - No signage, facility name, or logo in generated images; typeset verified branding in post.
 
 ## Screen direction and time
@@ -29,8 +30,9 @@
 
 ## Clinical and equipment continuity
 
-- Never imply a named product or service unless verified. Named SkyTech simulator use requires an actual verified reference; no design invention.
-- Validate equipment against supplied references and clinical review. Sensor placement, belts/harnesses, screens, pool supervision, clothing, and patient posture must make physical sense.
+- No equipment or specialist service is confirmed as available by the project documents. Verify inventory and services with the actual facility before depiction or claims.
+- Specifically unconfirmed: cryotherapy/cold therapy, anti-gravity treadmill, therapy pool/aquatic rehabilitation, stabilometric platform, named ski simulator (including SkyTech), treadmill/sensor biomechanics, and other specialized diagnostic/exercise devices.
+- Validate any later-supplied equipment references and clinical review. Sensor placement, belts/harnesses, screens, pool supervision, clothing, and patient posture must make physical sense if their use is verified.
 - Monitors and interfaces should have graphics and patient data replaced or added in post. No random text or real patient information.
 - Team composition/credentials and any apparent clinical intervention must be approved and factually accurate. No white coats by default; use approved professional sports-medical clothing.
 

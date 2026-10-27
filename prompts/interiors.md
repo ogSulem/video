@@ -1,10 +1,10 @@
 # Stage 4 reference brief — interior and equipment assets
 
-**Current candidate:** `REF-INT-01` — revised reception and main public interior master reference.
-**Status:** One revised image generated after user selected the revised alternative; awaiting visual review. It is **not approved or locked**.
-**Candidate output:** `references/interiors/REF-INT-01-master-reception.png`, PNG, 1376 × 768, 2,772,482 bytes (verified from file and PNG header).
-**Previous draft preserved:** `references/interiors/REF-INT-01-master-reception-v1-original.png`, PNG, 1376 × 768, 2,673,858 bytes. The copy is byte-identical to the initial unapproved image (SHA-256 `3d9cb7781d1c5efd20b8a7be9901a9717645150d5d9131c248fdc4279881353b`). Do not treat it as canonical.
-**Input reference used for revised candidate:** Approved exterior image `references/architecture/REF-ARC-01-master-exterior.png`, supplied as the sole image reference. REF-CHAR-01 was not used; no person appears in the reception room.
+**REF-INT-01 status:** Approved and locked as the canonical reception reference.
+**Canonical image:** `references/interiors/REF-INT-01-master-reception.png`, PNG, 1376 × 768, 2,772,482 bytes. Preserve unchanged.
+**Archived original:** `references/interiors/REF-INT-01-master-reception-v1-original.png`, PNG, 1376 × 768, 2,673,858 bytes; archived unapproved draft, not canonical. Preserve unchanged.
+**REF-INT-02 status:** Exact prompt prepared; awaiting user approval. No treatment-room image has been generated.
+**Equipment verification:** Existing project documents confirm no actual center equipment or services. Keep the proposed room generic and unbranded; specialized devices are excluded pending real-world verification.
 
 ## Why reception first
 
@@ -32,6 +32,28 @@ Reception is the first interior audience sees after the exterior reveal and supp
 - Are sports details legible but restrained? Are there no invented services, equipment, credentials, text, or logos?
 - Is the warm welcome balanced against cool winter daylight without excessive amber or artificial HDR?
 
-## Later interior/equipment assets — on hold
+## REF-INT-02 — master rehabilitation and exercise room
 
-REF-INT-02 and all other interior/equipment images remain gated until the user approves the revised REF-INT-01 candidate. Gait assessment, ski simulator, cold therapy, anti-gravity treadmill, aquatic rehabilitation, and stabilometry require facility/service verification and credible supplied equipment references before depiction. Do not name or reproduce SkyTech or another exact make/model without a verified reference. Keep titles, interfaces, branding, and patient data out of generated imagery; add approved graphics in post.
+**Status:** Proposed exact prompt; awaiting user approval. Do not generate yet.
+**Output path if approved:** `references/interiors/REF-INT-02-master-rehabilitation-room.png`
+**Reference plan:** Use approved REF-ARC-01 as the primary architecture input and approved REF-INT-01 as secondary interior-material and circulation reference. Do not use REF-CHAR-01; no people in this room reference.
+
+### Equipment verification findings
+
+The existing brief, shot list, continuity guide, and asset records do not verify any actual equipment or service availability at the center. Therefore the prompt below excludes cryotherapy/cold therapy, anti-gravity treadmills, therapy pools, stabilometric platforms, SkyTech or other ski simulators, treadmills/sensors, and all other specialized devices. Generic furnishings are illustrative design elements only, not a claim about actual inventory. Confirm any equipment with the facility before depiction in later assets.
+
+### Exact proposed generation prompt — REF-INT-02
+
+> Create exactly ONE photorealistic cinematic 16:9 landscape architectural reference image for REF-INT-02, the main rehabilitation and supervised exercise room of the same premium sports rehabilitation center in the Altai Mountains. Use the supplied approved exterior REF-ARC-01 as the primary architectural reference and the approved reception REF-INT-01 as the secondary interior continuity reference. The room must plausibly exist within that exact building. Preserve the shared contemporary architecture and materials: dark timber with restrained vertical slat details, natural grey stone or mineral-finish surfaces, charcoal steel framing, generous but realistic panoramic glazing, restrained deep-blue accents and a very small orange accent. Do not redesign either approved reference.
+>
+> Show one clean, operational, clinically credible multi-purpose rehabilitation studio, empty of people, with open floor area for supervised movement and accessible, unobstructed circulation. Compose a calm cinematic establishing view from a plausible human-height camera position, natural 35mm architectural-photography perspective, straight verticals, no extreme wide-angle distortion, and useful depth from clear foreground through the work area to windows and background. Large windows admit natural Altai winter daylight and a subtle view of snowy conifers and mountains; warm practical lighting softly balances the cool daylight. Keep exposure natural and material colors accurate.
+>
+> Communicate evidence-based sports rehabilitation through thoughtful function and order rather than dramatic medical props: one generic, unbranded adjustable treatment plinth placed to the side of the open movement area; one sturdy low exercise bench; a few neatly stored exercise mats and simple elastic resistance bands in a compact storage unit. These are generic illustrative furnishings only, not verified center inventory. Keep the room uncluttered, clean, durable, welcoming, and ready for supervised athlete recovery; allow ample wheelchair and staff circulation. Use realistic proportions, safe spacing, credible joinery, practical flooring, modest storage, and controlled reflections.
+>
+> Do not depict or imply cryotherapy, an anti-gravity treadmill, a therapy pool, a stabilometric platform, any treadmill or sensor system, a ski simulator (including SkyTech), or any other specialized diagnostic or treatment device. Do not add extra equipment beyond the generic items named above. No people, text, readable labels, signage, logos, medical crosses, certifications, watermarks, patient information, or collage. This is a room-design reference, not a claim about actual services or equipment.
+>
+> Premium photorealistic architectural-commercial photography, restrained natural contrast, subtle film grain, refined color grading, realistic wood, stone, steel, glass and daylight. Avoid hospital-ward styling, generic gym-showroom clutter, spa/hotel cues, artificial CGI gloss, excessive HDR, oversaturation, impossible geometry, distorted windows, floating furniture, clutter, or obvious AI artifacts.
+
+## Later interior/equipment assets — gated
+
+Do not generate any other interior or equipment image until REF-INT-02 and each later asset pass their approval gates. Confirm actual equipment/service availability with the facility before preparing device-specific imagery. Add any verified details to the manifest and continuity guide with source and approval notes. Keep titles, interfaces, branding, and patient data out of generated imagery; use approved graphics in post.
