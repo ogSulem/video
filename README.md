@@ -4,7 +4,7 @@ Production workspace for a premium cinematic commercial for a sports rehabilitat
 
 ## Current status
 
-**REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, and REF-SCENE-02 v2 are approved and locked.** Scene 2 v1 remains archived and unapproved. The REF-SCENE-01 pre-fall descent prompt is prepared and awaits approval; no descent image or video has been generated.
+**REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, and REF-SCENE-02 v2 are approved and locked.** Scene 2 v1 remains archived and unapproved. REF-SCENE-01 pre-fall descent is generated and awaiting user visual approval; no video has been generated.
 
 ## Production documents
 
@@ -21,7 +21,7 @@ Production workspace for a premium cinematic commercial for a sports rehabilitat
 
 ## Approval gates
 
-Work in sequence. REF-ARC-01 (exterior) and REF-CHAR-01 (skier) are approved and must not be modified or regenerated. The next image-generation step is **one** REF-INT-01 reception reference, only after prompt approval. Other interior/equipment assets and all video remain gated.
+Work in sequence. REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, and REF-SCENE-02 v2 are approved and must not be modified or regenerated. REF-SCENE-01 is awaiting visual approval; do not generate another asset or video until that gate is cleared.
 
 ## Factual advertising safeguard
 
