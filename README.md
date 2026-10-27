@@ -4,7 +4,7 @@ Production workspace for a premium cinematic commercial for a sports rehabilitat
 
 ## Current status
 
-**REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, and REF-SCENE-01 are approved and locked.** Scene 2 v1 remains archived and unapproved. No video has been generated.
+**REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, and REF-SCENE-01 are approved and locked.** REF-SCENE-03 center exterior reveal is generated and awaiting approval; Scene 2 v1 remains archived and unapproved. No video has been generated.
 
 ## Production documents
 

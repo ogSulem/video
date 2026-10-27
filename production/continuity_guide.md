@@ -1,6 +1,6 @@
 # Continuity guide — RETURN TO THE SLOPE
 
-**Status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, and REF-SCENE-01 ski descent are approved and locked. Preserve all approved originals unchanged. REF-SCENE-02 v1 remains archived and unapproved. No video has been generated.
+**Status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, and REF-SCENE-01 ski descent are approved and locked. REF-SCENE-03 center exterior reveal is generated and awaiting approval; it is not canonical. Preserve all approved originals unchanged. REF-SCENE-02 v1 remains archived and unapproved. No video has been generated.
 
 ## Master skier — REF-CHAR-01 (approved canonical)
 
@@ -28,6 +28,7 @@
 
 - Stage 2 exterior `references/architecture/REF-ARC-01-master-exterior.png` is approved and canonical. Reuse it unchanged for exterior scenes; do not invent a competing building.
 - Keep its natural stone base, dark timber/vertical slats, charcoal steel, glazing rhythm, roofline, entrance, railings, scale, snowy terrain, and Altai mountain orientation stable.
+- **REF-SCENE-03 center exterior reveal candidate:** `references/scenes/REF-SCENE-03-center-exterior-reveal.png` (PNG, 1376 × 768, 2,630,607 bytes; SHA-256 `3cff05af0b82055281a203e5187ac4a0266cd4f53d6b05440de280dc74543ac0`), generated using REF-ARC-01 as the sole architectural reference; awaiting user visual approval and not canonical. The candidate retains the same three-quarter front/side composition, building massing, facade materials, roofline, glazing, blue-hour light, and snowy Altai context. Keep REF-ARC-01 unchanged and use it—not this pending candidate—as the authoritative design source until approval.
 - **REF-INT-01 revised reception:** `references/interiors/REF-INT-01-master-reception.png`, PNG, 1376 × 768, 2,772,482 bytes, approved and locked canonical interior. Preserve unchanged.
 - **Initial reception draft:** `references/interiors/REF-INT-01-master-reception-v1-original.png`, PNG, 1376 × 768, 2,673,858 bytes, archived and unapproved; never treat as canonical.
 - **REF-INT-02 rehabilitation/exercise room:** `references/interiors/REF-INT-02-master-rehabilitation-room.png`, PNG, 1376 × 768, 2,690,673 bytes, approved and locked canonical reference. Preserve unchanged. Its generic furnishings are illustrative, not verified center inventory.
