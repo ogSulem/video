@@ -1,13 +1,13 @@
 # Approval workflow and asset manifest
 
-**Project status:** Stage 1 — documents prepared; awaiting user approval.  
-**Generated reference assets:** None.  
-**GitHub integration status:** Arena's GitHub connector lookup returned `unsupported` in this conversation. The workspace checkout is `ogSulem/video` (remote `origin: https://github.com/ogSulem/video.git`) on `arena/f2208454-video`; files can be written locally, but no GitHub connector operations or remote publication have been performed.
+**Project status:** Stage 2 — master exterior generated; awaiting user visual approval.
+**Generated reference assets:** One exterior image; not yet approved as canonical.
+**Repository:** Workspace checkout `ogSulem/video`, branch `arena/f2208454-video`. The Arena GitHub connector lookup returned `unsupported`; this file and the image are saved in the checkout. Git CLI was used for repository publication where supported.
 
 ## Sequential approval gates
 
-1. **Stage 1 — setup and creative direction:** these documents and workflow. Await approval before proceeding.
-2. **Stage 2 — master exterior architecture:** generate exactly one image; review and approve before it becomes the locked facility anchor.
+1. **Stage 1 — setup and creative direction:** documents and workflow approved by user.
+2. **Stage 2 — master exterior architecture:** exactly one image generated; awaiting user review/approval before it becomes the locked facility anchor.
 3. **Stage 3 — master skier:** generate exactly one image only after Stage 2 is approved; review/approve proposed appearance before use.
 4. **Stage 4 — interiors and equipment:** create/review one approved asset at a time, using approved architectural/character references and verifying actual facility equipment/services.
 5. **Stage 5 — shot prompts:** write individual prompts based on approved references; obtain approval before generation.
@@ -20,13 +20,14 @@ No paid operation without explicit authorization. Do not skip gates or replace a
 
 | Filename / ID | Purpose | Status | Dependencies / notes |
 |---|---|---|---|
-| `production/creative_brief.md` | Project goals and guardrails | Draft — Stage 1 review | User brief; not an approved final creative |
-| `production/visual_style_guide.md` | Shared look, light, camera, credibility rules | Draft — Stage 1 review | To be refined against approved references |
-| `production/master_script.md` | 10-beat timing, Russian titles and VO | Draft — Stage 1 review | Brand, URL, medical claims unverified |
-| `production/shot_list.md` | 20-shot production plan | Draft — Stage 1 review | Service/equipment shots are conditional |
-| `production/continuity_guide.md` | Character, facility, action-axis rules | Draft — Stage 1 review | Proposed skier not yet approved/generated |
-| `prompts/architecture.md` | Stage 2 exterior image brief | Draft — not submitted to image generation | Generate one image only after Stage 1 approval |
-| `prompts/character.md` | Stage 3 skier design brief | Draft — not submitted to image generation | Hold until Stage 2 approval |
+| `references/architecture/REF-ARC-01-master-exterior.png` | Master exterior architecture reference | Generated — awaiting user visual approval | Original generated PNG; 1376 × 768; 2,688,465 bytes; generated from exact prompt recorded in `prompts/architecture.md`; do not treat as canonical until approved |
+| `production/creative_brief.md` | Project goals and guardrails | Stage 1 approved | User brief; claims and brand details still need factual verification |
+| `production/visual_style_guide.md` | Shared look, light, camera, credibility rules | Stage 1 approved | Refine after approval of visual references |
+| `production/master_script.md` | 10-beat timing, Russian titles and VO | Stage 1 approved | Brand, URL, medical claims unverified |
+| `production/shot_list.md` | 20-shot production plan | Stage 1 approved | Service/equipment shots are conditional |
+| `production/continuity_guide.md` | Character, facility, action-axis rules | Stage 1 approved | Proposed skier not yet approved/generated |
+| `prompts/architecture.md` | Stage 2 exterior image brief and generation record | Generated — awaiting user visual approval | Exact generation prompt is preserved; no variants generated |
+| `prompts/character.md` | Stage 3 skier design brief | Draft — not submitted to image generation | Hold until Stage 2 is approved |
 | `prompts/interiors.md` | Stage 4 reference brief | Draft — not submitted to image generation | Hold until Stages 2–3 and fact checks |
 
 ## Status vocabulary

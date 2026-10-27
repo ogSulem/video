@@ -4,7 +4,7 @@ Production workspace for a premium cinematic commercial for a sports rehabilitat
 
 ## Current status
 
-**Stage 1 — production setup and creative plan.** No images or video have been generated. All character, facility, equipment, service, and brand details remain proposed or unverified until explicitly approved.
+**Stage 2 — master exterior generated; awaiting user approval.** Exactly one image exists at `references/architecture/REF-ARC-01-master-exterior.png`. No video, character, interior, or equipment assets have been generated. The exterior is not canonical until the user approves it.
 
 ## Production documents
 
