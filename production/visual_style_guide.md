@@ -1,6 +1,6 @@
 # Visual style guide — RETURN TO THE SLOPE
 
-**Status:** Proposed for Stage 1 approval. Apply only after approval; references will define exact looks.
+**Status:** Approved baseline; refine only in ways consistent with the approved REF-ARC-01 exterior and REF-CHAR-01 skier references.
 
 ## Image language
 

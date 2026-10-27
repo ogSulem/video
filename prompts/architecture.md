@@ -1,6 +1,6 @@
 # Stage 2 image brief — master exterior architecture
 
-**Status:** Stage 1 approved. Exactly one image has been generated for Stage 2 and is awaiting user review; no additional views or variations have been generated.
+**Status:** Approved by user as the canonical exterior reference. Preserve the original unchanged; reuse for future exterior shots. Exactly one image was generated; no additional views or variations.
 
 ## Intent
 
@@ -24,11 +24,11 @@ Photorealism; Altai winter plausibility; buildable structure and access; coheren
 
 ## Generation record — REF-ARC-01
 
-**Status:** Generated once; awaiting user visual approval.
+**Status:** Approved by user — canonical exterior.
 **File:** `references/architecture/REF-ARC-01-master-exterior.png`
 **Dimensions:** 1376 × 768 PNG (verified from PNG header); original generated file, 2,688,465 bytes.
 **Generation operation:** One image-generation call; no variants or collage.
-**QC observation:** The result presents the stone base, dark vertical timber, charcoal glazing, warm-lit interior, functional entry/terrace railings, and blue-hour snowy conifer/mountain setting. It remains a proposal pending the user's review; do not lock as canonical or proceed to the skier reference until explicit approval.
+**QC observation:** The result presents the stone base, dark vertical timber, charcoal glazing, warm-lit interior, functional entry/terrace railings, and blue-hour snowy conifer/mountain setting. The user approved this image as REF-ARC-01 canonical exterior; preserve the image unchanged.
 
 ### Exact generation prompt used
 

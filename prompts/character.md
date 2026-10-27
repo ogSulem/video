@@ -1,6 +1,6 @@
 # Stage 3 image brief — master skier character
 
-**Status:** Stage 2 architecture approved. Exactly one Stage 3 image has been generated; REF-CHAR-01 is awaiting user visual approval. No injury, rehabilitation, or video assets have been generated.
+**Status:** REF-CHAR-01 approved by user as the canonical main skier identity and wardrobe. Preserve the original unchanged. No injury, rehabilitation, or video assets have been generated.
 
 ## Approved design request
 
@@ -8,7 +8,7 @@ Male skier, approximately 30–35, realistic athletic build, natural European/Si
 
 ## Generation record — REF-CHAR-01
 
-**Status:** Generated once; awaiting user visual approval.
+**Status:** Approved by user — canonical skier reference.
 **File:** `references/characters/REF-CHAR-01-master-skier.png`
 **Dimensions:** 1376 × 768 PNG (verified from PNG header); original generated file, 2,180,293 bytes.
 **Generation operation:** One image-generation call; no variations, collage, or inset portrait.

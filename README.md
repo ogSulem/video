@@ -4,7 +4,7 @@ Production workspace for a premium cinematic commercial for a sports rehabilitat
 
 ## Current status
 
-**Stage 3 — master skier generated; awaiting user approval.** The approved canonical exterior is `references/architecture/REF-ARC-01-master-exterior.png`; the single skier reference candidate is `references/characters/REF-CHAR-01-master-skier.png`. No video, injury, rehabilitation, interior, or equipment assets have been generated.
+**Stage 4 planning — REF-ARC-01 and REF-CHAR-01 approved and locked.** The exact prompt for `REF-INT-01`, the reception/main public interior, is prepared in `prompts/interiors.md` and awaits approval. No interior image, video, injury, rehabilitation, or equipment assets have been generated.
 
 ## Production documents
 
@@ -21,7 +21,7 @@ Production workspace for a premium cinematic commercial for a sports rehabilitat
 
 ## Approval gates
 
-Work in sequence. Stage 1 documents are a proposal for review. The next image-generation step is **one** master exterior architecture reference, after approval. Do not generate the skier, interiors, equipment, or video until their respective gates are approved. Generated reference assets are not yet present.
+Work in sequence. REF-ARC-01 (exterior) and REF-CHAR-01 (skier) are approved and must not be modified or regenerated. The next image-generation step is **one** REF-INT-01 reception reference, only after prompt approval. Other interior/equipment assets and all video remain gated.
 
 ## Factual advertising safeguard
 
