@@ -1,6 +1,6 @@
 # Continuity guide — RETURN TO THE SLOPE
 
-**Status:** REF-ARC-01 exterior and REF-CHAR-01 skier approved by user. REF-INT-01 reception prompt prepared and awaiting approval; no interior image has been generated.
+**Status:** REF-ARC-01 exterior and REF-CHAR-01 skier approved by user. REF-INT-01 reception image generated and awaiting user visual approval. Do not alter/regenerate the approved references.
 
 ## Master skier — REF-CHAR-01 (approved canonical)
 
@@ -16,7 +16,8 @@
 
 - Stage 2 exterior reference `references/architecture/REF-ARC-01-master-exterior.png` is approved and is the visual source of truth. Reuse this unchanged reference for exterior scenes; do not generate a competing building.
 - Keep its stone base, dark timber/vertical slats, charcoal steel, glazing rhythm, roofline, entrance, railings, scale, snow conditions, and mountain orientation stable.
-- **REF-INT-01 reception** is the proposed first interior reference because it is the audience's first public interior view after the exterior. It is not generated or approved yet. Its prompt specifies an empty, buildable reception/lobby belonging to the exact approved exterior; use the exterior image as a reference input when generating if supported. Later interiors should inherit the approved reception's material language, window proportions, warm practical lighting, and credible circulation.
+- **REF-INT-01 reception:** `references/interiors/REF-INT-01-master-reception.png`, generated as 1376 × 768 PNG using REF-ARC-01 as the primary image reference; awaiting user visual approval. It is an empty public reception/lobby candidate, not yet a locked canonical interior. Full exact generation prompt is recorded in `prompts/interiors.md`. If approved, reuse its desk, timber-slat feature, stone/concrete floor, steel-framed windows, circulation, and warm/cool light balance for later reception shots; preserve the approved exterior language and mountain context.
+- REF-CHAR-01 was deliberately not used in the reception generation. Keep the public interior reference empty; introduce the character only in later shots where required by the approved story.
 - No signage, facility name, or logo in generated images; typeset verified branding in post.
 
 ## Screen direction and time

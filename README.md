@@ -4,7 +4,7 @@ Production workspace for a premium cinematic commercial for a sports rehabilitat
 
 ## Current status
 
-**Stage 4 planning — REF-ARC-01 and REF-CHAR-01 approved and locked.** The exact prompt for `REF-INT-01`, the reception/main public interior, is prepared in `prompts/interiors.md` and awaits approval. No interior image, video, injury, rehabilitation, or equipment assets have been generated.
+**Stage 4 — REF-INT-01 generated; awaiting user approval.** REF-ARC-01 and REF-CHAR-01 remain approved and unchanged. The reception image and exact prompt are recorded in `references/interiors/REF-INT-01-master-reception.png` and `prompts/interiors.md`. No video, injury, rehabilitation, or equipment assets have been generated.
 
 ## Production documents
 
