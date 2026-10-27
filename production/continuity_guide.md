@@ -1,6 +1,6 @@
 # Continuity guide — RETURN TO THE SLOPE
 
-**Status:** REF-ARC-01 exterior and REF-CHAR-01 skier approved by user. REF-INT-01 reception image generated and awaiting user visual approval. Do not alter/regenerate the approved references.
+**Status:** REF-ARC-01 exterior and REF-CHAR-01 skier approved by user. Revised REF-INT-01 reception candidate generated and awaiting visual review; it is not locked. Do not alter/regenerate the approved exterior or skier references.
 
 ## Master skier — REF-CHAR-01 (approved canonical)
 
@@ -16,8 +16,9 @@
 
 - Stage 2 exterior reference `references/architecture/REF-ARC-01-master-exterior.png` is approved and is the visual source of truth. Reuse this unchanged reference for exterior scenes; do not generate a competing building.
 - Keep its stone base, dark timber/vertical slats, charcoal steel, glazing rhythm, roofline, entrance, railings, scale, snow conditions, and mountain orientation stable.
-- **REF-INT-01 reception:** `references/interiors/REF-INT-01-master-reception.png`, generated as 1376 × 768 PNG using REF-ARC-01 as the primary image reference; awaiting user visual approval. It is an empty public reception/lobby candidate, not yet a locked canonical interior. Full exact generation prompt is recorded in `prompts/interiors.md`. If approved, reuse its desk, timber-slat feature, stone/concrete floor, steel-framed windows, circulation, and warm/cool light balance for later reception shots; preserve the approved exterior language and mountain context.
-- REF-CHAR-01 was deliberately not used in the reception generation. Keep the public interior reference empty; introduce the character only in later shots where required by the approved story.
+- **REF-INT-01 revised reception candidate:** `references/interiors/REF-INT-01-master-reception.png`, PNG, 1376 × 768, 2,772,482 bytes. Generated with REF-ARC-01 as the sole image reference; REF-CHAR-01 was not used. It is awaiting user visual review and is not canonical yet. Exact prompt is in `prompts/interiors.md`.
+- **Initial reception draft preserved:** `references/interiors/REF-INT-01-master-reception-v1-original.png`, byte-identical copy of the earlier unapproved reception image. It is retained for record only and is not canonical.
+- Do not use either reception version as a locked interior until the user explicitly approves the revised candidate. If approved, use the reception's counter, slat/stone details, accessible circulation, sports-photo wall, restrained ski detail, windows, and warm/cool light balance consistently; keep the approved exterior language and Altai context.
 - No signage, facility name, or logo in generated images; typeset verified branding in post.
 
 ## Screen direction and time
