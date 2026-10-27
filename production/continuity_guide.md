@@ -1,6 +1,6 @@
 # Continuity guide — RETURN TO THE SLOPE
 
-**Status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, and REF-SCENE-02 v2 are approved and locked. Preserve all approved originals unchanged. REF-SCENE-02 v1 remains archived and unapproved. REF-SCENE-01 ski-descent still is generated and awaiting user visual approval; no video has been generated.
+**Status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, and REF-SCENE-01 ski descent are approved and locked. Preserve all approved originals unchanged. REF-SCENE-02 v1 remains archived and unapproved. No video has been generated.
 
 ## Master skier — REF-CHAR-01 (approved canonical)
 
@@ -12,9 +12,9 @@
 
 ## Pre-fall descent and screen-axis continuity
 
-- **REF-SCENE-01 candidate:** `references/scenes/REF-SCENE-01-ski-descent.png` (PNG, 1376 × 768, 2,247,593 bytes), generated once and awaiting approval. It shows the skier in a controlled carve with skis contacting the snow; it is not canonical until approved.
-- The generated frame follows the proposed screen direction from upper right toward lower left, downhill, with a downhill/front-quarter tracking perspective on the same side of the action axis as the REF-SCENE-02 v2 aftermath view. V2 places the seated skier and skis in a compatible three-quarter orientation with skis extending toward the lower-left foreground. Preserve this axis; do not cross it on the cut.
-- Use the descent still's line of travel and modest snow spray as a visual lead into the aftermath's disturbed snow. Do not force an identical camera position if it compromises skiing realism. The later return can echo the same direction with stronger confidence.
+- **REF-SCENE-01 ski descent:** `references/scenes/REF-SCENE-01-ski-descent.png` (PNG, 1376 × 768, 2,247,593 bytes) is APPROVED — LOCKED. Preserve unchanged. REF-CHAR-01 was the primary identity reference and REF-SCENE-02 v2 the secondary slope/camera-axis reference.
+- The approved frame establishes travel from upper right toward lower left, downhill, with a downhill/front-quarter tracking perspective on the same side of the action axis as the REF-SCENE-02 v2 aftermath view. V2 places the seated skier and skis in a compatible three-quarter orientation with skis extending toward the lower-left foreground. Preserve this axis; do not cross it on the cut.
+- Carry the descent still's line of travel and modest snow spray into the aftermath's disturbed snow. Do not force an identical camera position if it compromises skiing realism. The later return can echo the same direction with stronger confidence.
 
 ## Accident, uncertainty, recovery, and return continuity plan
 

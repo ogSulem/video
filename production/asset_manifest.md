@@ -1,6 +1,6 @@
 # Approval workflow and asset manifest
 
-**Project status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, and REF-SCENE-02 v2 are approved and locked. REF-SCENE-01-ski-descent was generated once and is awaiting user visual approval; no video has been generated.
+**Project status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, and REF-SCENE-01 are approved and locked. No video has been generated.
 **Repository:** Workspace checkout `ogSulem/video`, branch `arena/f2208454-video`.
 
 ## Sequential approval gates
@@ -9,7 +9,7 @@
 2. **Stage 2 — master exterior architecture:** REF-ARC-01 generated once and approved; locked canonical facility exterior.
 3. **Stage 3 — master skier:** REF-CHAR-01 generated once and approved; locked canonical skier identity and wardrobe.
 4. **Stage 4 — interiors and equipment:** REF-INT-01 reception and REF-INT-02 rehabilitation room approved and locked. Specialized equipment remains unverified.
-5. **Stage 5 — skier continuity stills:** REF-SCENE-02 v2 is approved and locked; v1 is archived and unapproved. REF-SCENE-01 pre-fall descent was generated exactly once and is awaiting user visual approval.
+5. **Stage 5 — skier continuity stills:** REF-SCENE-02 v2 and REF-SCENE-01 pre-fall descent are approved and locked; REF-SCENE-02 v1 is archived and unapproved.
 6. **Stage 6 — video:** generate clips in narrative order and review each batch before continuing.
 7. **Stage 7 — finishing:** edit, sound, VO, Russian titles, verified brand card, and separately composed vertical cut.
 
@@ -26,13 +26,13 @@ No paid operation without explicit authorization. Do not skip gates or replace a
 | `references/interiors/REF-INT-02-master-rehabilitation-room.png` | Master rehabilitation/exercise room | APPROVED — LOCKED | PNG; 1376 × 768; 2,690,673 bytes; preserve unchanged; generic furnishings are illustrative, not verified inventory |
 | `references/scenes/REF-SCENE-02-injury-aftermath.png` | First post-fall still candidate (v1) | Archived — unapproved alternative | PNG; 1376 × 768; 2,274,093 bytes; retain unchanged for comparison |
 | `references/scenes/REF-SCENE-02-injury-aftermath-v2.png` | Canonical non-graphic post-fall still | APPROVED — LOCKED | PNG; 1376 × 768; 2,045,368 bytes; preserve unchanged; face visible with goggles raised |
-| `references/scenes/REF-SCENE-01-ski-descent.png` | Pre-fall descent continuity still | GENERATED — AWAITING APPROVAL | PNG; 1376 × 768; 2,247,593 bytes; REF-CHAR-01 primary and REF-SCENE-02 v2 secondary references; exact prompt and hash in `prompts/scene_prompts.md` |
-| `prompts/scene_prompts.md` | Scene 2 continuity and Scene 1 descent prompt/generation record | Updated — v2 approved; Scene 1 still awaiting approval | Exact prompt and generated-image metadata recorded; no video generated |
+| `references/scenes/REF-SCENE-01-ski-descent.png` | Canonical pre-fall descent continuity still | APPROVED — LOCKED | PNG; 1376 × 768; 2,247,593 bytes; REF-CHAR-01 primary and REF-SCENE-02 v2 secondary references; preserve unchanged; exact prompt and hash in `prompts/scene_prompts.md` |
+| `prompts/scene_prompts.md` | Scene 2 continuity and Scene 1 descent prompt/generation record | Updated — Scene 1 and Scene 2 v2 approved | Exact prompts and generated-image metadata recorded; no video generated |
 | `production/creative_brief.md` | Project goals and guardrails | Stage 1 approved | Brand details and factual claims still need verification |
 | `production/visual_style_guide.md` | Shared look, light, camera, credibility rules | Approved baseline | Maintain reference continuity |
 | `production/master_script.md` | 10-beat timing, Russian titles and VO | Stage 1 approved | Brand, URL, medical claims unverified |
 | `production/shot_list.md` | 20-shot production plan | Stage 1 approved | Service/equipment shots are conditional |
-| `production/continuity_guide.md` | Character, facility, action-axis rules | Updated — five references locked | Scene 1 descent still generated and awaiting approval; direction/camera continuity documented |
+| `production/continuity_guide.md` | Character, facility, action-axis rules | Updated — six references locked | Scene 1 direction/camera continuity now anchored by approved descent still |
 | `prompts/interiors.md` | Interior prompts and generation records | REF-INT-01 and REF-INT-02 approved | Approved reference images preserved; equipment availability remains unverified |
 
 ## Equipment verification status

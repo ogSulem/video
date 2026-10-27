@@ -1,15 +1,15 @@
 # Injury and return continuity — REF-SCENE-02
 
-**Status:** REF-SCENE-02 v2 is approved and locked; v1 is archived and unapproved. REF-SCENE-01 descent still is generated and **awaiting user visual approval**. No video has been generated.
+**Status:** REF-SCENE-02 v2 and REF-SCENE-01 descent are APPROVED — LOCKED; REF-SCENE-02 v1 is archived and unapproved. No video has been generated.
 **Approved references:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, and REF-SCENE-02 v2. Preserve all unchanged.
 **V1 archive:** `references/scenes/REF-SCENE-02-injury-aftermath.png`, PNG, 1376 × 768, 2,274,093 bytes; retain unchanged, unapproved.
 **Canonical v2:** `references/scenes/REF-SCENE-02-injury-aftermath-v2.png`, PNG, 1376 × 768, 2,045,368 bytes; approved and locked.
-**REF-SCENE-01 output:** `references/scenes/REF-SCENE-01-ski-descent.png`, PNG, 1376 × 768, 2,247,593 bytes; generated using REF-CHAR-01 primary and REF-SCENE-02 v2 secondary reference; awaiting approval.
+**REF-SCENE-01 canonical output:** `references/scenes/REF-SCENE-01-ski-descent.png`, PNG, 1376 × 768, 2,247,593 bytes; APPROVED — LOCKED; generated using REF-CHAR-01 primary and REF-SCENE-02 v2 secondary reference. Preserve unchanged.
 **REF-SCENE-01 SHA-256:** `384fd25d66cb3598939b0e8e8bb52e9b9019439f651b10bbbafef1ea224191dc`.
 
 ## Narrative continuity plan
 
-- **Pre-fall descent, Scene 1 / shot 02 (about 4 seconds):** `references/scenes/REF-SCENE-01-ski-descent.png` is generated and awaiting approval. It establishes the proposed upper-right to lower-left downhill screen direction and the downhill/front-quarter camera axis. Keep the carve controlled and skis in contact with snow.
+- **Pre-fall descent, Scene 1 / shot 02 (about 4 seconds):** `references/scenes/REF-SCENE-01-ski-descent.png` is APPROVED — LOCKED. It establishes the upper-right to lower-left downhill screen direction and the downhill/front-quarter camera axis. Preserve the controlled carve and ski-to-snow contact in later shots.
 - **Accident, Scene 2 / shot 03 (about 3.5 seconds):** later video coverage should show a single controlled loss of balance into soft snow, not an extreme or graphic crash. Continue the established action axis from the descent into aftermath.
 - **Aftermath, Scene 2 / shot 04 (about 3.5 seconds):** canonical still is approved/locked v2 with goggles raised for facial visibility. V1 remains archived and unapproved. The image depicts only non-specific knee concern; no diagnosis. Emotion is brief disappointment and uncertainty, not panic or theatrical pain.
 - **Frustration/recovery beat:** later in an early, generic supervised exercise moment, show a short pause, exhale, lowered gaze and a calm cue/listening response. Keep the setback human and understated; no breakdown, pain spectacle, diagnosis, treatment claim, fixed timeline, or guaranteed recovery implication. Avoid unverified equipment.
@@ -44,7 +44,7 @@
 
 ## REF-SCENE-01 — pre-fall ski descent still
 
-**Status:** GENERATED — AWAITING USER VISUAL APPROVAL; not approved or locked.
+**Status:** APPROVED — LOCKED by user. Preserve the image unchanged.
 **Output:** `references/scenes/REF-SCENE-01-ski-descent.png`, PNG, 1376 × 768, 2,247,593 bytes.
 **References used:** REF-CHAR-01 as primary identity input; approved REF-SCENE-02 v2 as secondary slope/snow/camera-axis continuity reference. Its seated pose and injury state were not copied.
 
@@ -60,8 +60,8 @@
 
 ## Generation and QC record — REF-SCENE-01
 
-**Status:** Generated exactly once; awaiting user visual approval. No variants, collage, or video.
-**QC note:** The image shows a controlled carve with skis contacting the snow, the skier traveling upper-right to lower-left, and an Altai-like snowy conifer/mountain background. The goggles are worn over the eyes for active skiing, so eye-level facial landmarks are less visible than in REF-CHAR-01; use REF-CHAR-01 as the identity anchor and review this limitation.
+**Status:** Generated exactly once and approved/locked by user. No variants, collage, or video.
+**QC note:** The image shows a controlled carve with skis contacting the snow, the skier traveling upper-right to lower-left, and an Altai-like snowy conifer/mountain background. The goggles are worn over the eyes for active skiing, so eye-level facial landmarks are less visible than in REF-CHAR-01; retain REF-CHAR-01 as the identity anchor for future shots.
 
 ## Production cautions
 
