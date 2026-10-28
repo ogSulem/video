@@ -1,6 +1,6 @@
 # Proposed final Russian voice-over — RETURN TO THE SLOPE
 
-**Status: PROPOSED FINAL SCRIPT — AWAITING OWNER APPROVAL.** The wording below is not silently marked as approved. Any generated reading remains a draft performance until the owner approves the script/audio.
+**Status: APPROVED — LOCKED by the project owner on 2026-10-28.** The approved wording and matching generated reading are locked; retain unchanged unless the owner authorizes a revision.
 
 **Delivery:** Calm, warm, confident, cinematic, and natural. Use measured phrasing and brief breaths between paragraphs; avoid melodrama or a “guaranteed comeback” tone.
 

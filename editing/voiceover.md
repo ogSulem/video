@@ -1,6 +1,6 @@
 # Voice-over — working Russian script
 
-**Status:** The original VO remains a working draft; the proposed full script is `editing/voiceover_final_ru.md` and awaits owner approval. Its synthetic reading is saved at `audio/voiceover/voiceover_ru_full_v1.mp3` (70.16 seconds by Xing frame count, voice-00) and is also unapproved. The short technical test remains at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3`. Owner-approved end-card copy is production-ready; the end card remains VO-free.
+**Status:** `editing/voiceover_final_ru.md` and its matching synthetic reading `audio/voiceover/voiceover_ru_full_v1.mp3` are APPROVED — LOCKED by the owner on 2026-10-28 (70.16 seconds by Xing frame count; voice-00). The short technical test remains at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3`. The earlier numbered draft below is retained as source history, not the approved narration. Owner-approved end-card copy is production-ready; the end card remains VO-free.
 
 1. «Каждый спуск — это риск. Но каждый спуск достоин второго шанса.»
 2. «Перелом. Разрыв связок. И вопрос, который звучит в голове: смогу ли я вернуться?»
