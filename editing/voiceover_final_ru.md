@@ -4,7 +4,7 @@
 
 **Delivery:** Calm, warm, confident, cinematic, and natural. Use measured phrasing and brief breaths between paragraphs; avoid melodrama or a “guaranteed comeback” tone.
 
-**Timing:** Approximately 65–77 seconds of narration. The current synthetic v1 reading is 70.19 seconds by MP3 frame/Xing metadata; leave the final brand-card reveal without VO.
+**Timing:** Approximately 65–77 seconds of narration. The current synthetic v1 reading is 70.16 seconds by Xing frame count; leave the final brand-card reveal without VO.
 
 ## Narration cues and spoken text
 
