@@ -1,6 +1,6 @@
 # Approval workflow and asset manifest
 
-**Project status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01, REF-SCENE-03 center exterior reveal, REF-SCENE-04 reception welcome, REF-SCENE-05 v2 biomechanics assessment, REF-SCENE-06 rehabilitation exercises, and REF-SCENE-07 recovery physiotherapy are approved and locked. REF-SCENE-08 rehabilitation team is generated and awaiting user visual approval. REF-SCENE-05 v1 is archived as an unapproved alternative. Preserve all approved references unchanged. No video has been generated.
+**Project status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01, REF-SCENE-03 center exterior reveal, REF-SCENE-04 reception welcome, REF-SCENE-05 v2 biomechanics assessment, REF-SCENE-06 rehabilitation exercises, REF-SCENE-07 recovery physiotherapy, and REF-SCENE-08 rehabilitation team are approved and locked. REF-SCENE-09 return to slopes is generated and awaiting user visual approval. REF-SCENE-05 v1 is archived as an unapproved alternative. Preserve all approved references unchanged. No video has been generated.
 **Repository:** Workspace checkout `ogSulem/video`, branch `arena/f2208454-video`.
 
 ## Sequential approval gates
@@ -9,7 +9,7 @@
 2. **Stage 2 — master exterior architecture:** REF-ARC-01 generated once and approved; locked canonical facility exterior.
 3. **Stage 3 — master skier:** REF-CHAR-01 generated once and approved; locked canonical skier identity and wardrobe.
 4. **Stage 4 — interiors and equipment:** REF-INT-01 reception and REF-INT-02 rehabilitation room approved and locked. Specialized equipment remains unverified.
-5. **Stage 5 — scene continuity stills:** REF-SCENE-02 v2, REF-SCENE-01 pre-fall descent, REF-SCENE-03 center exterior reveal, REF-SCENE-04 reception welcome, REF-SCENE-05 v2 biomechanics assessment, REF-SCENE-06 rehabilitation exercises, and REF-SCENE-07 recovery physiotherapy are approved and locked; REF-SCENE-02 v1 remains archived and unapproved, and REF-SCENE-05 v1 is archived as an unapproved alternative. REF-SCENE-08 rehabilitation team is generated and awaiting approval.
+5. **Stage 5 — scene continuity stills:** REF-SCENE-02 v2, REF-SCENE-01 pre-fall descent, REF-SCENE-03 center exterior reveal, REF-SCENE-04 reception welcome, REF-SCENE-05 v2 biomechanics assessment, REF-SCENE-06 rehabilitation exercises, REF-SCENE-07 recovery physiotherapy, and REF-SCENE-08 rehabilitation team are approved and locked; REF-SCENE-02 v1 remains archived and unapproved, and REF-SCENE-05 v1 is archived as an unapproved alternative. REF-SCENE-09 return to slopes is generated and awaiting approval.
 6. **Stage 6 — video:** generate clips in narrative order and review each batch before continuing.
 7. **Stage 7 — finishing:** edit, sound, VO, Russian titles, verified brand card, and separately composed vertical cut.
 
@@ -33,13 +33,14 @@ No paid operation without explicit authorization. Do not skip gates or replace a
 | `references/scenes/REF-SCENE-05-biomechanics-assessment-v2.png` | Canonical indoor biomechanics assessment still | APPROVED — LOCKED | PNG; 1376 × 768; 2,727,414 bytes; SHA-256 `0a6d303ee25232ba9d82474e120001cbcf0c2813debdaf9ea44d3031f4722acb`; REF-SCENE-05 v1 composition reference, REF-CHAR-01 identity reference; preserve image unchanged |
 | `references/scenes/REF-SCENE-06-rehabilitation-exercises.png` | Canonical supervised split-squat rehabilitation still | APPROVED — LOCKED | PNG; 1376 × 768; 2,737,178 bytes; SHA-256 `d163d7baab6f34d2cc5720e3b68782adb7389b22a83af793c54fa442395ad9de`; preserve image unchanged |
 | `references/scenes/REF-SCENE-07-recovery-physiotherapy.png` | Canonical supervised knee-mobility still | APPROVED — LOCKED | PNG; 1376 × 768; 2,700,046 bytes; SHA-256 `a3899eb7d0c1a5470c7fa90dc31e3760e3dd9dfc56e0ac519855911d542618e1`; preserve image unchanged |
-| `references/scenes/REF-SCENE-08-rehabilitation-team.png` | Supportive athlete-specialist conversation | GENERATED — AWAITING APPROVAL | PNG; 1376 × 768; 2,691,273 bytes; SHA-256 `581c44ba71f91d3de5a0f3447246e3d406afa7427b99e60d95db6a5ba15ef749`; REF-CHAR-01, REF-INT-02, REF-SCENE-05 v2, and REF-SCENE-07; generated once; no added equipment or extra people; do not lock until approved |
+| `references/scenes/REF-SCENE-08-rehabilitation-team.png` | Canonical supportive athlete-specialist conversation | APPROVED — LOCKED | PNG; 1376 × 768; 2,691,273 bytes; SHA-256 `581c44ba71f91d3de5a0f3447246e3d406afa7427b99e60d95db6a5ba15ef749`; preserve image unchanged |
+| `references/scenes/REF-SCENE-09-return-to-slopes.png` | Skier’s controlled return-to-sport carve | GENERATED — AWAITING APPROVAL | PNG; 1376 × 768; 2,739,826 bytes; SHA-256 `5eec2e8d9dc4730241c10500e2541b97da51475827d714b1c5f5e9ccb7626897`; REF-CHAR-01 identity/wardrobe and REF-SCENE-01 action/slope continuity; generated once; preserve all approved refs; do not lock until approved |
 | `prompts/scene_prompts.md` | Scene 1, Scene 2, Scene 4, and Scene 5 prompt/generation records | Updated — Scene 5 v2 approved and locked | Exact prompt and output metadata recorded; no video generated |
 | `production/creative_brief.md` | Project goals and guardrails | Stage 1 approved | Brand details and factual claims still need verification |
 | `production/visual_style_guide.md` | Shared look, light, camera, credibility rules | Approved baseline | Maintain reference continuity |
 | `production/master_script.md` | 10-beat timing, Russian titles and VO | Stage 1 approved | Brand, URL, medical claims unverified |
 | `production/shot_list.md` | 20-shot production plan | Stage 1 approved | Service/equipment shots are conditional |
-| `production/continuity_guide.md` | Character, facility, action-axis rules | Updated — eleven references locked; REF-SCENE-08 awaiting approval | Scene 8 continues the approved skier, specialist, and rehabilitation-room continuity |
+| `production/continuity_guide.md` | Character, facility, action-axis rules | Updated — twelve references locked; REF-SCENE-09 awaiting approval | Scene 9 returns to the approved skier and opening descent continuity |
 | `prompts/interiors.md` | Interior prompts and generation records | REF-INT-01 and REF-INT-02 approved | Approved reference images preserved; equipment availability remains unverified |
 
 ## Equipment verification status
