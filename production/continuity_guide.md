@@ -1,6 +1,6 @@
 # Continuity guide — RETURN TO THE SLOPE
 
-**Status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01 ski descent, REF-SCENE-03 center exterior reveal, and REF-SCENE-04 reception welcome are APPROVED — LOCKED. Preserve all approved originals unchanged. REF-SCENE-02 v1 remains archived and unapproved. No video has been generated.
+**Status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01 ski descent, REF-SCENE-03 center exterior reveal, and REF-SCENE-04 reception welcome are APPROVED — LOCKED. REF-SCENE-05 biomechanics assessment is generated and awaiting approval; it is not canonical. Preserve all approved originals unchanged. REF-SCENE-02 v1 remains archived and unapproved. No video has been generated.
 
 ## Master skier — REF-CHAR-01 (approved canonical)
 
@@ -33,6 +33,7 @@
 - **REF-SCENE-04 reception welcome:** `references/scenes/REF-SCENE-04-reception-welcome.png` (PNG, 1376 × 768, 2,773,335 bytes; SHA-256 `dcc6b97af2e1452d9a09a6bf5397ab1b8282a56c08aac864cecf9db7a6f00320`) is APPROVED — LOCKED as the canonical reception welcome still. It uses locked REF-INT-01 for the reception and locked REF-CHAR-01 for skier identity and clothing. Preserve the image and both source references unchanged. Keep the skier's approved face, build and navy/orange/charcoal outfit consistent in the following assessment scene; a team member in understated non-branded attire welcomes him calmly, without implying a diagnosis or treatment.
 - **Initial reception draft:** `references/interiors/REF-INT-01-master-reception-v1-original.png`, PNG, 1376 × 768, 2,673,858 bytes, archived and unapproved; never treat as canonical.
 - **REF-INT-02 rehabilitation/exercise room:** `references/interiors/REF-INT-02-master-rehabilitation-room.png`, PNG, 1376 × 768, 2,690,673 bytes, approved and locked canonical reference. Preserve unchanged. Its generic furnishings are illustrative, not verified center inventory.
+- **REF-SCENE-05 biomechanics assessment candidate:** `references/scenes/REF-SCENE-05-biomechanics-assessment.png` (PNG, 1376 × 768, 2,660,634 bytes; SHA-256 `56cccf4c639787858c0b8dea3b0be8e57491df78895ac1d48626c468bdc38ecf`), generated using locked REF-CHAR-01 and REF-INT-02 only. Status: GENERATED — AWAITING APPROVAL; not canonical. The skier remains in the established navy jacket with restrained orange details and charcoal pants, performing a controlled shallow bodyweight squat while one specialist observes and explains. Treat this only as a general functional assessment: do not infer diagnosis or treatment and do not depict specialized or unverified equipment. Preserve both approved reference images unchanged.
 - No signage, facility name, or logo in generated images; typeset verified branding in post.
 
 ## Equipment, clinical, and claims continuity
