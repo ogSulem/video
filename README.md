@@ -4,7 +4,7 @@ Production workspace for a premium cinematic commercial for a sports rehabilitat
 
 ## Current status
 
-**REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01, REF-SCENE-03 center exterior reveal, REF-SCENE-04 reception welcome, REF-SCENE-05 v2 biomechanics assessment, REF-SCENE-06 rehabilitation exercises, REF-SCENE-07 recovery physiotherapy, REF-SCENE-08 rehabilitation team, and REF-SCENE-09 return to slopes are approved and locked.** REF-SCENE-10 final brand-card background is generated and awaiting approval. Scene 5 v1 is archived as an unapproved alternative; Scene 2 v1 remains archived and unapproved. No video has been generated.
+**REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01, REF-SCENE-03 center exterior reveal, REF-SCENE-04 reception welcome, REF-SCENE-05 v2 biomechanics assessment, REF-SCENE-06 rehabilitation exercises, REF-SCENE-07 recovery physiotherapy, REF-SCENE-08 rehabilitation team, REF-SCENE-09 return to slopes, and REF-SCENE-10 final brand-card background are APPROVED — LOCKED.** Scene 10 is approved as a backup end-card background; its motif is decorative, not an official logo. Scene 5 v1 is archived as an unapproved alternative; Scene 2 v1 remains archived and unapproved. No video has been generated; one short synthetic Russian VO excerpt is available at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3` for review.
 
 ## Production documents
 

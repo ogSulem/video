@@ -1,6 +1,6 @@
 # Voice-over — working Russian script
 
-**Status:** Draft for creative/client/clinical review; not recorded. Brand terms and medical claims unverified. The VO may finish over Scene 9 so the brand card remains clean.
+**Status:** Complete VO remains a draft and is not approved/recorded. Owner-approved end-card brand copy is production-ready; medical/factual claims remain under review. A short synthetic excerpt is saved at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3`; the end card remains VO-free.
 
 1. «Каждый спуск — это риск. Но каждый спуск достоин второго шанса.»
 2. «Перелом. Разрыв связок. И вопрос, который звучит в голове: смогу ли я вернуться?»
@@ -12,4 +12,4 @@
 8. «За каждым возвращением стоит команда. И мы рядом на каждом этапе.»
 9. «Потому что настоящий спортсмен не заканчивает. Он возвращается.»
 
-**Review cautions:** The lines about fractures/ligament tears, certainty of correcting movement, treating fear, and guaranteed-sounding return outcomes need factual, clinical, and legal review. Consider a less absolute alternative if unsupported. Final Russian copy and pronunciation/delivery direction require approval. No VO is planned over the final black card.
+**Review cautions:** The lines about fractures/ligament tears, certainty of correcting movement, treating fear, and guaranteed-sounding return outcomes need factual, clinical, and legal review. Consider a less absolute alternative if unsupported. Final VO wording and pronunciation/delivery direction require approval; the separate owner-approved end-card copy is recorded in the assembly plan. No VO is planned over the final card.

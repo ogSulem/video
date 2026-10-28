@@ -1,18 +1,18 @@
 # Video Assembly Plan — RETURN TO THE SLOPE
 
-**Status:** Editor-ready planning document only. No video has been generated or assembled.
+**Status:** Editor-ready plan; one short synthetic Russian VO excerpt has been generated, but no video has been assembled.
 **Target runtime:** 77 seconds (within the requested 75–85 second range).
-**Current edit basis:** Approved still references through Scene 9; Scene 10 background is **GENERATED — AWAITING APPROVAL** and must not be used in a final until approved.
+**Current edit basis:** Scenes 1–9 and the Scene 10 backup background are **APPROVED — LOCKED**. The existing Scene 10 PNG remains unchanged.
 
 ## 1. Audit snapshot and editorial decisions
 
 - The creative brief targets a premium 16:9 commercial, approximately 75 seconds, with ten narrative beats. The visual-style guide calls for restrained motion, natural anatomy, controlled color, and no fabricated text/logos or unsupported equipment.
-- The asset manifest and continuity guide mark Scenes 1–9 **APPROVED — LOCKED** (Scene 9 approval explicitly confirmed by the owner). Scene 10 remains **GENERATED — AWAITING APPROVAL**. Preserve all locked source files byte-for-byte.
+- The asset manifest and continuity guide mark Scenes 1–10 **APPROVED — LOCKED** (Scene 10 approved by the owner on 2026-10-28 as a backup end-card background). Preserve all locked source files byte-for-byte.
 - The available scene references are still PNGs, not clips. Scene 10 is a near-black 16:9 background with a decorative mountain/trail/cross motif and blank type bands; it contains no Russian text and is not an official logo.
-- No video, recorded voice-over, music, sound effects, licensed footage, official logo file, or brand font is present in the repository. The VO and sound-design documents are drafts/proposals only.
+- No video, final voice-over, music, sound effects, licensed footage, official logo file, or brand font is present. The VO draft and sound-design proposal remain provisional. A short synthetic Russian excerpt from non-diagnostic draft wording is saved at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3` for review.
 - The current `prompts/scene_prompts.md` records exact prompts through Scene 5; later asset statuses are tracked in the manifest and continuity guide. This prompt-archive gap does not change their approval status.
 - The legacy shot list includes a simulator, diagnostic display/sensors, and conditional modalities. Do not include these unless availability and references are verified. The assembly below uses the approved simple exercises and team stills instead.
-- Brand name, tagline, and URL remain subject to verification in the creative brief and manifest. The exact owner-supplied card copy is retained below for typesetting after that check.
+- The owner-approved brand name, tagline, and URL are production-ready. Factual medical/service claims in the VO draft remain subject to substantiation and review.
 
 ## 2. Proposed assembly timeline — 77 seconds
 
@@ -22,8 +22,8 @@ The timecodes are an editorial proposal. “Still move” means a 2D pan/scale o
 |---:|---|---|---|---|
 | 01 | 00:00–00:04 / 4s | Scene 1 — `REF-SCENE-01-ski-descent.png` | Open on a wide crop emphasizing Altai terrain, then a very slow drift. This is simulated movement over a still; there is no landscape-only plate. If a true aerial is required, source licensed footage. | Begin with spacious wind only. Draft VO line 1 may enter near the end after approval. |
 | 02 | 00:04–00:08 / 4s | Scene 1 — same still | Reframe to the skier and carve; subtle tracking-style pan in the established upper-right to lower-left direction. Simulated, not a skiing clip. | Add ski-edge/powder detail only from a created or licensed SFX source. |
-| 03 | 00:08–00:11 / 3s | Scene 1 → Scene 2 | Imply the fall off-screen with a brief snow-white/dip transition into the aftermath. No fall footage exists; do not fabricate a violent fall. | Briefly narrow the sound field; soft snow impact/breath only if sourced and approved. Hold VO for a beat. |
-| 04 | 00:11–00:16 / 5s | Scene 2 — `REF-SCENE-02-injury-aftermath-v2.png` | Hold the approved, non-graphic aftermath; restrained push toward the face/posture. Preserve the image and avoid implying a diagnosis. | Draft VO line 2 is on hold: its fracture/ligament language is not an athlete-specific approved fact. Use breath/roomless outdoor ambience until clinically reviewed. |
+| 03 | 00:08–00:11 / 3s | Scene 1 → Scene 2 | Imply the fall off-screen with a brief snow-white/dip transition into the aftermath. No fall footage exists; do not fabricate a violent fall. | Briefly narrow the sound field; soft snow impact/breath only if sourced and approved. Leave a short VO pause. |
+| 04 | 00:11–00:16 / 5s | Scene 2 — `REF-SCENE-02-injury-aftermath-v2.png` | Hold the approved, non-graphic aftermath; restrained push toward the face/posture. Preserve the image and avoid implying a diagnosis. | Use only the safe question fragment in the generated excerpt: «И вопрос, который звучит в голове: смогу ли я вернуться?» Exclude the draft’s unverified fracture/ligament diagnosis. |
 | 05 | 00:16–00:21 / 5s | Scene 3 — `REF-SCENE-03-center-exterior-reveal.png` | Slow, subtle push toward the existing entrance; keep verticals and building geometry undistorted. Simulated movement over the approved still. | Warm the music bed slightly; no factual service claim. |
 | 06 | 00:21–00:25 / 4s | Scene 4 — `REF-SCENE-04-reception-welcome.png` | Soft match-dissolve from exterior cool light to reception warmth; gentle two-shot push. | Draft VO line 3 or 4 may be placed here after claim review. No recorded dialogue exists. |
 | 07 | 00:25–00:28 / 3s | Scene 4 — same still | A modest crop/reframe to the eye contact; no new image or invented action. | Let the welcome ambience breathe; keep music restrained. |
@@ -37,9 +37,9 @@ The timecodes are an editorial proposal. “Still move” means a 2D pan/scale o
 | 15 | 00:57–01:02 / 5s | Scene 9 — `REF-SCENE-09-return-to-slopes.png` | Approved return carve as the hero hold; slow push along the carve direction. This is simulated movement over the still. | Draft VO line 9 is on hold for review because it may imply a universal/guaranteed return. |
 | 16 | 01:02–01:07 / 5s | Scene 9 — motion insert **not in repository** | Preferred: a separately sourced/created, approved short carve clip matching REF-CHAR-01 and Scene 1. Fallback: a second digital reframe of Scene 9; label it simulated, not real tracking. | Broaden the alpine bed and ski-on-snow sound only when sourced. |
 | 17 | 01:07–01:11 / 4s | Altai mountain-to-sky move **not in repository** | Preferred: licensed/owner-supplied Altai footage with a real slow upward tilt. Fallback: a restrained upward reframe of the Scene 9 still; the available sky is limited, so this is visibly simulated and not a true camera tilt. | Let the music resolve toward open air; no VO is needed here. |
-| 18 | 01:11–01:12 / 1s | Scene 10 — `REF-SCENE-10-final-brand-card.png` (pending approval) | Dissolve from sky to the unchanged dark card. Reveal the existing emblem with a mask/matte if separate timing is desired; the emblem is baked into the PNG. | Music begins its final resolution. Do not use until Scene 10 is approved. |
-| 19 | 01:12–01:13.5 / 1.5s | Scene 10 | Fade in the primary brand name in a separate, licensed Cyrillic text layer. Keep the emblem visible. | No VO, per master script and VO notes. |
-| 20 | 01:13.5–01:17 / 3.5s | Scene 10 | Fade in tagline first, then website about 0.8s later; hold the URL legibly for the remaining time. Text is composited in post, not generated into the PNG. | Music resolves cleanly; no VO. |
+| 18 | 01:11–01:12 / 1s | Altai mountain/sky shot; use the motif from Scene 10 as a graphic reference | Over the mountain/sky image, fade in the existing decorative mountain motif as a separate post layer. It is not an official logo. If no moving background is available, Scene 10 remains a usable backup card. | Music begins its final resolution. |
+| 19 | 01:12–01:13.5 / 1.5s | Same mountain/sky background | Fade in the owner-approved brand name as a separate, licensed Cyrillic text layer. Keep the motif visible. | No VO, per master script and VO notes. |
+| 20 | 01:13.5–01:17 / 3.5s | Same mountain/sky background | Fade in the approved tagline first, then website about 0.8s later; hold the URL legibly for the remaining time. All text is composited in post. | Music resolves cleanly; no VO. |
 
 **Total: 77 seconds.** Shots 16–17 are planned dependencies, not existing clips. If unavailable, use the stated still-based fallbacks and retain the 77-second timing; do not present simulated motion as genuine camera footage.
 
@@ -48,7 +48,7 @@ The timecodes are an editorial proposal. “Still move” means a 2D pan/scale o
 - **Genuine footage/camera movement:** none currently exists in the repository. A real aerial/landscape opening, moving return carve, and physical tilt from peaks into sky must be sourced/licensed or created in an external video-generation/shoot environment and approved as new video assets.
 - **Simulated movement:** all existing scene PNGs can receive small keyframed position/scale moves, editorial crops, and restrained parallax in an NLE. This creates movement across a still, not new perspective or real subject motion. Avoid warping limbs, skis, faces, architecture, or equipment. Preserve original PNGs.
 - **Transitions:** mostly clean cuts; one brief snow/dip transition to imply the off-screen fall; cool-to-warm match dissolve into reception; measured cuts through rehabilitation; a deliberate dissolve from the return/sky into the dark end card. Avoid flashy wipes and overused slow motion.
-- **End-card reveal:** Scene 10’s emblem is already part of the background raster. Use the intact PNG as the base. For separate emblem timing, derive a temporary matte/layer in the editor without changing the source file. Typeset copy as editable text layers after Scene 10 approval.
+- **Primary ending:** Keep the Altai mountain image as the background through the gradual skyward move, then reveal the decorative mountain motif, brand name, tagline, and website in that order as editable overlays. The motif can be isolated from Scene 10 in the editor without changing its PNG; do not present it as an official logo. Use the approved, unchanged Scene 10 PNG only as a backup end card.
 
 ## 4. Voice-over, music, pauses, and effects
 
@@ -56,9 +56,9 @@ The timecodes are an editorial proposal. “Still move” means a 2D pan/scale o
 
 `editing/sound_design.md` is a **proposal only**; no music or SFX are generated or licensed. Production cues: spacious alpine wind; restrained ski-edge/powder detail; a soft off-screen snow impact and breath at the implied fall; quiet interior room tone; human-scale rehab movement; broader wind on return; controlled musical lift and clean resolution. Source/record only sounds that correspond to the pictured action. No futuristic medical effects, sensational impact, or invented device sounds. Mix intelligibly around the finally approved VO and confirm delivery loudness/true-peak requirements with the platform/client.
 
-## 5. Exact end-card copy and verification
+## 5. Owner-approved end-card copy
 
-Typeset exactly as supplied by the owner, preserving Cyrillic and punctuation:
+Typeset exactly as approved by the owner, preserving Cyrillic and punctuation:
 
 **РЕАБИЛИТАЦИОННЫЙ ЦЕНТР АЛТАЙ**
 
@@ -66,22 +66,22 @@ Typeset exactly as supplied by the owner, preserving Cyrillic and punctuation:
 
 **altaysportreab.ru**
 
-The existing PNG intentionally contains no lettering. The creative brief and manifest say the official center name, tagline, URL, and logo rights are unverified; the working brief contains a different provisional tagline. Confirm the selected copy/domain and legal use before public release. The existing mountain/trail/cross motif is decorative, not a verified official logo; replace it only if an authorized logo is supplied and approved.
+The owner approved this name, tagline, and website for production. Add them as editable post-production text; the PNG intentionally contains no lettering. The Scene 10 mountain/trail/cross motif is decorative, not an official logo. The primary ending keeps Altai mountain imagery behind the gradual skyward move and staggered text; the unchanged Scene 10 background is the approved backup.
 
 ## 6. Production readiness and blockers
 
 ### Available
 
 - **APPROVED — LOCKED:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-01, REF-SCENE-02 v2, and REF-SCENE-03 through REF-SCENE-09. Use v2 for Scene 5; preserve archived Scene 2 v1 and Scene 5 v1 as unapproved alternatives only.
-- **GENERATED — AWAITING APPROVAL:** REF-SCENE-10 final brand-card background. It is a still template with reserved text areas, not a finished, approved card.
-- Production documents, a 20-shot proposal, draft Russian VO text, and a sound-design proposal.
+- **APPROVED — LOCKED:** REF-SCENE-10 final brand-card background, approved as a backup on 2026-10-28; it is not a finished title card or official logo.
+- Production documents, a 20-shot proposal, draft Russian VO text, a sound-design proposal, and one short generated Russian VO excerpt at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3`.
 
 ### Still missing or pending
 
-- Explicit user approval of Scene 10 before final-card use.
-- Actual moving Altai establishing/sky-tilt and return-carve footage if the ending and ski action must feel like real camera movement rather than animated stills.
-- A recorded/approved VO; licensed or original music; recorded/licensed SFX and room tone; final mix.
-- Authorized brand/logo/font guidance and factual/legal verification of the exact Russian name and domain. Copy is provided for layout but remains verification-gated.
+- Actual moving Altai descent/return and mountain-to-sky footage if those beats must have real camera/subject movement; none is in the repository.
+- Owner-approved full VO wording that avoids unsupported diagnoses, outcomes, device, and service claims; the generated file is only a short safe excerpt, not a complete narration.
+- Licensed/original music, SFX and room tone, plus final mix.
+- An official logo/font package if one is desired. The Scene 10 decorative motif is approved as a backup graphic, not an official logo.
 
 ### External tools required
 

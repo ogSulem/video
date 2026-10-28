@@ -37,7 +37,7 @@ Male athlete, approximately 32; lean, powerful build; realistic weathered skin; 
 
 ## Brand and claims guardrails
 
-Working Russian name/title in brief: «Реабилитационный центр Алтай»; proposed tagline: «Возвращаем на склон.»; proposed URL: altaysportreab.ru. These are not verified as the center's official name, brand, tagline, or domain. Treat all as placeholders pending authorization and verification. Never invent logos, credentials, devices, or treatment availability.
+**Owner-approved brand copy for production:** `РЕАБИЛИТАЦИОННЫЙ ЦЕНТР АЛТАЙ` / `Твой сезон продолжается.` / `altaysportreab.ru`. This supersedes the earlier provisional name/tagline wording. No official logo has been supplied; never present a decorative motif as one, and do not invent credentials, devices, or treatment availability.
 
 ## Success criteria
 
