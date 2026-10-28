@@ -1,7 +1,17 @@
 # Approval workflow and asset manifest
 
 **Project status (2026-10-28):** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-01 through REF-SCENE-10, and the full Russian VO script/audio remain APPROVED — LOCKED. Scene 10 is a backup card background; its motif is decorative, not an official logo. Preserve all approved sources unchanged. V1 remains preserved as the baseline at `video/final/altai_rehabilitation_commercial_v1.mp4`. The test-first six-second motion test is category C (programmatic movement over a still). A technically decoded 77-second v2 review render now exists at `video/final/altai_rehabilitation_commercial_v2.mp4`; it uses approved stills and VO plus three new provisional AI-generated **still** inserts, with only programmatic 2D motion—not genuine image-to-video or articulated skier motion. The three inserts are not approval-locked and await owner review. See `video/tests/MOTION_TEST_REPORT.md` and `video/tests/V2_QC_REPORT.md`.
-**Repository:** Workspace checkout `ogSulem/video`, branch `arena/cd6d8886-video`.
+**v3 (2026-10-28):** `video/final/altai_rehabilitation_v3.mp4` is a new review
+master, 78.8 s, 1920 × 1080, 24 fps, −16 LUFS. It is the first cut that uses the
+three generated clips (`scene a1/a2/d.mp4`) as motion picture: they are re-timed
+with per-frame optical flow and supply 32.5 s (41 %) of the film. The remaining
+picture is 40.3 s of approved stills staged as depth-layered living stills
+(clearly stills, not footage) and a 7.6 s typeset brand card. The locked VO file
+is byte-identical; a codec-click repair and a broadcast voice curve are applied
+to an in-memory placement copy only and are switchable off. Nothing approved was
+modified or regenerated. v3 remains a review master pending the Stage 7 gates.
+
+**Repository:** Workspace checkout `ogSulem/video`, branch `arena/9927bff3-video`.
 
 ## Sequential approval gates
 
@@ -59,6 +69,10 @@ No paid operation without explicit authorization. Do not skip gates or replace a
 | `editing/video_assembly_plan.md` | 77-second v2 director's timeline, test-first capability audit, render record, and QC/release gates | Updated — v2 rendered and technically verified | Approved sources/VO remain locked; three AI-generated still inserts are provisional; genuine moving footage and any licensed/recorded final mix remain absent |
 | `editing/voiceover_final_ru.md` | Final Russian narration and scene cues | APPROVED — LOCKED (owner approval, 2026-10-28) | Approximately 65–77 seconds; non-guaranteed, no diagnosis or unverified treatment/equipment claims; exact approved end-card copy included as on-screen text only; preserve unchanged |
 | `prompts/interiors.md` | Interior prompts and generation records | REF-INT-01 and REF-INT-02 approved | Approved reference images preserved; equipment availability remains unverified |
+| `scene a1.mp4`, `scene a2.mp4`, `scene d.mp4` | Generated motion footage: carve, fall/aftermath, return | GENERATED — reviewed, hash-pinned for v3; not owner-approved | 8.0 s / 8.0 s / 10.1 s, 24 fps, 1280 × 704 / 1284 × 716 / 1344 × 768; upscaled to 1080p in v3; known AI artefacts in skis, gloves and snow |
+| `video/final/altai_rehabilitation_v3.mp4` (+ `.json`) | v3 review master and its manifest | QC REVIEW — awaiting owner approval | 78.8 s; 41 % generated motion, 51 % staged stills, 8 % typeset card; −16 LUFS / −1.5 dBTP; see `video/tests/V3_QC_REPORT.md` |
+| `video/render_film_v3.py`, `video/filmkit/*` | Reproducible v3 renderer (optical-flow retiming, living stills, grade, score, mix) | In production — deterministic, offline | Hash-pins every source in `filmkit/sources.py`; refuses to render if a pin drifts |
+| `video/tools/qc_v3.py` | Delivery QC: decode, loudness, duplicate-frame census, contact sheet | In production | Reads the delivery only; writes `video/tests/V3_QC_REPORT.md` |
 
 ## Equipment verification status
 

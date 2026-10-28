@@ -1,0 +1,277 @@
+{
+  "delivery": "video/final/altai_rehabilitation_v3.mp4",
+  "sha256": "2e9ef1c0bbfd8d26ec865c5448beebe7818fe925dce1beb5dfe9aac9263b997a",
+  "duration_s": 78.8,
+  "frames": 1891,
+  "fps": 24,
+  "size": [
+    1920,
+    1080
+  ],
+  "video": {
+    "codec": "h264",
+    "profile": "high",
+    "pix_fmt": "yuv420p",
+    "crf": 20,
+    "preset": "medium",
+    "colorspace": "bt709"
+  },
+  "audio": {
+    "codec": "aac",
+    "bitrate": "192k",
+    "sample_rate": 48000,
+    "channels": 2,
+    "loudness": {
+      "measured_lufs_before": -25.9,
+      "gain_db_applied": 9.9,
+      "measured_lufs_after": -16.3,
+      "target_lufs": -16.0,
+      "true_peak_ceiling_db": -2.4,
+      "peak_after": 0.7586
+    },
+    "balance": {
+      "vo_speech_peak_window_db": -24.88,
+      "score_median_in_gaps_db": -4.32,
+      "offset_db": -9.0,
+      "music_gain_db": -29.56,
+      "duck_db": -7.5
+    }
+  },
+  "voiceover": {
+    "file": "audio/voiceover/voiceover_ru_full_v1.mp3",
+    "offset_s": 1.0,
+    "file_modified": false,
+    "codec_artefact_repairs_s": [
+      15.611,
+      22.889,
+      22.89,
+      22.893,
+      22.894,
+      22.895,
+      22.896,
+      22.898,
+      22.898,
+      22.906,
+      22.907,
+      22.912,
+      22.912,
+      22.912,
+      22.917,
+      22.918,
+      22.92,
+      22.922,
+      27.73,
+      27.733,
+      49.887,
+      56.046,
+      56.05
+    ],
+    "mix_eq": "broadcast voice curve on the placement copy",
+    "note": "the approved MP3 is byte-identical; the repair and the voice curve are applied to the in-memory placement copy only"
+  },
+  "sources": {
+    "clip_carve": {
+      "file": "scene a1.mp4",
+      "sha256": "1c177a724a20339a832200b41334d2388e1f268c84c3cef1eb541caae5ac2ead",
+      "kind": "clip"
+    },
+    "clip_fall": {
+      "file": "scene a2.mp4",
+      "sha256": "a93cec75210e159b0d569b0d8919bb47f7ebd9332ea886f4c0e0c842a785848e",
+      "kind": "clip"
+    },
+    "clip_return": {
+      "file": "scene d.mp4",
+      "sha256": "c77b1ddf0c3cd79508d5c5c0d02e9441f0aa6b380810a12464edf1a5ba2723bd",
+      "kind": "clip"
+    },
+    "dawn_valley": {
+      "file": "video/assets/endcard_altai_landscape_v1.png",
+      "sha256": "2beca354122fe5ffac84b43c1ddd27e06be63db3fa37a172fc8b28d060061e5c",
+      "kind": "still"
+    },
+    "aftermath": {
+      "file": "references/scenes/REF-SCENE-02-injury-aftermath-v2.png",
+      "sha256": "4b4e21eed7a5b62d368782c4c5b805f836e07fd1ac9ecba932bf3a6fd0ac5074",
+      "kind": "still"
+    },
+    "exterior": {
+      "file": "references/scenes/REF-SCENE-03-center-exterior-reveal.png",
+      "sha256": "3cff05af0b82055281a203e5187ac4a0266cd4f53d6b05440de280dc74543ac0",
+      "kind": "still"
+    },
+    "reception": {
+      "file": "references/scenes/REF-SCENE-04-reception-welcome.png",
+      "sha256": "dcc6b97af2e1452d9a09a6bf5397ab1b8282a56c08aac864cecf9db7a6f00320",
+      "kind": "still"
+    },
+    "rehab_room": {
+      "file": "references/interiors/REF-INT-02-master-rehabilitation-room.png",
+      "sha256": "ad355398dd775ad6f0f0f4c33968e75f8ac7281d9fafea9aab5a83b03b3ffe62",
+      "kind": "still"
+    },
+    "assessment": {
+      "file": "references/scenes/REF-SCENE-05-biomechanics-assessment-v2.png",
+      "sha256": "0a6d303ee25232ba9d82474e120001cbcf0c2813debdaf9ea44d3031f4722acb",
+      "kind": "still"
+    },
+    "exercises": {
+      "file": "references/scenes/REF-SCENE-06-rehabilitation-exercises.png",
+      "sha256": "d163d7baab6f34d2cc5720e3b68782adb7389b22a83af793c54fa442395ad9de",
+      "kind": "still"
+    },
+    "physio": {
+      "file": "references/scenes/REF-SCENE-07-recovery-physiotherapy.png",
+      "sha256": "a3899eb7d0c1a5470c7fa90dc31e3760e3dd9dfc56e0ac519855911d542618e1",
+      "kind": "still"
+    },
+    "team": {
+      "file": "references/scenes/REF-SCENE-08-rehabilitation-team.png",
+      "sha256": "581c44ba71f91d3de5a0f3447246e3d406afa7427b99e60d95db6a5ba15ef749",
+      "kind": "still"
+    },
+    "return_still": {
+      "file": "references/scenes/REF-SCENE-09-return-to-slopes.png",
+      "sha256": "5eec2e8d9dc4730241c10500e2541b97da51475827d714b1c5f5e9ccb7626897",
+      "kind": "still"
+    },
+    "brand_plate": {
+      "file": "references/scenes/REF-SCENE-10-final-brand-card.png",
+      "sha256": "5c173731529dd1899046b842997d798865a2059062f0a6cec99696a9afdc7486",
+      "kind": "still"
+    },
+    "voiceover": {
+      "file": "audio/voiceover/voiceover_ru_full_v1.mp3",
+      "sha256": "7d5368d3075ba16c30e9f6bf717d477c1ff2c6eb51bf59dba2a86b6d199376f1",
+      "kind": "vo"
+    }
+  },
+  "shots": [
+    {
+      "name": "carve",
+      "in": 0.0,
+      "out": 7.15,
+      "kind": "clip",
+      "source": "clip_carve"
+    },
+    {
+      "name": "fall",
+      "in": 7.01,
+      "out": 11.41,
+      "kind": "clip",
+      "source": "clip_fall"
+    },
+    {
+      "name": "aftermath",
+      "in": 11.41,
+      "out": 15.01,
+      "kind": "clip",
+      "source": "clip_fall"
+    },
+    {
+      "name": "exterior",
+      "in": 14.46,
+      "out": 19.06,
+      "kind": "still",
+      "source": "exterior"
+    },
+    {
+      "name": "reception",
+      "in": 18.86,
+      "out": 22.26,
+      "kind": "still",
+      "source": "reception"
+    },
+    {
+      "name": "hall",
+      "in": 22.06,
+      "out": 25.16,
+      "kind": "still",
+      "source": "rehab_room"
+    },
+    {
+      "name": "assessment",
+      "in": 25.16,
+      "out": 28.66,
+      "kind": "still",
+      "source": "assessment"
+    },
+    {
+      "name": "hands_on",
+      "in": 28.66,
+      "out": 32.46,
+      "kind": "still",
+      "source": "physio"
+    },
+    {
+      "name": "movement",
+      "in": 32.46,
+      "out": 35.66,
+      "kind": "still",
+      "source": "exercises"
+    },
+    {
+      "name": "effort",
+      "in": 35.48,
+      "out": 38.88,
+      "kind": "still",
+      "source": "exercises"
+    },
+    {
+      "name": "insert_detail",
+      "in": 38.7,
+      "out": 40.9,
+      "kind": "still",
+      "source": "exercises"
+    },
+    {
+      "name": "guidance",
+      "in": 40.9,
+      "out": 43.9,
+      "kind": "still",
+      "source": "physio"
+    },
+    {
+      "name": "insert_window",
+      "in": 43.72,
+      "out": 45.72,
+      "kind": "still",
+      "source": "rehab_room"
+    },
+    {
+      "name": "team",
+      "in": 45.52,
+      "out": 48.32,
+      "kind": "still",
+      "source": "team"
+    },
+    {
+      "name": "dawn",
+      "in": 47.87,
+      "out": 54.34,
+      "kind": "still",
+      "source": "dawn_valley"
+    },
+    {
+      "name": "return_a",
+      "in": 54.08,
+      "out": 62.88,
+      "kind": "clip",
+      "source": "clip_return"
+    },
+    {
+      "name": "return_b",
+      "in": 62.6,
+      "out": 71.2,
+      "kind": "clip",
+      "source": "clip_return"
+    },
+    {
+      "name": "card",
+      "in": 71.2,
+      "out": 78.8,
+      "kind": "card",
+      "source": ""
+    }
+  ]
+}
