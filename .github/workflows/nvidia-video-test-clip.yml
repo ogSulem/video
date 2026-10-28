@@ -2,6 +2,14 @@ name: NVIDIA video - single test clip (image-to-video)
 
 # ONE clip. One generation call, one attempt, no automatic retry.
 #
+# STATUS 2026-10-28: BLOCKED. Discovery run 40659445152 returned
+#   GET /v1/models -> 200 with 84 ids, none of them a video generator;
+#   GET /v1/models/wan-ai/wan2.2 -> 404 "Model does not exist by the name of".
+# So this workflow cannot produce a clip today: the free preflight below stops it
+# at the catalog check, before any request is built or sent. Kept for the day a
+# hosted video model actually appears in the catalog. See
+# production/video_generation_pack_v2/09_nvidia_discovery_result.md.
+#
 # Safety design:
 #   * Runs only when started by hand, and only when the operator types GENERATE
 #     into the confirm box. Without it the job performs a free preflight
