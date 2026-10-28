@@ -40,7 +40,6 @@ jobs:
       # redacted from every captured response before anything is printed.
       NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
       BASE_URL: https://integrate.api.nvidia.com/v1
-      OUT_DIR: ${{ runner.temp }}/nvidia-discovery
 
     steps:
       - name: Checkout (read-only use; nothing is written back)
@@ -52,6 +51,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # runner context is legal at step level, not in a job-level env block
+          echo "OUT_DIR=${RUNNER_TEMP}/nvidia-discovery" >> "$GITHUB_ENV"
+          mkdir -p "${RUNNER_TEMP}/nvidia-discovery"
           if [ -z "${NVIDIA_API_KEY:-}" ]; then
             echo "::error title=Secret missing::NVIDIA_API_KEY is not configured for this repository. Add it under Settings > Secrets and variables > Actions, then re-run this workflow."
             exit 1
