@@ -1,64 +1,63 @@
-# Video Assembly Plan — RETURN TO THE SLOPE
+# Video assembly plan — RETURN TO THE SLOPE, director's cut v2
 
-**Status:** The full Russian VO script/audio are APPROVED — LOCKED. No video clips/render were produced: this runtime lacks an I2V tool and working encoder; the ImageMagick MP4 probe failed without `ffmpeg`.
-**Target runtime:** 77 seconds (within the requested 75–85 second range).
-**Current edit basis:** Scenes 1–9 and the Scene 10 backup background are **APPROVED — LOCKED**. The existing Scene 10 PNG remains unchanged.
+**Status (2026-10-28):** The approximately 77-second v2 is rendered and technically verified at `video/final/altai_rehabilitation_commercial_v2.mp4`. It is a new review export; the v1 baseline remains unchanged at `video/final/altai_rehabilitation_commercial_v1.mp4`. Approved source stills and approved Russian VO remain hash-identical. The v2 adds three new AI-generated **still images** as provisional editorial inserts; these are not yet owner-approved.
 
-## 1. Audit snapshot and editorial decisions
+**Important motion classification:** The test-first render is category C (programmatic 2D motion over a still). The v2 also uses only still-image camera crops, compositing, overlays, and cross-dissolves. There is no genuine image-to-video, moving AI footage, live-action clip, or articulated skier motion. Do not describe its stills as video footage.
 
-- The creative brief targets a premium 16:9 commercial, approximately 75 seconds, with ten narrative beats. The visual-style guide calls for restrained motion, natural anatomy, controlled color, and no fabricated text/logos or unsupported equipment.
-- The asset manifest and continuity guide mark Scenes 1–10 **APPROVED — LOCKED** (Scene 10 approved by the owner on 2026-10-28 as a backup end-card background). Preserve all locked source files byte-for-byte.
-- The available scene references are still PNGs, not clips. Scene 10 is a near-black 16:9 background with a decorative mountain/trail/cross motif and blank type bands; it contains no Russian text and is not an official logo.
-- No video, music, sound effects, licensed footage, official logo file, or brand font is present. The full script `editing/voiceover_final_ru.md` and its 70.16-second synthetic reading `audio/voiceover/voiceover_ru_full_v1.mp3` are APPROVED — LOCKED; the shorter technical test at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3` is retained.
-- The current `prompts/scene_prompts.md` records exact prompts through Scene 5; later asset statuses are tracked in the manifest and continuity guide. This prompt-archive gap does not change their approval status.
-- The legacy shot list includes a simulator, diagnostic display/sensors, and conditional modalities. Do not include these unless availability and references are verified. The assembly below uses the approved simple exercises and team stills instead.
-- The owner-approved brand name, tagline, and URL are production-ready. Factual medical/service claims in the VO draft remain subject to substantiation and review.
+**Target / actual:** 77.00 seconds, 1920 × 1080, progressive 16:9, 24 fps.
 
-## 2. Proposed assembly timeline — 77 seconds
+## 1. Test-first capability audit and constraints
 
-The timecodes are an editorial proposal. “Still move” means a 2D pan/scale or restrained compositing move over an unchanged PNG—not real camera movement. Crops are timeline treatments only, not new reference assets.
+- Before beginning the commercial rework, the six-second capability test `video/tests/skier_motion_test_v1.mp4` was rendered, decoded, and inspected at multiple points. It shows a slow digital camera push and procedural drifting snow on the locked `REF-CHAR-01` still; the skier's body does not move. Its category-C classification and checksum are recorded in `video/tests/MOTION_TEST_REPORT.md`.
+- The current session tools exposed still-image generation, but no image-to-video/video-generation workflow. The local environment audit found no GPU/model runtime and did not establish an external video API/service. The available repeatable rendering route is pinned PyPI-based FFmpeg/Pillow/NumPy.
+- The earlier described green-field/cloud method has no accessible asset, script, prompt, or workflow in this repository/session. Its provenance remains unknown; no technique is inferred or claimed.
+- V2 therefore uses restrained still animation and adds new still keyframes only where they clarify the narrative. It does not pretend to solve the lack of true subject movement.
+- No official logo/emblem file or brand-font package was found. The decorative mark in approved Scene 10 is not an official logo; v2 does not use it as one. The exact approved name, tagline, and URL are typeset in post.
 
-| # | Timecode / duration | Scene and source | Picture, transition, and motion treatment | VO / sound cue |
+## 2. Picture plan — exact v2 timeline
+
+All times are seconds from program start. All move descriptions refer to digital reframing or compositing of a still, not a physical camera move. Smooth eased camera paths, brief motivated dissolves, and a consistent action axis replace abrupt/random jumps.
+
+| # | Time / duration | Source and beat | Director's treatment | Sound / narration |
 |---:|---|---|---|---|
-| 01 | 00:00–00:04 / 4s | Scene 1 — `REF-SCENE-01-ski-descent.png` | Open on a wide crop emphasizing Altai terrain, then a very slow drift. This is simulated movement over a still; there is no landscape-only plate. If a true aerial is required, source licensed footage. | Begin with spacious wind only. Draft VO line 1 may enter near the end after approval. |
-| 02 | 00:04–00:08 / 4s | Scene 1 — same still | Reframe to the skier and carve; subtle tracking-style pan in the established upper-right to lower-left direction. Simulated, not a skiing clip. | Add ski-edge/powder detail only from a created or licensed SFX source. |
-| 03 | 00:08–00:11 / 3s | Scene 1 → Scene 2 | Imply the fall off-screen with a brief snow-white/dip transition into the aftermath. No fall footage exists; do not fabricate a violent fall. | Briefly narrow the sound field; soft snow impact/breath only if sourced and approved. Leave a short VO pause. |
-| 04 | 00:11–00:16 / 5s | Scene 2 — `REF-SCENE-02-injury-aftermath-v2.png` | Hold the approved, non-graphic aftermath; restrained push toward the face/posture. Preserve the image and avoid implying a diagnosis. | Use only the safe question fragment in the generated excerpt: «И вопрос, который звучит в голове: смогу ли я вернуться?» Exclude the draft’s unverified fracture/ligament diagnosis. |
-| 05 | 00:16–00:21 / 5s | Scene 3 — `REF-SCENE-03-center-exterior-reveal.png` | Slow, subtle push toward the existing entrance; keep verticals and building geometry undistorted. Simulated movement over the approved still. | Warm the music bed slightly; no factual service claim. |
-| 06 | 00:21–00:25 / 4s | Scene 4 — `REF-SCENE-04-reception-welcome.png` | Soft match-dissolve from exterior cool light to reception warmth; gentle two-shot push. | Draft VO line 3 or 4 may be placed here after claim review. No recorded dialogue exists. |
-| 07 | 00:25–00:28 / 3s | Scene 4 — same still | A modest crop/reframe to the eye contact; no new image or invented action. | Let the welcome ambience breathe; keep music restrained. |
-| 08 | 00:28–00:32 / 4s | Scene 5 — `REF-SCENE-05-biomechanics-assessment-v2.png` | Stable medium-wide hold on the supervised shallow squat. Tiny scale move only; no diagnostic graphics or equipment overlays. | Existing VO line 5 is on hold for clinical/legal review; it currently makes a certainty claim. |
-| 09 | 00:32–00:35 / 3s | Scene 5 — same still | Detail crop on alignment/coach, with a short, smooth digital reframe. Do not imply a sensor or scanner. | Natural room tone and light movement foley, to be sourced. |
-| 10 | 00:35–00:39 / 4s | Scene 6 — `REF-SCENE-06-rehabilitation-exercises.png` | Show the controlled split squat; use a gentle lateral crop move. This is still-image animation, not a recorded exercise clip. | Low, human-scale movement sound only if recorded/licensed. |
-| 11 | 00:39–00:43 / 4s | Scene 7 — `REF-SCENE-07-recovery-physiotherapy.png` | Hold the seated knee-mobility exercise on the existing plinth; slow push, no invented equipment. | Draft VO line 7 is not cleared; avoid claiming a particular procedure or outcome. |
-| 12 | 00:43–00:46 / 3s | Scene 7 — same still | Crop to the specialist’s attentive guidance, keeping the athlete’s position understandable. No physical manipulation is added. | Quiet room tone; no generated clinical beeps. |
-| 13 | 00:46–00:53 / 7s | Scene 8 — `REF-SCENE-08-rehabilitation-team.png` | Let the one-to-one conversation read in a steady medium-wide frame; minimal push. No extra team members. | Draft VO line 8 may sit here after staff-role/claim review. No recorded conversation exists. |
-| 14 | 00:53–00:57 / 4s | Scene 8 — same still | Gentle crop toward the listener/speaker relationship; remain a single still, not a second angle. | Music opens slightly; preserve a short pause before the return. |
-| 15 | 00:57–01:02 / 5s | Scene 9 — `REF-SCENE-09-return-to-slopes.png` | Approved return carve as the hero hold; slow push along the carve direction. This is simulated movement over the still. | Draft VO line 9 is on hold for review because it may imply a universal/guaranteed return. |
-| 16 | 01:02–01:07 / 5s | Scene 9 — motion insert **not in repository** | Preferred: a separately sourced/created, approved short carve clip matching REF-CHAR-01 and Scene 1. Fallback: a second digital reframe of Scene 9; label it simulated, not real tracking. | Broaden the alpine bed and ski-on-snow sound only when sourced. |
-| 17 | 01:07–01:11 / 4s | Altai mountain-to-sky move **not in repository** | Preferred: licensed/owner-supplied Altai footage with a real slow upward tilt. Fallback: a restrained upward reframe of the Scene 9 still; the available sky is limited, so this is visibly simulated and not a true camera tilt. | Let the music resolve toward open air; no VO is needed here. |
-| 18 | 01:11–01:12 / 1s | Altai mountain/sky shot; use the motif from Scene 10 as a graphic reference | Over the mountain/sky image, fade in the existing decorative mountain motif as a separate post layer. It is not an official logo. If no moving background is available, Scene 10 remains a usable backup card. | Music begins its final resolution. |
-| 19 | 01:12–01:13.5 / 1.5s | Same mountain/sky background | Fade in the owner-approved brand name as a separate, licensed Cyrillic text layer. Keep the motif visible. | No VO, per master script and VO notes. |
-| 20 | 01:13.5–01:17 / 3.5s | Same mountain/sky background | Fade in the approved tagline first, then website about 0.8s later; hold the URL legibly for the remaining time. All text is composited in post. | Music resolves cleanly; no VO. |
+| 01 | 00:00–00:04 / 4.0s | Approved Scene 1, `REF-SCENE-01-ski-descent.png` | Establish the slope and skier with a restrained opening fade and slow wide push. The fall's movement axis is set here. | Soft synthetic alpine air; approved VO begins unchanged. |
+| 02 | 00:04–00:07 / 3.0s | Same Scene 1 still | Continuous move into a closer tracking crop; the end framing of shot 1 is the start framing here. Procedural snow/ski texture stays restrained. | A little more synthetic edge/snow texture; VO remains front. |
+| 03 | 00:07–00:08.5 / 1.5s | Provisional `skier_loss_of_control_keyframe_v1.png` | Short snow-motivated dissolve into a visibly off-balance, pre-impact keyframe. Small roll/push and a brief procedural powder burst lead toward white. This still is not the impact and contains no articulated fall. | Designed low snow/thump accent near 00:08.18; music and wind drop rapidly. |
+| 04 | 00:08.5–00:09.1 / 0.6s | Approved Scene 2 aftermath, `REF-SCENE-02-injury-aftermath-v2.png` | Snow-white transition resolves into the seated aftermath. This separate image is not misrepresented as the fall. | Near-silent bed begins; VO continues as approved. |
+| 05 | 00:09.1–00:14 / 4.9s | Same approved Scene 2 aftermath still | Slow close push; sparse snow and a faint breath-like visual cue hold the quiet, disoriented aftermath. No diagnosis or visible injury is added. | Score/FX bed remains near silence; a very soft synthetic breath-like texture only. |
+| 06 | 00:14–00:17 / 3.0s | Approved Scene 3 exterior, `REF-SCENE-03-center-exterior-reveal.png` | Short dissolve from cold slope to the established center exterior; slow push toward entrance, no geometry warp. | Warm harmonic bed starts returning; VO continues. |
+| 07 | 00:17–00:21 / 4.0s | Provisional `assisted_arrival_keyframe_v1.png` | Supported arrival at the exterior entrance: companion has an arm around the skier; slow forward reframe. It is an arrival still, not moving footage or proof of a particular service. | Gentle exterior air; no invented siren, clinical, or device sound. |
+| 08 | 00:21–00:24 / 3.0s | Approved Scene 4, `REF-SCENE-04-reception-welcome.png` | Warm match dissolve into reception; restrained push and clear eyelines. | Synthetic score warms; approved VO unchanged. |
+| 09 | 00:24–00:28 / 4.0s | Approved Scene 5 v2, `REF-SCENE-05-biomechanics-assessment-v2.png` | Calm medium-wide assessment hold, then gentle push. Show only the depicted supervised movement; no diagnostic overlays/equipment added. | Music only under VO; no invented clinic beeps. |
+| 10 | 00:28–00:32 / 4.0s | Approved Scene 7, `REF-SCENE-07-recovery-physiotherapy.png` | First measured seated mobility beat; stable crop and patient/specialist relationship remain understandable. | Soft synthetic room tone; no clinical procedure claim. |
+| 11 | 00:32–00:36 / 4.0s | Approved Scene 6, `REF-SCENE-06-rehabilitation-exercises.png` | Show the depicted controlled split squat; warm, slow lateral reframe. | Sparse pulse begins to enter. |
+| 12 | 00:36–00:39 / 3.0s | Same Scene 6 still | Continuous closer reframe toward effort and stance; no body/limb warping or invented action. | Pulse remains gentle. |
+| 13 | 00:39–00:43 / 4.0s | Approved Scene 7 still | Return to guided knee mobility as a calmer counterpoint; short motivated dissolve from the effort detail. | Music opens slightly; VO continues. |
+| 14 | 00:43–00:46 / 3.0s | Same Scene 7 still | Closer crop toward the specialist's attentive guidance, preserving the skier's position and eyeline. | No added treatment/device sound. |
+| 15 | 00:46–00:51 / 5.0s | Approved Scene 8, `REF-SCENE-08-rehabilitation-team.png` | Establish the one-to-one team/support relationship in a stable medium-wide view. | The warm harmonic bed grows subtly. |
+| 16 | 00:51–00:55 / 4.0s | Same Scene 8 still | Continuous close reframe; hold the conversation and teamwork without inventing dialogue. | Music continues beneath approved VO. |
+| 17 | 00:55–00:59 / 4.0s | Approved Scene 5 v2 still | A calm progress-check reprise; new crop and warmer grade distinguish it from the first assessment beat. No outcome claim. | Soft pulse grows. |
+| 18 | 00:59–01:03 / 4.0s | Approved Scene 6 still | Confident, still-controlled exercise reprise; the story advances through framing/color, not fabricated body motion. | Score begins its return lift. |
+| 19 | 01:03–01:08 / 5.0s | Approved Scene 9, `REF-SCENE-09-return-to-slopes.png` | Hero return carve; slow push follows the established direction and action axis. Snow overlay is light and purposeful. | Alpine air and snow-edge texture return; score lifts without a triumphal guarantee. |
+| 20 | 01:08–01:11 / 3.0s | Same approved Scene 9 still | Continue the crop upward toward sky/mountain. This is a simulated digital reframe, not a true camera tilt or second clip. | Music resolves; full approved VO ends at about 01:10.16. |
+| 21 | 01:11–01:17 / 6.0s | Provisional `endcard_altai_landscape_v1.png` | Dissolve into the wide generated Altai landscape still, then continue a gentle upward digital reframe. Reveal exact rendered typography in sequence without boxes or an invented mark; hold the complete URL through the end. | VO-free end card; synthetic score resolves and fades. |
 
-**Total: 77 seconds.** Shots 16–17 are planned dependencies, not existing clips. If unavailable, use the stated still-based fallbacks and retain the 77-second timing; do not present simulated motion as genuine camera footage.
+**Total: 77.00 seconds.** V2 contains 21 editorial beats. Repeated recovery stills are deliberate crops/reprises from the approved scene set; they do not become moving footage through the edit.
 
-## 3. Motion, transitions, and still treatment
+## 3. Motion, transitions, and image treatment
 
-- **Genuine footage/camera movement:** none currently exists in the repository. A real aerial/landscape opening, moving return carve, and physical tilt from peaks into sky must be sourced/licensed or created in an external video-generation/shoot environment and approved as new video assets.
-- **Simulated movement:** all existing scene PNGs can receive small keyframed position/scale moves, editorial crops, and restrained parallax in an NLE. This creates movement across a still, not new perspective or real subject motion. Avoid warping limbs, skis, faces, architecture, or equipment. Preserve original PNGs.
-- **Transitions:** mostly clean cuts; one brief snow/dip transition to imply the off-screen fall; cool-to-warm match dissolve into reception; measured cuts through rehabilitation; a deliberate dissolve from the return/sky into the dark end card. Avoid flashy wipes and overused slow motion.
-- **Primary ending:** Keep the Altai mountain image as the background through the gradual skyward move, then reveal the decorative mountain motif, brand name, tagline, and website in that order as editable overlays. The motif can be isolated from Scene 10 in the editor without changing its PNG; do not present it as an official logo. Use the approved, unchanged Scene 10 PNG only as a backup end card.
+- The fall sequence distinguishes three beats: (1) the skier visibly loses balance in the new still, (2) a brief designed snow impact/whiteout, and (3) the separate approved seated aftermath. The render never calls the aftermath image a fall clip.
+- The supported-arrival still follows the exterior establishing view and precedes the reception scene. No ambulance, clinical procedure, diagnosis, treatment, or unverified service is implied.
+- Snow and breath cues are restrained generated compositing effects. They are not recorded weather/breath and do not imply injury severity.
+- Camera movement is eased digital crop/scale/position; shots 1–2, 4–5, 11–12, 13–14, 15–16, 19–20 use continuous endpoints where they share a source. Dissolves are used only for location or atmosphere changes.
+- All approved reference PNGs remain unchanged. New AI-generated stills are hash-pinned for reproducibility but remain provisional and owner-review candidates; a generated still is not approved merely because it is in the cut.
+- No motion vectors, interpolated anatomy, face morphing, fake camera footage, fabricated logo, or external-service claim is used.
 
-## 4. Voice-over, music, pauses, and effects
+## 4. Locked copy and VO
 
-`editing/voiceover_final_ru.md` and its continuous synthetic reading `audio/voiceover/voiceover_ru_full_v1.mp3` (70.16 seconds by Xing frame count) are APPROVED — LOCKED by the owner on 2026-10-28. The narration avoids the earlier draft’s injury diagnoses, diagnostic certainty, 3D simulator, treatment/outcome promises, and universal return claim. The older numbered lines in `editing/voiceover.md` remain source history and are not the approved read. The final card is VO-free; the narration leaves a short breath before the sequential card copy.
+The approved, unchanged narration is `editing/voiceover_final_ru.md` and `audio/voiceover/voiceover_ru_full_v1.mp3` (70.16 seconds; source SHA-256 `7d5368d3075ba16c30e9f6bf717d477c1ff2c6eb51bf59dba2a86b6d199376f1`). It is mixed from the opening; the picture timeline does not alter its wording or source file. The VO ends before the six-second end card.
 
-`editing/sound_design.md` is a **proposal only**; no music or SFX are generated or licensed. Production cues: spacious alpine wind; restrained ski-edge/powder detail; a soft off-screen snow impact and breath at the implied fall; quiet interior room tone; human-scale rehab movement; broader wind on return; controlled musical lift and clean resolution. Source/record only sounds that correspond to the pictured action. No futuristic medical effects, sensational impact, or invented device sounds. Mix intelligibly around the finally approved VO and confirm delivery loudness/true-peak requirements with the platform/client.
-
-## 5. Owner-approved end-card copy
-
-Typeset exactly as approved by the owner, preserving Cyrillic and punctuation:
+Typeset the owner-approved copy exactly, in post-production:
 
 **РЕАБИЛИТАЦИОННЫЙ ЦЕНТР АЛТАЙ**
 
@@ -66,41 +65,34 @@ Typeset exactly as approved by the owner, preserving Cyrillic and punctuation:
 
 **altaysportreab.ru**
 
-The owner approved this name, tagline, and website for production. Add them as editable post-production text; the PNG intentionally contains no lettering. The Scene 10 mountain/trail/cross motif is decorative, not an official logo. The primary ending keeps Altai mountain imagery behind the gradual skyward move and staggered text; the unchanged Scene 10 background is the approved backup.
+The end-card serif/sans type is rendered at high resolution and downsampled for clean edges. No logo or emblem is added. The motif in approved Scene 10 remains decorative only and is not presented as an official logo.
 
-## 6. Production readiness and blockers
+## 5. Sound design and measured levels
 
-### Available
+- V2 uses a deterministic original synthetic pad/pulse, shaped alpine-air texture, restrained ski-edge noise, one muted designed snow impact around 00:08.18, and two faint breath-like synthetic effects in the aftermath. No licensed/recorded score, recorded location sound, conversation, device beep, medical procedure sound, or external audio service was used.
+- The score/FX bed alone over 8–12 seconds measured −38.8 dB mean / −21.8 dB max; the approved VO continues unchanged over this near-silent bed.
+- The rendered program measured about −15.8 LUFS integrated, LRA 3.9 LU, and −0.9 dBFS true peak (FFmpeg `ebur128`); decoded mean level was −18.5 dB. The AAC audio stream decodes to about 77.013 seconds including standard codec frame padding; the edited program duration is 77.00 seconds. These are descriptive measurements; client/platform delivery loudness requirements were not supplied. Final subjective mix/loudness approval remains open.
+- The timeline and source are the reproducible mix; re-render with `video/render_altai_commercial.py` after any authorized change. Never alter the locked VO without approval.
 
-- **APPROVED — LOCKED:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-01, REF-SCENE-02 v2, and REF-SCENE-03 through REF-SCENE-09. Use v2 for Scene 5; preserve archived Scene 2 v1 and Scene 5 v1 as unapproved alternatives only.
-- **APPROVED — LOCKED:** REF-SCENE-10 final brand-card background, approved as a backup on 2026-10-28; it is not a finished title card or official logo.
-- Production documents, a 20-shot proposal, the APPROVED — LOCKED script at `editing/voiceover_final_ru.md`, and two readings: the retained technical test and approved full narration at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3` and `audio/voiceover/voiceover_ru_full_v1.mp3`.
+## 6. Export and reproducibility
 
-### Still missing or pending
+- Renderer: `video/render_altai_commercial.py`; previous v1 renderer is preserved as `video/render_altai_commercial_v1.py`. Pinned dependencies are in `video/requirements.txt`; setup and commands are in `video/README.md`.
+- FFmpeg 7.0.2 from the `imageio-ffmpeg` PyPI wheel with `libx264`; Pillow 13.0.0; NumPy 2.4.6.
+- V2 delivery: 1920 × 1080 progressive, 24 fps, Rec.709, MP4 / H.264 High / yuv420p + AAC-LC stereo 48 kHz / 192 kb/s.
+- Existing outputs are not overwritten unless `--force` is explicit. Input hashes are checked before and after render; v1 is never the v2 output target.
+- Reproduce after installing the pinned requirements:
 
-- Actual moving Altai descent/return and mountain-to-sky footage if those beats must have real camera/subject movement; none is in the repository.
-- Licensed/original music, SFX and room tone, plus final mix.
-- An official logo/font package if one is desired. The Scene 10 decorative motif is approved as a backup graphic, not an official logo.
+```bash
+.venv/bin/python video/render_altai_commercial.py --verify-only
+.venv/bin/python video/render_altai_commercial.py
+```
 
-### External tools required
+## 7. QC / render record — 2026-10-28
 
-- A video-capable NLE/compositor (e.g., Resolve/Fusion, Premiere/After Effects) or a provisioned FFmpeg/rendering toolchain. This checkout has no native video generator, FFmpeg, or installed image/video libraries; no finished render can be produced here at present.
-- A source/production environment for licensed footage and audio, plus an approved Cyrillic-capable font/brand package. The current repository contains stills and documents only.
-
-## 7. Export recommendations
-
-- **16:9 master:** 1920 × 1080 progressive at 24 fps as the practical baseline for the 1376 × 768 still sources; use high-quality scaling and protect composition. A 3840 × 2160 master is possible only as an upscale and should be approved/QC’d against the source detail. Use Rec.709 SDR unless a delivery spec says otherwise.
-- Keep a high-quality mezzanine master (ProRes 422 HQ or DNxHR HQX where available) and a delivery H.264/H.265 MP4; confirm final codec, bitrate, color, audio loudness, and peak ceiling with the distributor.
-- Stereo audio at 48 kHz; keep dialogue intelligible and verify sync, clipping, and final peak/loudness against delivery requirements.
-- **Later 9:16 social cut:** recompose shot-by-shot at 1080 × 1920, 24 fps. Do not center-crop blindly; check the skier, skis/poles, faces, text safe areas, and action direction. The landscape stills may not support every portrait crop without reframing or additional approved material.
-
-## 8. Final QC checklist
-
-- [ ] Timeline is 75–85 seconds; approved story order and Scene 10 end sequence are intact.
-- [ ] Scenes 1–9 remain sourced from approved locked images; no archived v1 is used as canonical; Scene 10 is approved before use.
-- [ ] Identity, ski kit, action axis, room, specialist, and lighting remain coherent; still motion is identified as simulated.
-- [ ] No unverified simulator, scanner, diagnostic display, equipment, staff credential, or treatment claim appears.
-- [ ] Russian copy matches exact Cyrillic spelling, capitalization, punctuation, and URL; font license, legibility, contrast, and safe margins pass review.
-- [ ] VO claims are clinically/legal approved; music/SFX are licensed or original; mix has no clipping and dialogue is clear.
-- [ ] 16:9 master and any later 9:16 cut play through end-to-end; verify frame rate, aspect ratio, color, audio sync, duration, codec, and file integrity.
-- [ ] Hashes of all approved reference PNGs remain unchanged; no generated lettering or random marks are present.
+- **V2:** `video/final/altai_rehabilitation_commercial_v2.mp4`; 45,420,896 bytes; SHA-256 `86fdee75baf13a2183d219e34f65b9bd8ffe9c916a11722808ae0d3a79390410`; 77.00 s / 1,848 frames.
+- **V1 baseline:** `video/final/altai_rehabilitation_commercial_v1.mp4`; unchanged; SHA-256 `c41468ce4342c8349f2d3936f2b5a935242695d8b58afbcb8071404bb852acd2`.
+- **Full decode:** FFmpeg decoded the complete v2 with no errors. Probe confirms 1920 × 1080, 24 fps, 77.00 s, H.264 High/yuv420p, Rec.709, AAC-LC stereo 48 kHz.
+- **Visual sampling:** checked opening and action, the loss-of-control/whiteout/aftermath distinction, exterior and supported arrival, reception, exercises/teamwork, return, sky reframe, and end-card timing. Exact copy is present and legible at the final hold. No new official logo or source-image edits.
+- **Source integrity:** all 13 inputs were hash-verified before/after render; the locked VO SHA is unchanged. V1 remains separate.
+- **QC report:** `video/tests/V2_QC_REPORT.md`; motion test report: `video/tests/MOTION_TEST_REPORT.md`.
+- **Release gate:** technically verified does not mean owner-approved or medically/legal/brand cleared. Review the three new still inserts, confirm factual/rights requirements and platform loudness, then approve separately before public use.
