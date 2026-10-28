@@ -1,6 +1,6 @@
 # Video Assembly Plan — RETURN TO THE SLOPE
 
-**Status:** The full Russian VO script/audio are APPROVED — LOCKED. No video clips/render were produced: this runtime lacks an I2V tool and working encoder; the ImageMagick MP4 probe failed without `ffmpeg`.
+**Status:** The full Russian VO script/audio are APPROVED — LOCKED. A playable v1 render was completed on 2026-10-28 at `video/final/altai_rehabilitation_commercial_v1.mp4`; it uses approved stills with simulated 2D motion, not image-to-video footage. Approved source files remain unchanged. Technical details and QC are recorded at the end of this plan.
 **Target runtime:** 77 seconds (within the requested 75–85 second range).
 **Current edit basis:** Scenes 1–9 and the Scene 10 backup background are **APPROVED — LOCKED**. The existing Scene 10 PNG remains unchanged.
 
@@ -9,7 +9,7 @@
 - The creative brief targets a premium 16:9 commercial, approximately 75 seconds, with ten narrative beats. The visual-style guide calls for restrained motion, natural anatomy, controlled color, and no fabricated text/logos or unsupported equipment.
 - The asset manifest and continuity guide mark Scenes 1–10 **APPROVED — LOCKED** (Scene 10 approved by the owner on 2026-10-28 as a backup end-card background). Preserve all locked source files byte-for-byte.
 - The available scene references are still PNGs, not clips. Scene 10 is a near-black 16:9 background with a decorative mountain/trail/cross motif and blank type bands; it contains no Russian text and is not an official logo.
-- No video, music, sound effects, licensed footage, official logo file, or brand font is present. The full script `editing/voiceover_final_ru.md` and its 70.16-second synthetic reading `audio/voiceover/voiceover_ru_full_v1.mp3` are APPROVED — LOCKED; the shorter technical test at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3` is retained.
+- At the pre-render audit, no video, music, sound effects, licensed footage, official logo file, or brand font was present. The full script `editing/voiceover_final_ru.md` and its 70.16-second synthetic reading `audio/voiceover/voiceover_ru_full_v1.mp3` are APPROVED — LOCKED; the shorter technical test at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3` is retained. The v1 synthetic score and assembled MP4 are documented in the render record below.
 - The current `prompts/scene_prompts.md` records exact prompts through Scene 5; later asset statuses are tracked in the manifest and continuity guide. This prompt-archive gap does not change their approval status.
 - The legacy shot list includes a simulator, diagnostic display/sensors, and conditional modalities. Do not include these unless availability and references are verified. The assembly below uses the approved simple exercises and team stills instead.
 - The owner-approved brand name, tagline, and URL are production-ready. Factual medical/service claims in the VO draft remain subject to substantiation and review.
@@ -54,7 +54,7 @@ The timecodes are an editorial proposal. “Still move” means a 2D pan/scale o
 
 `editing/voiceover_final_ru.md` and its continuous synthetic reading `audio/voiceover/voiceover_ru_full_v1.mp3` (70.16 seconds by Xing frame count) are APPROVED — LOCKED by the owner on 2026-10-28. The narration avoids the earlier draft’s injury diagnoses, diagnostic certainty, 3D simulator, treatment/outcome promises, and universal return claim. The older numbered lines in `editing/voiceover.md` remain source history and are not the approved read. The final card is VO-free; the narration leaves a short breath before the sequential card copy.
 
-`editing/sound_design.md` is a **proposal only**; no music or SFX are generated or licensed. Production cues: spacious alpine wind; restrained ski-edge/powder detail; a soft off-screen snow impact and breath at the implied fall; quiet interior room tone; human-scale rehab movement; broader wind on return; controlled musical lift and clean resolution. Source/record only sounds that correspond to the pictured action. No futuristic medical effects, sensational impact, or invented device sounds. Mix intelligibly around the finally approved VO and confirm delivery loudness/true-peak requirements with the platform/client.
+`editing/sound_design.md` began as a proposal. For the v1 render, the script creates an original, deterministic synthetic ambient score (slow harmonic pad, sparse soft pulse, and alpine-air texture) plus one quiet designed transition accent at the implied off-screen fall. No third-party music, recorded SFX, or external audio service was used; no device-specific noises, clinical beeps, or unsupported equipment sounds were added. The approved VO remains unchanged and is mixed in front of the bed. Confirm final loudness/true-peak and any licensing requirements with the platform/client.
 
 ## 5. Owner-approved end-card copy
 
@@ -78,14 +78,14 @@ The owner approved this name, tagline, and website for production. Add them as e
 
 ### Still missing or pending
 
-- Actual moving Altai descent/return and mountain-to-sky footage if those beats must have real camera/subject movement; none is in the repository.
-- Licensed/original music, SFX and room tone, plus final mix.
+- Genuine moving Altai descent/return and mountain-to-sky footage if those beats must show real camera/subject movement; none is in the repository or the v1 render.
+- Licensed/original recorded music, SFX, and final mix if the client requires recorded/licensed sound; v1 uses a restrained synthetic score and designed ambience only.
 - An official logo/font package if one is desired. The Scene 10 decorative motif is approved as a backup graphic, not an official logo.
 
-### External tools required
+### Render tools and remaining requirements
 
-- A video-capable NLE/compositor (e.g., Resolve/Fusion, Premiere/After Effects) or a provisioned FFmpeg/rendering toolchain. This checkout has no native video generator, FFmpeg, or installed image/video libraries; no finished render can be produced here at present.
-- A source/production environment for licensed footage and audio, plus an approved Cyrillic-capable font/brand package. The current repository contains stills and documents only.
+- The v1 was assembled by `video/render_altai_commercial.py` using FFmpeg 7.0.2/libx264 from the `imageio-ffmpeg` PyPI wheel, plus Pillow and NumPy. The exact Python dependencies and rerun instructions are in `video/requirements.txt` and `video/README.md`.
+- No image-to-video integration or real footage was available; all apparent movement is 2D animation of approved stills. If true moving footage or a final licensed audio mix is required, it must be supplied/created and approved separately.
 
 ## 7. Export recommendations
 
@@ -96,11 +96,20 @@ The owner approved this name, tagline, and website for production. Add them as e
 
 ## 8. Final QC checklist
 
-- [ ] Timeline is 75–85 seconds; approved story order and Scene 10 end sequence are intact.
-- [ ] Scenes 1–9 remain sourced from approved locked images; no archived v1 is used as canonical; Scene 10 is approved before use.
-- [ ] Identity, ski kit, action axis, room, specialist, and lighting remain coherent; still motion is identified as simulated.
-- [ ] No unverified simulator, scanner, diagnostic display, equipment, staff credential, or treatment claim appears.
-- [ ] Russian copy matches exact Cyrillic spelling, capitalization, punctuation, and URL; font license, legibility, contrast, and safe margins pass review.
-- [ ] VO claims are clinically/legal approved; music/SFX are licensed or original; mix has no clipping and dialogue is clear.
-- [ ] 16:9 master and any later 9:16 cut play through end-to-end; verify frame rate, aspect ratio, color, audio sync, duration, codec, and file integrity.
-- [ ] Hashes of all approved reference PNGs remain unchanged; no generated lettering or random marks are present.
+- [x] Timeline is 77 seconds; approved story order and Scene 10 backup end sequence are intact.
+- [x] Scenes 1–9 use the approved locked images; no archived v1 is used as canonical; approved Scene 10 is used unchanged as a background.
+- [x] Identity, ski kit, action axis, room, specialist, and lighting follow the references; all movement is clearly 2D animation of stills, not real generated footage.
+- [x] No simulator, scanner, diagnostic display, unverified specialty equipment, staff credential, or treatment/outcome claim was added in post.
+- [x] The exact Cyrillic brand copy, capitalization, punctuation, and URL are present; the rendered text is legible with safe margins. No official brand font/logo package was supplied.
+- [ ] Public-release clinical/legal review and any client/platform rights, loudness, and final-mix requirements remain to be confirmed. The v1 uses an original synthetic score/ambience, not a third-party licensed track.
+- [x] The 16:9 master decoded end-to-end and its stream metadata, audio, frame rate, aspect ratio, duration, codec, and file integrity were checked. A 9:16 cut was not requested or produced.
+- [x] SHA-256 hashes of all approved stills and the locked voice-over were verified before and after rendering; the new end-card lettering is post-composited exact brand copy.
+
+## 9. Render record — 2026-10-28
+
+- **Output:** `video/final/altai_rehabilitation_commercial_v1.mp4` — 31,217,020 bytes; SHA-256 `c41468ce4342c8349f2d3936f2b5a935242695d8b58afbcb8071404bb852acd2`.
+- **Container/streams:** MP4, H.264 High Profile (`libx264`), 1920 × 1080 progressive, 16:9, 24 fps, Rec.709, AAC-LC stereo at 48 kHz / 192 kb/s.
+- **Duration:** 77.00 seconds; the full approved 70.16-second mono Russian voice-over is mixed from the opening, with a short VO-free end-card hold.
+- **Sound:** original deterministic synthetic ambient music/air/pulse bed with a restrained designed transition accent; no third-party music or recorded SFX were available or added. Dialogue peaks below digital clipping (decoded sample peak approximately −0.9 dBFS).
+- **Verification:** all 1,848 video frames were rendered; FFmpeg decoded the complete MP4 without errors. Representative frames were visually checked, including the post-fall hold, indoor scenes, return shot, and exact brand end card. The approved source hashes passed both pre- and post-render checks.
+- **Motion provenance:** still-image crops/position/scale animation and dissolves only. No reference-image-to-video tool or genuine moving-camera footage was available; the fallback shots are not represented as generated live-action clips.

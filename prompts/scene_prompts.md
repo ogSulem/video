@@ -1,6 +1,6 @@
 # Injury and return continuity — REF-SCENE-02
 
-**Status:** REF-SCENE-02 v2, REF-SCENE-01 descent, REF-SCENE-03 center exterior reveal, REF-SCENE-04 reception welcome, and REF-SCENE-05 v2 biomechanics assessment are APPROVED — LOCKED; REF-SCENE-02 v1 is archived and unapproved; REF-SCENE-05 v1 is archived as an unapproved alternative. No video has been generated.
+**Status:** REF-SCENE-02 v2, REF-SCENE-01 descent, REF-SCENE-03 center exterior reveal, REF-SCENE-04 reception welcome, and REF-SCENE-05 v2 biomechanics assessment are APPROVED — LOCKED; REF-SCENE-02 v1 is archived and unapproved; REF-SCENE-05 v1 is archived as an unapproved alternative. No reference-image-to-video clip was generated; the still-based assembly render is documented under `video/`.
 **Approved references:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01, REF-SCENE-03, REF-SCENE-04, and REF-SCENE-05 v2. Preserve all unchanged.
 **V1 archive:** `references/scenes/REF-SCENE-02-injury-aftermath.png`, PNG, 1376 × 768, 2,274,093 bytes; retain unchanged, unapproved.
 **Canonical v2:** `references/scenes/REF-SCENE-02-injury-aftermath-v2.png`, PNG, 1376 × 768, 2,045,368 bytes; approved and locked.
