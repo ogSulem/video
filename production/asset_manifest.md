@@ -42,6 +42,7 @@ No paid operation without explicit authorization. Do not skip gates or replace a
 | `production/master_script.md` | 10-beat timing, Russian titles and VO | Stage 1 approved | Brand, URL, medical claims unverified |
 | `production/shot_list.md` | 20-shot production plan | Stage 1 approved | Service/equipment shots are conditional |
 | `production/continuity_guide.md` | Character, facility, action-axis rules | Updated — thirteen references locked; REF-SCENE-10 awaiting approval | Scene 10 is a typography-ready end-card background; add verified copy in post |
+| `editing/video_assembly_plan.md` | Editor-ready 77-second assembly timeline and finishing/QC plan | Prepared — plan only; no media rendered | Scenes 1–9 approved/locked; Scene 10 awaiting approval; external footage, recorded/licensed audio, copy verification, and rendering toolchain remain pending |
 | `prompts/interiors.md` | Interior prompts and generation records | REF-INT-01 and REF-INT-02 approved | Approved reference images preserved; equipment availability remains unverified |
 
 ## Equipment verification status
