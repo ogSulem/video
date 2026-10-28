@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Reproducibly assemble the Altai rehabilitation commercial from locked stills.
+"""Director's-cut v2 assembly for RETURN TO THE SLOPE.
 
-The source PNGs and approved Russian narration are read-only. Motion is 2D
-Ken Burns-style reframing of still images; this script does not generate video
-footage. It creates an original, deterministic synthetic score/ambience and
-renders an H.264/AAC MP4 with FFmpeg from imageio-ffmpeg.
+This renderer combines approved locked stills, three new provisional AI-made
+STILLS (fall keyframe, assisted arrival, mountain end-card plate), procedural
+snow/breath/impact overlays, smooth 2D camera paths, original synthetic audio,
+and the unchanged approved Russian VO. It does NOT generate moving-image
+footage or animate the skier's joints. All motion provenance is described in
+video/README.md and the director's render log.
 """
 from __future__ import annotations
 
@@ -20,26 +22,19 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
-try:
-    import numpy as np
-    from PIL import Image, ImageDraw, ImageFont
-    from imageio_ffmpeg import get_ffmpeg_exe
-except ImportError as exc:  # pragma: no cover - exercised on fresh installations
-    raise SystemExit(
-        "Missing render dependency. Install with: "
-        "python -m pip install -r video/requirements.txt"
-    ) from exc
+import numpy as np
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
+from imageio_ffmpeg import get_ffmpeg_exe
 
 ROOT = Path(__file__).resolve().parents[1]
 WIDTH, HEIGHT, FPS = 1920, 1080, 24
-TOTAL_SECONDS = 77.0
+DURATION = 77.0
 VOICEOVER = ROOT / "audio/voiceover/voiceover_ru_full_v1.mp3"
-DEFAULT_OUTPUT = ROOT / "video/final/altai_rehabilitation_commercial_v1.mp4"
+DEFAULT_OUTPUT = ROOT / "video/final/altai_rehabilitation_commercial_v2.mp4"
 
-# SHA-256 pins protect every approved source used by this assembly. The files
-# are never written to; any mismatch aborts the render rather than silently
-# using an unreviewed replacement.
-APPROVED_SOURCES = {
+# Approved, locked material is hash-pinned and opened read-only. New stills are
+# separately pinned for reproducibility but remain provisional/not approved.
+SOURCE_HASHES = {
     "scene01": ("references/scenes/REF-SCENE-01-ski-descent.png", "384fd25d66cb3598939b0e8e8bb52e9b9019439f651b10bbbafef1ea224191dc"),
     "scene02": ("references/scenes/REF-SCENE-02-injury-aftermath-v2.png", "4b4e21eed7a5b62d368782c4c5b805f836e07fd1ac9ecba932bf3a6fd0ac5074"),
     "scene03": ("references/scenes/REF-SCENE-03-center-exterior-reveal.png", "3cff05af0b82055281a203e5187ac4a0266cd4f53d6b05440de280dc74543ac0"),
@@ -49,8 +44,10 @@ APPROVED_SOURCES = {
     "scene07": ("references/scenes/REF-SCENE-07-recovery-physiotherapy.png", "a3899eb7d0c1a5470c7fa90dc31e3760e3dd9dfc56e0ac519855911d542618e1"),
     "scene08": ("references/scenes/REF-SCENE-08-rehabilitation-team.png", "581c44ba71f91d3de5a0f3447246e3d406afa7427b99e60d95db6a5ba15ef749"),
     "scene09": ("references/scenes/REF-SCENE-09-return-to-slopes.png", "5eec2e8d9dc4730241c10500e2541b97da51475827d714b1c5f5e9ccb7626897"),
-    "scene10": ("references/scenes/REF-SCENE-10-final-brand-card.png", "5c173731529dd1899046b842997d798865a2059062f0a6cec99696a9afdc7486"),
     "voiceover": ("audio/voiceover/voiceover_ru_full_v1.mp3", "7d5368d3075ba16c30e9f6bf717d477c1ff2c6eb51bf59dba2a86b6d199376f1"),
+    "fall_keyframe": ("video/assets/skier_loss_of_control_keyframe_v1.png", "869924435d75bc045be03a1a57060aa744b3a81e8b532be4dd08d0c54cc11918"),
+    "assisted_arrival": ("video/assets/assisted_arrival_keyframe_v1.png", "d491fc559021a6bd55e88f494a0443b0e1e35b2a78477df1661f42dc6d147895"),
+    "endcard_landscape": ("video/assets/endcard_altai_landscape_v1.png", "2beca354122fe5ffac84b43c1ddd27e06be63db3fa37a172fc8b28d060061e5c"),
 }
 
 
@@ -60,32 +57,38 @@ class Shot:
     seconds: float
     zoom: tuple[float, float]
     center: tuple[float, float, float, float]
-    label: str
+    fx: str
+    tone: str = "neutral"
+    xfade_in: float = 0.0
+    roll_degrees: float = 0.0
+    label: str = ""
 
 
-# Timeline follows editing/video_assembly_plan.md (20 beats / exactly 77 s).
-# Repeated source stills use new editorial crops, not new footage.
+# Revised 21-beat director's timeline. Adjacent ski/recovery inserts use
+# continuous camera endpoints; short dissolves are only used for motivated
+# location/temperature transitions. The sum is exactly 77 s.
 SHOTS: tuple[Shot, ...] = (
-    Shot("scene01", 4.0, (1.01, 1.045), (0.48, 0.50, 0.51, 0.51), "01 Altai descent — wide"),
-    Shot("scene01", 4.0, (1.07, 1.14), (0.50, 0.50, 0.54, 0.51), "02 Descent — tighter reframe"),
-    Shot("scene02", 3.0, (1.035, 1.085), (0.50, 0.50, 0.52, 0.48), "03 Off-screen fall — aftermath reveal"),
-    Shot("scene02", 5.0, (1.085, 1.145), (0.52, 0.46, 0.53, 0.46), "04 Aftermath — restrained push"),
-    Shot("scene03", 5.0, (1.01, 1.055), (0.50, 0.54, 0.52, 0.53), "05 Center exterior"),
-    Shot("scene04", 4.0, (1.015, 1.06), (0.56, 0.51, 0.58, 0.50), "06 Reception welcome"),
-    Shot("scene04", 3.0, (1.07, 1.115), (0.58, 0.48, 0.59, 0.47), "07 Reception — detail reframe"),
-    Shot("scene05", 4.0, (1.01, 1.045), (0.54, 0.53, 0.55, 0.52), "08 Supervised movement — wide"),
-    Shot("scene05", 3.0, (1.065, 1.11), (0.56, 0.52, 0.58, 0.51), "09 Movement — detail reframe"),
-    Shot("scene06", 4.0, (1.015, 1.06), (0.55, 0.54, 0.57, 0.53), "10 Controlled rehabilitation exercise"),
-    Shot("scene07", 4.0, (1.015, 1.06), (0.56, 0.52, 0.58, 0.51), "11 Supervised mobility"),
-    Shot("scene07", 3.0, (1.065, 1.11), (0.59, 0.51, 0.61, 0.50), "12 Mobility — detail reframe"),
-    Shot("scene08", 7.0, (1.01, 1.045), (0.56, 0.52, 0.58, 0.51), "13 Athlete and specialist"),
-    Shot("scene08", 4.0, (1.055, 1.105), (0.58, 0.50, 0.60, 0.50), "14 Conversation — closer reframe"),
-    Shot("scene09", 5.0, (1.01, 1.055), (0.49, 0.52, 0.51, 0.50), "15 Return to the slope — hero hold"),
-    Shot("scene09", 5.0, (1.055, 1.12), (0.51, 0.52, 0.54, 0.51), "16 Return — second digital crop"),
-    Shot("scene09", 4.0, (1.08, 1.22), (0.51, 0.55, 0.50, 0.40), "17 Simulated upward reframe — no footage"),
-    Shot("scene10", 1.0, (1.0, 1.0), (0.50, 0.50, 0.50, 0.50), "18 Approved backup end card / motif"),
-    Shot("scene10", 1.5, (1.0, 1.0), (0.50, 0.50, 0.50, 0.50), "19 Brand name"),
-    Shot("scene10", 3.5, (1.0, 1.0), (0.50, 0.50, 0.50, 0.50), "20 Tagline and website"),
+    Shot("scene01", 4.0, (1.005, 1.035), (0.48, 0.50, 0.51, 0.51), "ski", "cold", 0.0, 0.0, "wide Altai descent"),
+    Shot("scene01", 3.0, (1.035, 1.11), (0.51, 0.51, 0.55, 0.50), "ski", "cold", 0.0, 0.0, "tracked carve"),
+    Shot("fall_keyframe", 1.5, (1.015, 1.14), (0.52, 0.53, 0.53, 0.49), "fall", "cold", 0.18, -2.2, "AI still keyframe: loss of edge"),
+    Shot("scene02", 0.6, (1.11, 1.115), (0.53, 0.45, 0.53, 0.45), "impact_reveal", "cold", 0.0, 0.0, "snow-white impact / reveal aftermath"),
+    Shot("scene02", 4.9, (1.115, 1.18), (0.53, 0.45, 0.54, 0.44), "aftermath", "cold", 0.0, 0.0, "disorientation and breath"),
+    Shot("scene03", 3.0, (1.005, 1.045), (0.50, 0.54, 0.51, 0.53), "exterior", "cold", 0.38, 0.0, "center exterior"),
+    Shot("assisted_arrival", 4.0, (1.005, 1.055), (0.52, 0.53, 0.54, 0.51), "arrival", "neutral", 0.30, 0.0, "AI still: supported arrival"),
+    Shot("scene04", 3.0, (1.01, 1.055), (0.55, 0.51, 0.58, 0.50), "reception", "warm", 0.42, 0.0, "welcome inside"),
+    Shot("scene05", 4.0, (1.005, 1.055), (0.54, 0.53, 0.56, 0.52), "rehab", "warm", 0.26, 0.0, "assessment — medium"),
+    Shot("scene07", 4.0, (1.01, 1.07), (0.56, 0.52, 0.58, 0.50), "rehab", "warm", 0.26, 0.0, "first mobility — measured"),
+    Shot("scene06", 4.0, (1.01, 1.065), (0.54, 0.54, 0.56, 0.53), "rehab", "warm", 0.22, 0.0, "controlled split squat"),
+    Shot("scene06", 3.0, (1.065, 1.12), (0.56, 0.53, 0.57, 0.52), "rehab_detail", "warm", 0.0, 0.0, "effort detail — continuous reframe"),
+    Shot("scene07", 4.0, (1.01, 1.06), (0.56, 0.52, 0.58, 0.51), "rehab", "warm", 0.22, 0.0, "guided knee mobility"),
+    Shot("scene07", 3.0, (1.06, 1.12), (0.58, 0.51, 0.60, 0.50), "rehab_detail", "warm", 0.0, 0.0, "specialist guidance detail"),
+    Shot("scene08", 5.0, (1.005, 1.045), (0.56, 0.52, 0.58, 0.51), "team", "warm", 0.26, 0.0, "team — calm two-shot"),
+    Shot("scene08", 4.0, (1.045, 1.10), (0.58, 0.51, 0.60, 0.50), "team_detail", "warm", 0.0, 0.0, "listening and confidence"),
+    Shot("scene05", 4.0, (1.015, 1.075), (0.55, 0.52, 0.57, 0.51), "rehab", "warm", 0.22, 0.0, "progress check"),
+    Shot("scene06", 4.0, (1.04, 1.10), (0.56, 0.53, 0.58, 0.52), "rehab", "warm", 0.22, 0.0, "growing confidence"),
+    Shot("scene09", 5.0, (1.005, 1.075), (0.49, 0.52, 0.52, 0.50), "return", "cold", 0.42, 0.0, "return carve — hero"),
+    Shot("scene09", 3.0, (1.075, 1.22), (0.52, 0.50, 0.50, 0.40), "sky_rise", "cold", 0.0, 0.0, "simulated rise to mountain sky"),
+    Shot("endcard_landscape", 6.0, (1.02, 1.22), (0.50, 0.57, 0.50, 0.40), "endcard", "end", 0.55, 0.0, "typographic end card / digital camera rise"),
 )
 
 BRAND_NAME = "РЕАБИЛИТАЦИОННЫЙ ЦЕНТР АЛТАЙ"
@@ -96,269 +99,402 @@ WEBSITE = "altaysportreab.ru"
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+        for chunk in iter(lambda: handle.read(1 << 20), b""):
             digest.update(chunk)
     return digest.hexdigest()
 
 
 def verify_sources() -> dict[str, Path]:
-    result: dict[str, Path] = {}
-    for key, (relative, expected) in APPROVED_SOURCES.items():
+    paths: dict[str, Path] = {}
+    for key, (relative, expected) in SOURCE_HASHES.items():
         path = ROOT / relative
         if not path.is_file():
-            raise FileNotFoundError(f"Approved source is missing: {relative}")
+            raise FileNotFoundError(f"Required source is missing: {relative}")
         actual = sha256(path)
         if actual != expected:
             raise RuntimeError(
-                f"Approved source hash mismatch for {relative}:\n"
-                f"  expected {expected}\n  found    {actual}\n"
-                "Refusing to render with a changed/ unapproved source."
+                f"Hash mismatch for {relative}: expected {expected}, got {actual}. "
+                "Refusing to render with changed source material."
             )
-        result[key] = path
-    return result
+        paths[key] = path
+    return paths
 
 
-def ease01(value: float) -> float:
+def ease(value: float) -> float:
     value = max(0.0, min(1.0, value))
     return value * value * (3.0 - 2.0 * value)
 
 
-def shot_frame(source: Image.Image, shot: Shot, frame_in_shot: int) -> Image.Image:
-    count = int(round(shot.seconds * FPS))
-    progress = 0.0 if count <= 1 else frame_in_shot / (count - 1)
-    eased = ease01(progress)
+def crop_camera(source: Image.Image, shot: Shot, local_seconds: float) -> Image.Image:
+    progress = 1.0 if shot.seconds <= 0 else max(0.0, min(1.0, local_seconds / shot.seconds))
+    eased = ease(progress)
     zoom = shot.zoom[0] + (shot.zoom[1] - shot.zoom[0]) * eased
     cx0, cy0, cx1, cy1 = shot.center
     cx = (cx0 + (cx1 - cx0) * eased) * source.width
     cy = (cy0 + (cy1 - cy0) * eased) * source.height
-
-    # Crop to 16:9 without distorting or rewriting the approved original.
     crop_h = source.height / zoom
     crop_w = crop_h * WIDTH / HEIGHT
     cx = min(max(cx, crop_w / 2), source.width - crop_w / 2)
     cy = min(max(cy, crop_h / 2), source.height - crop_h / 2)
-    left = cx - crop_w / 2
-    top = cy - crop_h / 2
-    box = (left, top, left + crop_w, top + crop_h)
-    return source.crop(box).resize((WIDTH, HEIGHT), Image.Resampling.LANCZOS)
-
-
-def find_cyrillic_font() -> Path:
-    candidates = (
-        ROOT / "video/assets/DejaVuSans.ttf",
-        Path("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"),
-        Path("/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf"),
-        Path("/Library/Fonts/Arial.ttf"),
-        Path("C:/Windows/Fonts/arial.ttf"),
-    )
-    for candidate in candidates:
-        if candidate.is_file():
-            return candidate
-    raise FileNotFoundError(
-        "A Cyrillic-capable sans-serif TTF font is required for the end card. "
-        "Install DejaVu Sans or put video/assets/DejaVuSans.ttf in the project."
-    )
-
-
-def make_text_layer(text: str, font: ImageFont.FreeTypeFont, y: int) -> Image.Image:
-    layer = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(layer)
-    # A very soft, warm shadow separates the typesetting from the reserved dark band.
-    draw.text((WIDTH // 2, y + 2), text, font=font, anchor="mm", fill=(45, 38, 29, 115))
-    draw.text((WIDTH // 2, y), text, font=font, anchor="mm", fill=(231, 216, 184, 255))
-    return layer
-
-
-def alpha_composite(base: Image.Image, layer: Image.Image, alpha: float) -> Image.Image:
-    if alpha <= 0.0:
-        return base
-    if alpha >= 1.0:
-        return Image.alpha_composite(base.convert("RGBA"), layer).convert("RGB")
-    overlay = layer.copy()
-    overlay.putalpha(overlay.getchannel("A").point(lambda value: int(value * alpha)))
-    return Image.alpha_composite(base.convert("RGBA"), overlay).convert("RGB")
-
-
-def fade_to_color(frame: Image.Image, color: tuple[int, int, int], alpha: float) -> Image.Image:
-    if alpha <= 0.0:
-        return frame
-    solid = Image.new("RGB", (WIDTH, HEIGHT), color)
-    return Image.blend(frame, solid, min(1.0, max(0.0, alpha)))
-
-
-def add_end_card_text(
-    frame: Image.Image,
-    global_seconds: float,
-    title_layer: Image.Image,
-    tagline_layer: Image.Image,
-    website_layer: Image.Image,
-) -> Image.Image:
-    # Copy-only overlays; exact owner-approved strings are retained above.
-    for layer, start, fade in (
-        (title_layer, 72.0, 0.40),
-        (tagline_layer, 73.5, 0.36),
-        (website_layer, 74.3, 0.36),
-    ):
-        alpha = ease01((global_seconds - start) / fade)
-        frame = alpha_composite(frame, layer, alpha)
+    box = (cx - crop_w / 2, cy - crop_h / 2, cx + crop_w / 2, cy + crop_h / 2)
+    frame = source.crop(box).resize((WIDTH, HEIGHT), Image.Resampling.LANCZOS)
+    if shot.roll_degrees:
+        angle = shot.roll_degrees * ease(progress)
+        frame = frame.rotate(angle, resample=Image.Resampling.BICUBIC, expand=False,
+                             fillcolor=(222, 232, 239))
     return frame
 
 
-def _chord_notes() -> list[tuple[float, float, tuple[float, ...], float]]:
-    # (start, end, notes in Hz, bass root in Hz). Neighboring pads overlap to
-    # make an original slow harmonic bed without using an external recording.
-    progression = [
-        (0.0, 9.1, (146.83, 174.61, 220.00, 329.63), 73.42),       # Dm(add9)
-        (7.0, 16.1, (116.54, 174.61, 220.00, 293.66), 58.27),      # Bbmaj7
-        (14.0, 23.1, (130.81, 174.61, 196.00, 261.63), 87.31),     # F(add9)
-        (21.0, 30.1, (130.81, 196.00, 293.66, 329.63), 65.41),     # C(add9)
-        (28.0, 37.1, (146.83, 174.61, 220.00, 329.63), 73.42),
-        (35.0, 44.1, (116.54, 174.61, 220.00, 293.66), 58.27),
-        (42.0, 51.1, (130.81, 174.61, 196.00, 261.63), 87.31),
-        (49.0, 58.1, (130.81, 196.00, 293.66, 329.63), 65.41),
-        (56.0, 65.1, (146.83, 174.61, 220.00, 293.66), 73.42),
-        (63.0, 72.1, (130.81, 174.61, 196.00, 261.63), 87.31),
-        (70.0, 77.0, (130.81, 174.61, 220.00, 261.63), 87.31),
-    ]
-    return progression
+def tint(frame: Image.Image, tone: str) -> Image.Image:
+    colors = {
+        "cold": ((137, 168, 193), 0.045),
+        "neutral": ((228, 224, 211), 0.018),
+        "warm": ((255, 213, 163), 0.043),
+        "end": ((255, 239, 208), 0.012),
+    }
+    color, amount = colors.get(tone, ((255, 255, 255), 0.0))
+    if amount <= 0:
+        return frame
+    return Image.blend(frame, Image.new("RGB", frame.size, color), amount)
 
 
-def generate_audio_bed(path: Path, seconds: float = TOTAL_SECONDS, sample_rate: int = 48_000) -> None:
-    """Write a deterministic original pad/pulse/wind bed as stereo PCM WAV."""
-    count = int(round(seconds * sample_rate))
-    rng = np.random.default_rng(20261028)
-    left = np.zeros(count, dtype=np.float32)
-    right = np.zeros(count, dtype=np.float32)
-    sample_times = np.arange(count, dtype=np.float32) / sample_rate
+def make_snow(seed: int = 2604) -> list[tuple[float, float, float, float, float, int]]:
+    rng = np.random.default_rng(seed)
+    particles = []
+    for _ in range(300):
+        particles.append((
+            float(rng.uniform(-WIDTH, 2 * WIDTH)),
+            float(rng.uniform(-HEIGHT, 2 * HEIGHT)),
+            float(rng.uniform(0.6, 3.4)),
+            float(rng.uniform(-145.0, -35.0)),
+            float(rng.uniform(18.0, 96.0)),
+            int(rng.uniform(28, 116)),
+        ))
+    return particles
 
-    # Soft, slowly evolving chord pads with slightly detuned stereo voices.
-    for chord_start, chord_end, notes, root in _chord_notes():
-        first = max(0, int(chord_start * sample_rate))
-        last = min(count, int(chord_end * sample_rate))
-        if first >= last:
-            continue
-        t = np.arange(last - first, dtype=np.float32) / sample_rate
-        attack = np.clip(t / 1.65, 0.0, 1.0)
-        release = np.clip((chord_end - chord_start - t) / 1.9, 0.0, 1.0)
-        envelope = (0.5 - 0.5 * np.cos(np.pi * attack)) * (0.5 - 0.5 * np.cos(np.pi * release))
-        chord_level = 0.80 if chord_start < 21 else (0.93 if chord_start < 56 else 1.0)
-        for frequency in notes:
-            phase = float(rng.uniform(0, 2 * np.pi))
-            detune_l = float(rng.uniform(-0.0022, -0.0008))
-            detune_r = float(rng.uniform(0.0008, 0.0022))
-            fundamental = np.float32(0.0155 * chord_level)
-            harmonic = np.float32(0.0031 * chord_level)
-            left_wave = (
-                0.58 * np.sin(2 * np.pi * frequency * (1.0 + detune_l) * t + phase)
-                + 0.42 * np.sin(2 * np.pi * frequency * (1.0 + detune_l * 0.65) * t + phase + 0.31)
-                + 0.20 * np.sin(2 * np.pi * frequency * 2.0 * (1.0 + detune_l) * t + phase + 0.7)
-            )
-            right_wave = (
-                0.58 * np.sin(2 * np.pi * frequency * (1.0 + detune_r) * t + phase + 0.12)
-                + 0.42 * np.sin(2 * np.pi * frequency * (1.0 + detune_r * 0.65) * t + phase + 0.43)
-                + 0.20 * np.sin(2 * np.pi * frequency * 2.0 * (1.0 + detune_r) * t + phase + 0.82)
-            )
-            left[first:last] += (fundamental * left_wave + harmonic * left_wave) * envelope
-            right[first:last] += (fundamental * right_wave + harmonic * right_wave) * envelope
 
-        # Very low sustained root under each chord; deliberately restrained.
-        bass_gain = np.float32(0.012)
-        bass_phase = float(rng.uniform(0, 2 * np.pi))
-        bass_l = np.sin(2 * np.pi * root * t + bass_phase)
-        bass_r = np.sin(2 * np.pi * root * 1.0015 * t + bass_phase + 0.15)
-        bass_env = np.minimum(envelope, 0.75)
-        left[first:last] += bass_gain * bass_l * bass_env
-        right[first:last] += bass_gain * bass_r * bass_env
+def overlay_snow(frame: Image.Image, seconds: float, particles, density: int, intensity: float = 1.0) -> Image.Image:
+    if density <= 0 or intensity <= 0:
+        return frame
+    layer = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(layer)
+    for x0, y0, radius, vx, vy, alpha in particles[:density]:
+        x = (x0 + vx * seconds) % (WIDTH + 100) - 50
+        y = (y0 + vy * seconds) % (HEIGHT + 100) - 50
+        a = int(alpha * intensity)
+        if radius < 2.2:
+            draw.ellipse((x - radius, y - radius, x + radius, y + radius),
+                         fill=(241, 247, 251, a))
+        else:
+            trail = min(17.0, 3.0 + abs(vx) * 0.055)
+            draw.line((x, y, x - trail, y - trail * vy / max(abs(vx), 1.0)),
+                      fill=(241, 247, 251, a), width=max(1, int(radius)))
+            draw.ellipse((x - radius, y - radius, x + radius, y + radius),
+                         fill=(245, 249, 252, min(160, a + 20)))
+    layer = layer.filter(ImageFilter.GaussianBlur(0.32))
+    return Image.alpha_composite(frame.convert("RGBA"), layer).convert("RGB")
 
-    # Sparse soft bell/pluck notes add a gentle melodic thread; no sampled track.
-    motif = [
-        (3.0, 440.00), (9.0, 587.33), (15.0, 523.25), (23.0, 392.00),
-        (31.0, 440.00), (39.0, 523.25), (47.0, 587.33), (55.0, 493.88),
-        (61.0, 587.33), (67.0, 523.25), (71.5, 440.00),
-    ]
-    for onset, frequency in motif:
-        first = int(onset * sample_rate)
-        length = min(int(1.65 * sample_rate), count - first)
-        if length <= 0:
-            continue
-        t = np.arange(length, dtype=np.float32) / sample_rate
-        attack = np.clip(t / 0.018, 0.0, 1.0)
-        env = attack * np.exp(-t / 0.72)
-        phase = float(rng.uniform(0, 2 * np.pi))
-        note = 0.0105 * env * (
-            np.sin(2 * np.pi * frequency * t + phase)
-            + 0.20 * np.sin(2 * np.pi * frequency * 2.0 * t + phase + 0.2)
-            + 0.05 * np.sin(2 * np.pi * frequency * 3.0 * t + phase + 0.4)
-        )
-        pan = 0.5 + 0.22 * math.sin(onset * 0.31)
-        left[first:first + length] += note * math.sqrt(1.0 - pan)
-        right[first:first + length] += note * math.sqrt(pan)
 
-    # A quiet rounded pulse enters during the recovery build and opens on return.
-    for onset in np.arange(30.0, 69.5, 2.0):
-        first = int(onset * sample_rate)
-        length = min(int(0.42 * sample_rate), count - first)
-        if length <= 0:
-            continue
-        t = np.arange(length, dtype=np.float32) / sample_rate
-        env = (1.0 - np.exp(-t / 0.012)) * np.exp(-t / 0.16)
-        level = 0.0125 * (1.0 if onset < 57.0 else 1.12)
-        pulse = level * env * np.sin(2 * np.pi * (58.0 + 4.0 * math.sin(onset)) * t)
-        left[first:first + length] += pulse
-        right[first:first + length] += pulse * 0.96
+def overlay_fall_burst(frame: Image.Image, local_seconds: float) -> Image.Image:
+    age = local_seconds - 0.68
+    if age < 0 or age > 0.64:
+        return frame
+    layer = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(layer)
+    weight = max(0.0, 1.0 - age / 0.64)
+    # A directional powder burst around the ski-contact area. It is an FX layer,
+    # not a substitute for articulated body motion.
+    for i in range(56):
+        angle = (i / 56.0) * 2 * math.pi
+        speed = 105 + (i % 9) * 17
+        x = 935 + math.cos(angle) * speed * age
+        y = 870 + math.sin(angle) * speed * age - 140 * age
+        radius = 2 + (i % 4) * 1.5
+        alpha = int(92 * weight)
+        draw.ellipse((x - radius, y - radius, x + radius, y + radius),
+                     fill=(245, 250, 252, alpha))
+    layer = layer.filter(ImageFilter.GaussianBlur(1.2))
+    return Image.alpha_composite(frame.convert("RGBA"), layer).convert("RGB")
 
-    # Pink-leaning, band-limited noise creates a soft alpine-air ambience.
-    # Frequency-domain shaping is deterministic and avoids an external SFX file.
+
+def overlay_breath(frame: Image.Image, local_seconds: float) -> Image.Image:
+    # Two understated procedural breath puffs during the cold aftermath. This is
+    # designed atmosphere, not generated facial movement or a medical cue.
+    pulses = []
+    for onset in (0.55, 2.05):
+        age = local_seconds - onset
+        if 0 <= age <= 0.75:
+            pulses.append((age, max(0.0, math.sin(math.pi * age / 0.75))))
+    if not pulses:
+        return frame
+    haze = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(haze)
+    for age, strength in pulses:
+        cx = int(965 + 20 * age)
+        cy = int(238 - 18 * age)
+        alpha = int(22 * strength)
+        draw.ellipse((cx - 38, cy - 18, cx + 55, cy + 20), fill=(230, 239, 245, alpha))
+        draw.ellipse((cx + 5, cy - 28, cx + 84, cy + 18), fill=(235, 242, 247, alpha // 2))
+    haze = haze.filter(ImageFilter.GaussianBlur(17))
+    return Image.alpha_composite(frame.convert("RGBA"), haze).convert("RGB")
+
+
+def find_font_paths() -> tuple[Path, Path]:
+    serif_candidates = (
+        Path("/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"),
+        Path("/usr/share/fonts/truetype/liberation2/LiberationSerif-Regular.ttf"),
+        ROOT / "video/assets/DejaVuSerif.ttf",
+    )
+    sans_candidates = (
+        Path("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"),
+        Path("/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf"),
+        ROOT / "video/assets/DejaVuSans.ttf",
+    )
+    serif = next((p for p in serif_candidates if p.is_file()), None)
+    sans = next((p for p in sans_candidates if p.is_file()), None)
+    if not serif or not sans:
+        raise FileNotFoundError("Install a Cyrillic-capable DejaVu Serif and Sans font for the end card.")
+    return serif, sans
+
+
+def draw_tracking_text(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.FreeTypeFont,
+                       center: float, y: float, tracking: float, fill, anchor: str = "mm") -> None:
+    widths = [float(font.getlength(ch)) for ch in text]
+    total = sum(widths) + tracking * max(0, len(text) - 1)
+    x = center - total / 2
+    for character, width in zip(text, widths):
+        draw.text((x + width / 2, y), character, font=font, anchor=anchor, fill=fill)
+        x += width + tracking
+
+
+def make_endcard_layers(serif_path: Path, sans_path: Path) -> tuple[Image.Image, Image.Image, Image.Image]:
+    # Supersampled, carefully tracked rendered type on transparent layers. No
+    # fixed rectangles and no invented emblem/official logo are used.
+    scale = 3
+    size = (WIDTH * scale, HEIGHT * scale)
+    title_layer = Image.new("RGBA", size, (0, 0, 0, 0))
+    tag_layer = Image.new("RGBA", size, (0, 0, 0, 0))
+    url_layer = Image.new("RGBA", size, (0, 0, 0, 0))
+    title_draw = ImageDraw.Draw(title_layer)
+    tag_draw = ImageDraw.Draw(tag_layer)
+    url_draw = ImageDraw.Draw(url_layer)
+
+    accent = (179, 145, 88, 205)
+    title_color = (29, 45, 54, 255)
+    tagline_color = (37, 53, 61, 250)
+    url_color = (44, 62, 69, 240)
+
+    title_font = ImageFont.truetype(str(serif_path), 43 * scale)
+    tagline_font = ImageFont.truetype(str(serif_path), 47 * scale)
+    url_font = ImageFont.truetype(str(sans_path), 25 * scale)
+
+    # Minimal hairline and point are typographic rules, not a brand mark.
+    center = WIDTH * scale / 2
+    title_draw.line((center - 95 * scale, 248 * scale, center + 95 * scale, 248 * scale),
+                    fill=accent, width=2 * scale)
+    title_draw.ellipse((center - 2.2 * scale, 245.8 * scale,
+                        center + 2.2 * scale, 250.2 * scale), fill=accent)
+    draw_tracking_text(title_draw, BRAND_NAME, title_font, center, 332 * scale,
+                       2.6 * scale, title_color)
+    draw_tracking_text(tag_draw, TAGLINE, tagline_font, center, 414 * scale,
+                       0.8 * scale, tagline_color)
+    draw_tracking_text(url_draw, WEBSITE, url_font, center, 490 * scale,
+                       3.2 * scale, url_color)
+
+    resample = Image.Resampling.LANCZOS
+    return (title_layer.resize((WIDTH, HEIGHT), resample),
+            tag_layer.resize((WIDTH, HEIGHT), resample),
+            url_layer.resize((WIDTH, HEIGHT), resample))
+
+
+def composite_layer(frame: Image.Image, layer: Image.Image, alpha: float, dy: int = 0) -> Image.Image:
+    alpha = max(0.0, min(1.0, alpha))
+    if alpha <= 0:
+        return frame
+    overlay = layer.copy()
+    if dy:
+        translated = Image.new("RGBA", overlay.size, (0, 0, 0, 0))
+        translated.alpha_composite(overlay, (0, dy))
+        overlay = translated
+    if alpha < 1:
+        overlay.putalpha(overlay.getchannel("A").point(lambda value: int(value * alpha)))
+    return Image.alpha_composite(frame.convert("RGBA"), overlay).convert("RGB")
+
+
+def add_endcard_type(frame: Image.Image, global_seconds: float, layers) -> Image.Image:
+    name, tagline, url = layers
+    # Sequential, restrained reveals; hold the full message legibly to picture end.
+    for layer, start, fade in (
+        (name, 72.0, 0.80),
+        (tagline, 73.20, 0.72),
+        (url, 74.35, 0.72),
+    ):
+        alpha = ease((global_seconds - start) / fade)
+        frame = composite_layer(frame, layer, alpha, dy=int((1 - alpha) * 8))
+    return frame
+
+
+def shaped_noise(count: int, sample_rate: int, rng, low: float, high: float, pink: bool = True) -> np.ndarray:
     white = rng.standard_normal(count).astype(np.float32)
     spectrum = np.fft.rfft(white)
+    del white
     frequencies = np.fft.rfftfreq(count, 1.0 / sample_rate)
-    pink = 1.0 / np.sqrt(frequencies + 35.0)
-    highpass = 1.0 - np.exp(-((frequencies / 55.0) ** 2))
-    lowpass = np.exp(-((frequencies / 750.0) ** 4))
-    wind = np.fft.irfft(spectrum * pink * highpass * lowpass, n=count).astype(np.float32)
-    wind_rms = float(np.sqrt(np.mean(wind * wind)))
-    if wind_rms > 0:
-        wind /= wind_rms
+    if pink:
+        tilt = 1.0 / np.sqrt(frequencies + max(8.0, low * 0.35))
+    else:
+        tilt = np.ones_like(frequencies)
+    highpass = 1.0 - np.exp(-((frequencies / max(low, 1.0)) ** 2))
+    lowpass = np.exp(-((frequencies / max(high, 10.0)) ** 4))
+    shaped = np.fft.irfft(spectrum * tilt * highpass * lowpass, n=count).astype(np.float32)
+    del spectrum, frequencies, tilt, highpass, lowpass
+    rms = float(np.sqrt(np.mean(shaped * shaped)))
+    if rms > 1e-9:
+        shaped /= rms
+    return shaped
 
-    wind_gate = np.zeros(count, dtype=np.float32)
-    # Opening and return-to-slope air, with only a faint bed indoors.
-    wind_keys = ((0.0, 0.72), (0.8, 0.80), (7.7, 0.80), (10.0, 0.48),
-                 (16.0, 0.10), (54.0, 0.10), (57.0, 0.48), (60.0, 0.80),
-                 (70.0, 0.72), (71.0, 0.34), (73.0, 0.0), (77.0, 0.0))
-    wind_gate[:] = np.interp(sample_times, [p[0] for p in wind_keys], [p[1] for p in wind_keys])
-    left += 0.018 * wind * wind_gate
-    right += 0.016 * wind * wind_gate
 
-    # Soft snow-brush / low thump at the implied off-screen transition (~8 s).
-    impact_start = int(7.88 * sample_rate)
-    impact_length = min(int(0.56 * sample_rate), count - impact_start)
-    t = np.arange(impact_length, dtype=np.float32) / sample_rate
-    impact_env = np.sin(np.pi * np.clip(t / (impact_length / sample_rate), 0.0, 1.0)) ** 1.4
-    noise_slice = wind[impact_start:impact_start + impact_length]
-    thud = 0.042 * np.exp(-t / 0.12) * np.sin(2 * np.pi * 58.0 * t)
-    swish = 0.014 * noise_slice * impact_env
-    impact = thud + swish
-    left[impact_start:impact_start + impact_length] += impact
-    right[impact_start:impact_start + impact_length] += impact * 0.92
+def chord_progression() -> list[tuple[float, float, tuple[float, ...], float]]:
+    return [
+        (0.0, 9.2, (146.83, 174.61, 220.00, 329.63), 73.42),
+        (7.3, 16.4, (116.54, 174.61, 220.00, 293.66), 58.27),
+        (14.6, 23.7, (130.81, 174.61, 196.00, 261.63), 87.31),
+        (21.9, 31.0, (130.81, 196.00, 293.66, 329.63), 65.41),
+        (29.2, 38.3, (146.83, 174.61, 220.00, 329.63), 73.42),
+        (36.5, 45.6, (116.54, 174.61, 220.00, 293.66), 58.27),
+        (43.8, 52.9, (130.81, 174.61, 196.00, 261.63), 87.31),
+        (51.1, 60.2, (130.81, 196.00, 293.66, 329.63), 65.41),
+        (58.4, 67.5, (146.83, 174.61, 220.00, 293.66), 73.42),
+        (65.7, 74.8, (130.81, 174.61, 196.00, 261.63), 87.31),
+        (72.5, 77.0, (130.81, 174.61, 220.00, 261.63), 87.31),
+    ]
 
-    # Slow musical arc: restrained opening, warm build through recovery, clear
-    # lift on the return, then a soft resolution under the clean brand card.
-    gain_keys = ((0.0, 0.53), (2.0, 0.60), (12.0, 0.65), (21.0, 0.73),
-                 (36.0, 0.82), (50.0, 0.88), (58.0, 0.98), (65.0, 1.0),
-                 (70.0, 0.88), (73.0, 0.70), (77.0, 0.0))
-    music_gain = np.interp(sample_times, [p[0] for p in gain_keys], [p[1] for p in gain_keys]).astype(np.float32)
-    # A coherent global fader lets score, wind, and the accent enter and resolve
-    # together; FFmpeg side-chain ducking keeps the entire bed below the VO.
-    score_only_left = left.copy()
-    score_only_right = right.copy()
-    bed_gain = 2.2  # Lift the very restrained synth bed to a soft, audible level.
-    left = score_only_left * music_gain * bed_gain
-    right = score_only_right * music_gain * bed_gain
 
+def write_score_bed(path: Path, seconds: float = DURATION, sample_rate: int = 48_000) -> None:
+    """Compose an original, deterministic synthetic score and designed ambience."""
+    count = int(round(seconds * sample_rate))
+    rng = np.random.default_rng(28102026)
+    time_axis = np.arange(count, dtype=np.float32) / sample_rate
+    music_l = np.zeros(count, dtype=np.float32)
+    music_r = np.zeros(count, dtype=np.float32)
+
+    # Slow, warm harmonic bed with detuned stereo partials and soft bass roots.
+    for start, end, notes, root in chord_progression():
+        first = max(0, int(start * sample_rate))
+        last = min(count, int(end * sample_rate))
+        if last <= first:
+            continue
+        t = np.arange(last - first, dtype=np.float32) / sample_rate
+        attack = np.clip(t / 1.45, 0.0, 1.0)
+        release = np.clip((end - start - t) / 1.65, 0.0, 1.0)
+        envelope = (0.5 - 0.5 * np.cos(np.pi * attack)) * (0.5 - 0.5 * np.cos(np.pi * release))
+        for frequency in notes:
+            phase = float(rng.uniform(0, 2 * np.pi))
+            detune_l = float(rng.uniform(-0.0021, -0.0008))
+            detune_r = float(rng.uniform(0.0008, 0.0021))
+            left_wave = (0.62 * np.sin(2 * np.pi * frequency * (1 + detune_l) * t + phase)
+                         + 0.38 * np.sin(2 * np.pi * frequency * 1.004 * t + phase + 0.35)
+                         + 0.17 * np.sin(2 * np.pi * frequency * 2 * t + phase + 0.6))
+            right_wave = (0.62 * np.sin(2 * np.pi * frequency * (1 + detune_r) * t + phase + 0.12)
+                          + 0.38 * np.sin(2 * np.pi * frequency * 0.996 * t + phase + 0.48)
+                          + 0.17 * np.sin(2 * np.pi * frequency * 2 * t + phase + 0.8))
+            music_l[first:last] += 0.0175 * left_wave * envelope
+            music_r[first:last] += 0.0175 * right_wave * envelope
+        bass_phase = float(rng.uniform(0, 2 * np.pi))
+        bass_env = np.minimum(envelope, 0.72)
+        music_l[first:last] += 0.010 * np.sin(2 * np.pi * root * t + bass_phase) * bass_env
+        music_r[first:last] += 0.010 * np.sin(2 * np.pi * root * 1.0015 * t + bass_phase + 0.15) * bass_env
+
+    # Sparse high, soft plucks; a pulse gradually enters with the recovery montage.
+    for onset, frequency in ((3, 440), (11, 587.33), (18, 523.25), (26, 392),
+                             (34, 440), (42, 523.25), (50, 587.33), (58, 493.88),
+                             (64, 587.33), (69, 523.25), (73, 440)):
+        first = int(onset * sample_rate)
+        length = min(int(1.25 * sample_rate), count - first)
+        t = np.arange(length, dtype=np.float32) / sample_rate
+        env = (1.0 - np.exp(-t / 0.018)) * np.exp(-t / 0.54)
+        phase = float(rng.uniform(0, 2 * np.pi))
+        pluck = 0.0068 * env * (np.sin(2 * np.pi * frequency * t + phase)
+                                + 0.17 * np.sin(2 * np.pi * frequency * 2 * t + phase + 0.2))
+        pan = 0.5 + 0.18 * math.sin(onset * 0.3)
+        music_l[first:first + length] += pluck * math.sqrt(1.0 - pan)
+        music_r[first:first + length] += pluck * math.sqrt(pan)
+
+    pulse_curve = np.interp(time_axis, [0, 24, 34, 52, 62, 70, 77], [0, 0.0, 0.35, 0.65, 1.0, 0.75, 0.0])
+    for onset in np.arange(28.0, 70.0, 1.8):
+        first = int(onset * sample_rate)
+        length = min(int(0.38 * sample_rate), count - first)
+        t = np.arange(length, dtype=np.float32) / sample_rate
+        env = (1.0 - np.exp(-t / 0.012)) * np.exp(-t / 0.14)
+        index = min(count - 1, first)
+        level = 0.011 * float(pulse_curve[index])
+        freq = 54.0 + 4.0 * math.sin(onset * 0.45)
+        thump = level * env * np.sin(2 * np.pi * freq * t)
+        music_l[first:first + length] += thump
+        music_r[first:first + length] += thump * 0.96
+
+    music_gain_keys = ((0.0, 0.36), (4.0, 0.45), (7.6, 0.52), (8.4, 0.18),
+                       (8.8, 0.025), (10.6, 0.028), (11.4, 0.16), (14.0, 0.34),
+                       (21.0, 0.48), (30.0, 0.62), (43.0, 0.72), (54.0, 0.80),
+                       (60.0, 0.96), (66.0, 1.08), (71.0, 0.92), (74.0, 0.83), (77.0, 0.0))
+    music_gain = np.interp(time_axis, [p[0] for p in music_gain_keys], [p[1] for p in music_gain_keys]).astype(np.float32)
+    music_l *= music_gain
+    music_r *= music_gain
+
+    # Alpine wind, shaped scrape/edge texture, and a controlled snow impact.
+    wind = shaped_noise(count, sample_rate, rng, low=38.0, high=820.0, pink=True)
+    wind_keys = ((0.0, 0.72), (1.0, 0.86), (6.5, 0.78), (7.8, 0.95), (8.5, 0.07),
+                 (10.8, 0.035), (13.0, 0.25), (16.0, 0.16), (20.8, 0.04),
+                 (55.0, 0.04), (60.0, 0.18), (63.0, 0.55), (68.0, 0.86),
+                 (71.0, 0.55), (74.0, 0.26), (77.0, 0.0))
+    wind_gain = np.interp(time_axis, [p[0] for p in wind_keys], [p[1] for p in wind_keys]).astype(np.float32)
+    wind_mod = 0.78 + 0.22 * np.sin(2 * np.pi * 0.11 * time_axis + 0.4)
+    wind_l = 0.043 * wind * wind_gain * wind_mod
+    wind_r = 0.039 * wind * wind_gain * (0.82 + 0.18 * np.sin(2 * np.pi * 0.09 * time_axis + 1.1))
+    del wind
+
+    scrape = shaped_noise(count, sample_rate, rng, low=240.0, high=3300.0, pink=False)
+    ski_keys = ((0.0, 0.32), (1.0, 0.56), (3.4, 0.50), (4.0, 0.75), (6.6, 0.82),
+                (7.2, 0.90), (7.8, 0.70), (8.15, 0.12), (8.5, 0.0),
+                (61.0, 0.0), (63.0, 0.45), (65.0, 0.86), (68.0, 0.75),
+                (70.5, 0.34), (71.5, 0.0), (77.0, 0.0))
+    ski_gain = np.interp(time_axis, [p[0] for p in ski_keys], [p[1] for p in ski_keys]).astype(np.float32)
+    scrape_mod = 0.68 + 0.32 * np.sin(2 * np.pi * 0.7 * time_axis + 0.6)
+    ski_l = 0.021 * scrape * ski_gain * scrape_mod
+    ski_r = 0.018 * scrape * ski_gain * (0.75 + 0.25 * np.sin(2 * np.pi * 0.58 * time_axis + 1.3))
+    del scrape
+
+    # Muted off-screen impact at 8.2 s, followed by a near-silent bed.
+    impact_start = int(8.18 * sample_rate)
+    impact_len = int(0.55 * sample_rate)
+    it = np.arange(impact_len, dtype=np.float32) / sample_rate
+    impact_env = np.exp(-it / 0.15) * (1.0 - np.exp(-it / 0.012))
+    impact_noise = rng.standard_normal(impact_len).astype(np.float32)
+    thud = 0.050 * impact_env * np.sin(2 * np.pi * 59.0 * it)
+    snow = 0.012 * impact_env * impact_noise
+    impact = thud + snow
+    wind_l[impact_start:impact_start + impact_len] += impact
+    wind_r[impact_start:impact_start + impact_len] += impact * 0.90
+
+    # Two faint synthetic breath-like exhales at the aftermath; no recorded
+    # breathing or clinical sound is implied.
+    for onset in (9.45, 10.72):
+        first = int(onset * sample_rate)
+        length = int(0.72 * sample_rate)
+        puff = shaped_noise(length, sample_rate, rng, low=140.0, high=900.0, pink=True)
+        t = np.arange(length, dtype=np.float32) / sample_rate
+        envelope = np.sin(np.pi * np.clip(t / (length / sample_rate), 0, 1)) ** 1.3
+        envelope *= (1.0 - np.exp(-t / 0.08))
+        breath = 0.024 * puff * envelope
+        wind_l[first:first + length] += breath
+        wind_r[first:first + length] += breath * 0.92
+        del puff
+
+    left = music_l + wind_l + ski_l
+    right = music_r + wind_r + ski_r
     stereo = np.column_stack((left, right))
     peak = float(np.max(np.abs(stereo)))
-    if peak > 0.82:
-        stereo *= 0.82 / peak
+    if peak > 0.72:
+        stereo *= 0.72 / peak
     pcm = np.clip(stereo * 32767.0, -32768, 32767).astype("<i2", copy=False)
     path.parent.mkdir(parents=True, exist_ok=True)
     with wave.open(str(path), "wb") as handle:
@@ -368,53 +504,113 @@ def generate_audio_bed(path: Path, seconds: float = TOTAL_SECONDS, sample_rate: 
         handle.writeframes(pcm.tobytes())
 
 
-def run_checked(command: list[str], *, stderr_target=None) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
-        command,
-        cwd=ROOT,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=stderr_target if stderr_target is not None else subprocess.PIPE,
-        check=True,
-    )
+def create_frame(shot_index: int, local_seconds: float, global_seconds: float,
+                 images: dict[str, Image.Image], particles, type_layers) -> Image.Image:
+    shot = SHOTS[shot_index]
+    frame = crop_camera(images[shot.source], shot, local_seconds)
+    frame = tint(frame, shot.tone)
+
+    densities = {
+        "ski": 145,
+        "fall": 230,
+        "impact_reveal": 210,
+        "aftermath": 52,
+        "exterior": 44,
+        "arrival": 84,
+        "reception": 0,
+        "rehab": 0,
+        "rehab_detail": 0,
+        "team": 0,
+        "team_detail": 0,
+        "return": 200,
+        "sky_rise": 64,
+        "endcard": 0,
+    }
+    density = densities.get(shot.fx, 0)
+    strength = 0.35 if shot.fx in ("aftermath", "exterior", "arrival", "sky_rise") else 0.72
+    frame = overlay_snow(frame, global_seconds, particles, density, strength)
+
+    if shot.fx == "fall":
+        frame = overlay_fall_burst(frame, local_seconds)
+        if local_seconds > 1.10:
+            alpha = 0.86 * ease((local_seconds - 1.10) / 0.40)
+            frame = Image.blend(frame, Image.new("RGB", frame.size, (244, 248, 250)), alpha)
+    elif shot.fx == "impact_reveal":
+        alpha = 0.86 * (1.0 - ease(local_seconds / 0.42))
+        frame = Image.blend(frame, Image.new("RGB", frame.size, (244, 248, 250)), alpha)
+    elif shot.fx == "aftermath":
+        frame = overlay_breath(frame, local_seconds)
+
+    # A soft warm doorway bloom carries the assisted arrival into reception.
+    if shot.fx == "reception" and local_seconds < 0.48:
+        bloom_alpha = 0.045 * (1.0 - ease(local_seconds / 0.48))
+        bloom = Image.new("RGB", frame.size, (255, 216, 161))
+        frame = Image.blend(frame, bloom, bloom_alpha)
+
+    if shot.fx == "endcard":
+        frame = add_endcard_type(frame, global_seconds, type_layers)
+
+    # Restrained opening/ending fades. No random camera shake or unmotivated cuts.
+    if global_seconds < 0.50:
+        frame = Image.blend(Image.new("RGB", frame.size, (3, 8, 13)), frame, ease(global_seconds / 0.50))
+    if global_seconds > DURATION - 0.30:
+        frame = Image.blend(frame, Image.new("RGB", frame.size, (4, 9, 14)),
+                            ease((global_seconds - (DURATION - 0.30)) / 0.30))
+    return frame
+
+
+def render_composite_frame(global_seconds: float, starts: list[float], images,
+                           particles, type_layers) -> Image.Image:
+    index = len(SHOTS) - 1
+    local_seconds = 0.0
+    for i, start in enumerate(starts):
+        end = start + SHOTS[i].seconds
+        if global_seconds < end or i == len(SHOTS) - 1:
+            index = i
+            local_seconds = max(0.0, min(SHOTS[i].seconds, global_seconds - start))
+            break
+
+    current = create_frame(index, local_seconds, global_seconds, images, particles, type_layers)
+    transition = SHOTS[index].xfade_in
+    if index > 0 and transition > 0 and local_seconds < transition:
+        previous = SHOTS[index - 1]
+        prev_local = max(0.0, previous.seconds - transition + local_seconds)
+        prev_global = starts[index - 1] + prev_local
+        outgoing = create_frame(index - 1, prev_local, prev_global, images, particles, type_layers)
+        current = Image.blend(outgoing, current, ease(local_seconds / transition))
+    return current
+
+
+def run_checked(command: list[str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(command, cwd=ROOT, text=True, stdout=subprocess.PIPE,
+                          stderr=subprocess.PIPE, check=True)
 
 
 def render(args: argparse.Namespace) -> None:
-    approved = verify_sources()
+    sources = verify_sources()
     ffmpeg = get_ffmpeg_exe()
     version = run_checked([ffmpeg, "-hide_banner", "-version"]).stdout.splitlines()[0]
     encoders = run_checked([ffmpeg, "-hide_banner", "-encoders"]).stdout
     if "libx264" not in encoders:
-        raise RuntimeError("The selected FFmpeg build does not include the required libx264 encoder.")
+        raise RuntimeError("Selected FFmpeg does not include libx264.")
+    serif_path, sans_path = find_font_paths()
+    type_layers = make_endcard_layers(serif_path, sans_path)
 
-    font_path = find_cyrillic_font()
-    font_name = ImageFont.truetype(str(font_path), 44)
-    font_tagline = ImageFont.truetype(str(font_path), 44)
-    font_url = ImageFont.truetype(str(font_path), 38)
-    title_layer = make_text_layer(BRAND_NAME, font_name, 530)
-    tagline_layer = make_text_layer(TAGLINE, font_tagline, 693)
-    website_layer = make_text_layer(WEBSITE, font_url, 843)
-
-    images: dict[str, Image.Image] = {
-        key: Image.open(path).convert("RGB") for key, path in approved.items() if key.startswith("scene")
-    }
+    images = {key: Image.open(path).convert("RGB") for key, path in sources.items()
+              if key not in ("voiceover",)}
     for key, image in images.items():
         if image.size != (1376, 768):
-            raise RuntimeError(f"Unexpected locked image dimensions for {key}: {image.size}")
-
-    shot_frames = [int(round(shot.seconds * FPS)) for shot in SHOTS]
-    if sum(shot_frames) != int(round(TOTAL_SECONDS * FPS)):
-        raise AssertionError("Timeline does not add up to exactly 77 seconds at 24 fps.")
-    frame_total = sum(shot_frames)
-    offsets: list[int] = []
-    cursor = 0
-    for frame_count in shot_frames:
-        offsets.append(cursor)
-        cursor += frame_count
-
-    # Cache first frames used for cross-dissolves, keeping the transition work
-    # deterministic and avoiding an extra render at each cut.
-    first_frames = [shot_frame(images[shot.source], shot, 0) for shot in SHOTS]
+            raise RuntimeError(f"Unexpected dimensions for {key}: {image.size}")
+    particles = make_snow()
+    frame_counts = [int(round(shot.seconds * FPS)) for shot in SHOTS]
+    frame_total = sum(frame_counts)
+    if frame_total != int(round(DURATION * FPS)) or abs(sum(s.seconds for s in SHOTS) - DURATION) > 1e-6:
+        raise AssertionError(f"Director timeline must total 77 seconds; got {sum(s.seconds for s in SHOTS)}")
+    starts: list[float] = []
+    cursor = 0.0
+    for shot in SHOTS:
+        starts.append(cursor)
+        cursor += shot.seconds
 
     output = Path(args.output).expanduser()
     if not output.is_absolute():
@@ -422,176 +618,107 @@ def render(args: argparse.Namespace) -> None:
     output = output.resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
     if output.exists() and not args.force:
-        raise FileExistsError(f"Refusing to overwrite existing output: {output}\nUse --force to replace it.")
+        raise FileExistsError(f"Refusing to overwrite {output}; use --force explicitly.")
     partial = output.with_name(output.stem + ".partial" + output.suffix)
-    if partial.exists():
-        partial.unlink()
+    partial.unlink(missing_ok=True)
 
-    with tempfile.TemporaryDirectory(prefix="altai-commercial-render-") as temp_dir:
-        music_path = Path(temp_dir) / "original_synthetic_score_and_ambience.wav"
-        generate_audio_bed(music_path)
-
-        filter_graph = (
-            "[1:a]aresample=48000,asetpts=PTS-STARTPTS,"
-            "pan=stereo|c0=c0|c1=c0,volume=0.98[voice];"
+    with tempfile.TemporaryDirectory(prefix="altai-directors-cut-") as temp_dir:
+        bed_path = Path(temp_dir) / "original_synthetic_score_and_fx.wav"
+        write_score_bed(bed_path)
+        audio_filter = (
+            "[1:a]aresample=48000,asetpts=PTS-STARTPTS,pan=stereo|c0=c0|c1=c0,volume=0.98[voice];"
             "[2:a]aresample=48000,asetpts=PTS-STARTPTS,volume=1.0[bed];"
             "[voice]asplit=2[voice_mix][voice_key];"
-            "[bed][voice_key]sidechaincompress=threshold=0.05:ratio=1.8:"
-            "attack=60:release=500:makeup=1[ducked];"
-            "[voice_mix][ducked]amix=inputs=2:duration=longest:"
-            "dropout_transition=2:normalize=0,"
-            "alimiter=limit=0.92:attack=5:release=60[aout]"
+            # Pad only the side-chain detector, not the approved narration, so
+            # the original voice ends naturally while the score resolves to 77 s.
+            "[voice_key]apad=pad_dur=7,atrim=duration=77[voice_key_padded];"
+            "[bed][voice_key_padded]sidechaincompress=threshold=0.048:ratio=1.8:"
+            "attack=55:release=520:makeup=1[ducked];"
+            "[voice_mix][ducked]amix=inputs=2:duration=longest:normalize=0,"
+            "alimiter=limit=0.91:attack=5:release=60[aout]"
         )
         command = [
             ffmpeg, "-hide_banner", "-loglevel", "error", "-y",
-            "-f", "rawvideo", "-pixel_format", "rgb24",
-            "-video_size", f"{WIDTH}x{HEIGHT}", "-framerate", str(FPS), "-i", "pipe:0",
-            "-i", str(VOICEOVER), "-i", str(music_path),
-            "-filter_complex", filter_graph,
-            "-map", "0:v:0", "-map", "[aout]",
-            "-c:v", "libx264", "-preset", "medium", "-crf", "18",
-            "-profile:v", "high", "-level:v", "4.1", "-pix_fmt", "yuv420p",
-            "-r", str(FPS), "-fps_mode", "cfr",
+            "-f", "rawvideo", "-pixel_format", "rgb24", "-video_size", f"{WIDTH}x{HEIGHT}",
+            "-framerate", str(FPS), "-i", "pipe:0", "-i", str(VOICEOVER), "-i", str(bed_path),
+            "-filter_complex", audio_filter, "-map", "0:v:0", "-map", "[aout]",
+            "-c:v", "libx264", "-preset", "medium", "-crf", "17", "-profile:v", "high",
+            "-level:v", "4.1", "-pix_fmt", "yuv420p", "-r", str(FPS), "-fps_mode", "cfr",
             "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709",
             "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2",
-            "-t", f"{TOTAL_SECONDS:.3f}", "-movflags", "+faststart",
-            "-metadata", "title=Altai Rehabilitation Center — Return to the Slopes",
-            "-metadata", "comment=2D animation of approved stills; no generated live-action footage",
+            "-t", f"{DURATION:.3f}", "-movflags", "+faststart",
+            "-metadata", "title=Altai Rehabilitation Center — Director's Cut v2",
+            "-metadata", "comment=AI-generated still keyframes and programmatic 2D motion; no generated video footage",
             str(partial),
         ]
         print(f"Renderer: {version}")
-        print(f"Font: {font_path}")
-        print(f"Encoding {frame_total} frames ({TOTAL_SECONDS:.1f} s), {WIDTH}x{HEIGHT} at {FPS} fps …", flush=True)
+        print(f"Typography: supersampled DejaVu Serif/Sans; no logo/emblem used")
+        print(f"Sources verified: {len(SOURCE_HASHES)} files; timeline {DURATION:.1f} s / {frame_total} frames")
+        print("Motion provenance: still-image camera paths, snow/breath/impact layers, and AI-generated still inserts")
         start_time = time.monotonic()
-        with tempfile.TemporaryFile(mode="w+t") as ffmpeg_log:
-            process = subprocess.Popen(
-                command,
-                cwd=ROOT,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.DEVNULL,
-                stderr=ffmpeg_log,
-                bufsize=0,
-            )
+        with tempfile.TemporaryFile(mode="w+t") as log:
+            process = subprocess.Popen(command, cwd=ROOT, stdin=subprocess.PIPE,
+                                       stdout=subprocess.DEVNULL, stderr=log, bufsize=0)
             assert process.stdin is not None
             written = 0
             try:
-                for shot_index, shot in enumerate(SHOTS):
-                    for local_frame in range(shot_frames[shot_index]):
-                        global_frame = offsets[shot_index] + local_frame
-                        seconds = global_frame / FPS
-                        frame = shot_frame(images[shot.source], shot, local_frame)
-
-                        # The plan calls for a brief snow-white dip before the
-                        # non-graphic aftermath; this is a transition, not a fall clip.
-                        if shot_index == 1:
-                            remaining = shot.seconds - local_frame / FPS
-                            if remaining < 0.20:
-                                frame = fade_to_color(frame, (245, 247, 247), 0.82 * (1.0 - remaining / 0.20))
-                        elif shot_index == 2 and seconds < offsets[shot_index] / FPS + 0.24:
-                            local_seconds = local_frame / FPS
-                            frame = fade_to_color(frame, (245, 247, 247), 0.78 * (1.0 - ease01(local_seconds / 0.24)))
-
-                        # Exterior-to-reception match dissolve (last 0.60 s of shot 5).
-                        if shot_index == 4:
-                            remaining = shot.seconds - local_frame / FPS
-                            if remaining < 0.60:
-                                alpha = ease01((0.60 - remaining) / 0.60)
-                                frame = Image.blend(frame, first_frames[5], alpha)
-
-                        # Scene 9 fallback reframe to the approved Scene 10 backup card.
-                        if shot_index == 16:
-                            remaining = shot.seconds - local_frame / FPS
-                            if remaining < 0.78:
-                                alpha = ease01((0.78 - remaining) / 0.78)
-                                frame = Image.blend(frame, first_frames[17], alpha)
-
-                        if shot_index >= 17:
-                            frame = add_end_card_text(frame, seconds, title_layer, tagline_layer, website_layer)
-
-                        # Gentle open and close; the card remains readable until its final fade.
-                        if seconds < 0.62:
-                            frame = fade_to_color(frame, (0, 0, 0), 1.0 - ease01(seconds / 0.62))
-                        if seconds > TOTAL_SECONDS - 0.55:
-                            frame = fade_to_color(frame, (0, 0, 0), ease01((seconds - (TOTAL_SECONDS - 0.55)) / 0.55))
-
-                        process.stdin.write(frame.tobytes())
-                        written += 1
-                        if written % (FPS * 8) == 0:
-                            elapsed = time.monotonic() - start_time
-                            print(f"  {written:4d}/{frame_total} frames ({seconds:5.1f}s) — {elapsed:.0f}s elapsed", flush=True)
+                for index in range(frame_total):
+                    seconds = index / FPS
+                    frame = render_composite_frame(seconds, starts, images, particles, type_layers)
+                    process.stdin.write(frame.tobytes())
+                    written += 1
+                    if written % (FPS * 8) == 0:
+                        elapsed = time.monotonic() - start_time
+                        print(f"  {written:4d}/{frame_total} frames ({seconds:5.1f}s) — {elapsed:.0f}s elapsed", flush=True)
                 process.stdin.close()
-                return_code = process.wait()
+                code = process.wait()
             except BrokenPipeError:
                 process.stdin.close()
-                return_code = process.wait()
-            if return_code != 0:
-                ffmpeg_log.seek(0)
-                detail = ffmpeg_log.read()
-                raise RuntimeError(f"FFmpeg render failed (exit {return_code}):\n{detail}")
+                code = process.wait()
+            if code:
+                log.seek(0)
+                raise RuntimeError(f"FFmpeg render failed (exit {code}):\n{log.read()}")
 
-        if not partial.is_file() or partial.stat().st_size < 100_000:
-            raise RuntimeError("FFmpeg returned success but the MP4 output is missing or unexpectedly small.")
+        if not partial.is_file() or partial.stat().st_size < 500_000:
+            raise RuntimeError("Render completed without a plausible MP4 file.")
+        check = subprocess.run([ffmpeg, "-hide_banner", "-v", "error", "-i", str(partial),
+                                "-f", "null", "-"], cwd=ROOT, capture_output=True, text=True)
+        if check.returncode:
+            partial.unlink(missing_ok=True)
+            raise RuntimeError(f"Rendered MP4 failed full decode verification:\n{check.stderr}")
 
-        # Decode the entire export once before publishing it as the requested file.
-        check = subprocess.run(
-            [ffmpeg, "-hide_banner", "-v", "error", "-i", str(partial), "-f", "null", "-"],
-            cwd=ROOT,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        if check.returncode != 0:
-            raise RuntimeError(f"The rendered MP4 did not decode cleanly:\n{check.stderr}")
-
-    # Re-check locked source hashes after rendering, then atomically publish.
+    # Confirm source files are still byte-identical before publishing.
     verify_sources()
     if output.exists() and args.force:
         output.unlink()
     partial.replace(output)
-    print(f"Verified playable MP4: {output}")
-    print(f"File size: {output.stat().st_size:,} bytes")
+    print(f"Playable MP4 verified: {output}")
+    print(f"Size: {output.stat().st_size:,} bytes")
     print(f"SHA-256: {sha256(output)}")
-    print("Container metadata probe:")
-    probe = subprocess.run(
-        [ffmpeg, "-hide_banner", "-i", str(output), "-map", "0:v:0", "-frames:v", "1", "-f", "null", "-"],
-        cwd=ROOT,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    print(probe.stderr.strip())
-    print(f"Elapsed: {time.monotonic() - start_time:.1f} seconds")
+    print(f"Elapsed: {time.monotonic() - start_time:.1f} s")
+    probe = subprocess.run([ffmpeg, "-hide_banner", "-i", str(output), "-map", "0:v:0",
+                            "-frames:v", "1", "-f", "null", "-"],
+                           cwd=ROOT, capture_output=True, text=True)
+    print(probe.stderr)
 
 
 def main(argv: Iterable[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--output", default=str(DEFAULT_OUTPUT),
-        help=f"MP4 output path (default: {DEFAULT_OUTPUT.relative_to(ROOT)})",
-    )
-    parser.add_argument(
-        "--force", action="store_true",
-        help="replace an existing output file; source reference assets remain protected by hashes",
-    )
-    parser.add_argument(
-        "--verify-only", action="store_true",
-        help="check approved input hashes, font, FFmpeg and libx264 without rendering",
-    )
+    parser.add_argument("--output", default=str(DEFAULT_OUTPUT))
+    parser.add_argument("--force", action="store_true")
+    parser.add_argument("--verify-only", action="store_true")
     args = parser.parse_args(argv)
-
     try:
         verify_sources()
         if args.verify_only:
             ffmpeg = get_ffmpeg_exe()
             version = run_checked([ffmpeg, "-hide_banner", "-version"]).stdout.splitlines()[0]
-            encoders = run_checked([ffmpeg, "-hide_banner", "-encoders"]).stdout
-            if "libx264" not in encoders:
-                raise RuntimeError("The selected FFmpeg build does not include libx264.")
-            print(f"Approved source hashes: OK ({len(APPROVED_SOURCES)} files)")
-            print(f"Cyrillic font: {find_cyrillic_font()}")
+            serif, sans = find_font_paths()
+            print(f"Hash-pinned sources verified: {len(SOURCE_HASHES)}")
             print(f"FFmpeg: {version}")
-            print("H.264 encoder: libx264 available")
-            print(f"Timeline: {sum(s.seconds for s in SHOTS):.1f} s, {sum(int(round(s.seconds * FPS)) for s in SHOTS)} frames")
+            print(f"Fonts: {serif.name}, {sans.name}")
+            print(f"Timeline: {sum(s.seconds for s in SHOTS):.1f}s / {sum(int(round(s.seconds * FPS)) for s in SHOTS)} frames")
+            print("I2V capability: not present; this workflow is still-based/programmatic")
             return 0
         render(args)
         return 0

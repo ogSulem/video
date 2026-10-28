@@ -1,0 +1,6 @@
+.venv/
+.qc/
+**/__pycache__/
+*.py[cod]
+*.partial
+*.partial.mp4
