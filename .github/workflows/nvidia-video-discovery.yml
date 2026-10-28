@@ -13,9 +13,9 @@ on:
   workflow_dispatch:
     inputs:
       probe_model_id:
-        description: "Optional: exact model id to inspect with GET /models/{id}"
+        description: "Exact model id to inspect with GET /models/{id} (documented Wan2.2 id by default)"
         required: false
-        default: ""
+        default: "wan-ai/wan2.2"
       fetch_docs:
         description: "Also fetch the official NVIDIA docs pages and quote documented capabilities"
         type: boolean
@@ -61,9 +61,8 @@ jobs:
           # Register the value with the runner's masker so any accidental echo
           # is replaced by ***. The command itself is processed, not logged.
           echo "::add-mask::${NVIDIA_API_KEY}"
-          # Report only coarse shape information, never the key.
-          printf 'NVIDIA_API_KEY is configured (length %s characters, prefix %s, suffix %s)\n' \
-            "${#NVIDIA_API_KEY}" "${NVIDIA_API_KEY:0:5}" "${NVIDIA_API_KEY: -4}"
+          # Report nothing about the value: no length, no prefix, no suffix, no hash.
+          echo "NVIDIA_API_KEY is configured."
 
       - name: Install redaction helper and verify it works
         shell: bash
@@ -194,6 +193,30 @@ jobs:
             head -c 6000 "$OUT_DIR/model.json"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Optional - GET NIM metadata/manifest endpoints (may be absent on hosted)
+        shell: bash
+        run: |
+          set -euo pipefail
+          for ep in metadata manifest version; do
+            code=$(curl -sS -o "$OUT_DIR/$ep.raw.json" -w '%{http_code}' \
+              -H "Authorization: Bearer ${NVIDIA_API_KEY}" \
+              -H "Accept: application/json" \
+              -X GET "${BASE_URL}/$ep" || echo "000")
+            python3 "$OUT_DIR/redact.py" < "$OUT_DIR/$ep.raw.json" > "$OUT_DIR/$ep.json" 2>/dev/null || true
+            echo "GET ${BASE_URL}/$ep -> HTTP ${code}"
+            {
+              echo "#### GET ${BASE_URL}/$ep -> HTTP ${code}"
+              if [ "$code" = "200" ]; then
+                echo '```json'
+                head -c 3000 "$OUT_DIR/$ep.json"
+                echo '```'
+              else
+                echo "not available on the hosted surface (HTTP ${code}) — limits must come from the model page."
+              fi
+            } >> "$GITHUB_STEP_SUMMARY"
+          done
+        continue-on-error: true
 
       - name: Quote documented capabilities from the official NVIDIA docs
         if: ${{ inputs.fetch_docs }}

@@ -1,0 +1,366 @@
+name: NVIDIA video - single test clip (image-to-video)
+
+# ONE clip. One generation call, one attempt, no automatic retry.
+#
+# Safety design:
+#   * Runs only when started by hand, and only when the operator types GENERATE
+#     into the confirm box. Without it the job performs a free preflight
+#     (secret check + catalog check) and stops before any billable request.
+#   * One POST, no retry loop. On any error the redacted body is printed and the
+#     job stops so nothing is spent again automatically.
+#   * The API key is read from the repository secret via env, masked, and every
+#     response body passes through a redactor. Nothing about its value is printed.
+#   * Results are uploaded as artifacts only. Nothing is committed, nothing
+#     existing is overwritten.
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type GENERATE to allow ONE billable image-to-video request. Any other value = dry run (free).'
+        required: true
+        default: 'NO'
+      model:
+        description: 'Model id exactly as returned by the discovery catalog'
+        required: true
+        default: 'wan-ai/wan2.2'
+      size:
+        description: 'Output size, as documented (832x480 is the documented example)'
+        required: true
+        default: '832x480'
+      seconds:
+        description: 'Clip length in seconds (documented example is 4). Use the shortest that shows the carve.'
+        required: true
+        default: '4'
+      image_field:
+        description: 'JSON field name for the input image. Leave as image unless the API error names another (e.g. input_reference, image_url).'
+        required: true
+        default: 'image'
+      reference:
+        description: 'Approved reference image to animate'
+        required: true
+        default: 'references/scenes/REF-SCENE-01-ski-descent.png'
+        type: choice
+        options:
+          - references/scenes/REF-SCENE-01-ski-descent.png
+          - references/scenes/REF-SCENE-09-return-to-slopes.png
+          - references/scenes/REF-SCENE-02-injury-aftermath-v2.png
+          - references/scenes/REF-SCENE-05-biomechanics-assessment-v2.png
+      prompt_file:
+        description: 'Prompt file (markdown, the blockquote is used)'
+        required: true
+        default: 'production/video_generation_pack_v2/prompts/test_carve_i2v.md'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nvidia-test-clip
+  cancel-in-progress: false
+
+jobs:
+  test-clip:
+    name: One image-to-video test clip
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+      BASE_URL: https://integrate.api.nvidia.com/v1
+
+    steps:
+      - name: Checkout (read-only)
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup work dir and redactor
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "OUT_DIR=${RUNNER_TEMP}/nvidia-test" >> "$GITHUB_ENV"
+          mkdir -p "${RUNNER_TEMP}/nvidia-test"
+          cat > "${RUNNER_TEMP}/nvidia-test/redact.py" <<'PY'
+          import os, re, sys
+          key = os.environ.get("NVIDIA_API_KEY", "")
+          data = sys.stdin.read()
+          if key:
+              data = data.replace(key, "***REDACTED***")
+          data = re.sub(r"nvapi-[A-Za-z0-9_\-]{8,}", "***REDACTED***", data)
+          data = re.sub(r"(?i)(authorization\s*:\s*bearer\s+)\S+", r"\1***REDACTED***", data)
+          sys.stdout.write(data)
+          PY
+          out=$(printf 'Bearer nvapi-SELFTEST123456 body nvapi-SELFTEST123456' | python3 "${RUNNER_TEMP}/nvidia-test/redact.py")
+          if printf '%s' "$out" | grep -q 'nvapi-SELFTEST'; then
+            echo "::error title=Redaction broken::refusing to continue"
+            exit 1
+          fi
+          echo "redactor OK: $out"
+
+      - name: Verify the secret exists (value never inspected)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${NVIDIA_API_KEY:-}" ]; then
+            echo "::error title=Secret missing::NVIDIA_API_KEY is not set for this repository. Settings > Secrets and variables > Actions > New repository secret."
+            exit 1
+          fi
+          echo "::add-mask::${NVIDIA_API_KEY}"
+          echo "NVIDIA_API_KEY is configured."
+
+      - name: Preflight - the model must exist in the catalog (free GET, no generation)
+        shell: bash
+        run: |
+          set -euo pipefail
+          MODEL="${{ inputs.model }}"
+          code=$(curl -sS -o "$OUT_DIR/models.raw.json" -w '%{http_code}' \
+            -H "Authorization: Bearer ${NVIDIA_API_KEY}" -H "Accept: application/json" \
+            -X GET "${BASE_URL}/models" || echo "000")
+          python3 "$OUT_DIR/redact.py" < "$OUT_DIR/models.raw.json" > "$OUT_DIR/models.json"
+          if [ "$code" != "200" ]; then
+            echo "::error title=Catalog unavailable::GET /v1/models returned HTTP ${code}. See the summary for the redacted body."
+            {
+              echo "### Preflight failed: catalog HTTP ${code}"
+              echo '```'
+              head -c 3000 "$OUT_DIR/models.json"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          # Does the requested id exist? Also look for any video-ish id to suggest.
+          python3 - "$OUT_DIR/models.json" "$MODEL" "$GITHUB_STEP_SUMMARY" <<'PY'
+          import json, re, sys, pathlib
+          data = json.loads(pathlib.Path(sys.argv[1]).read_text() or "{}")
+          want = sys.argv[2]
+          ids = sorted({m.get("id", "") for m in data.get("data", []) if m.get("id")})
+          pat = re.compile(r"(video|i2v|t2v|wan|cosmos|ltx|svd|animate|motion)", re.I)
+          cand = [i for i in ids if pat.search(i)]
+          lines = [f"### Preflight\n",
+                   f"- Catalog size: **{len(ids)}** ids",
+                   f"- Requested model: `{want}` -> "
+                   + ("**present**" if want in ids else "**NOT PRESENT**"),
+                   f"- Video-ish ids in this catalog: " + (", ".join(f"`{c}`" for c in cand) if cand else "none")]
+          with open(sys.argv[3], "a") as fh:
+              fh.write("\n".join(lines) + "\n")
+          print("\n".join(lines))
+          if want not in ids:
+              print("::error title=Model not in catalog::'" + want + "' is not returned by /v1/models for this key. "
+                    "Fix the model id from the catalog list above; no request was sent.")
+              raise SystemExit(1)
+          PY
+
+      - name: Build the request payload (no network)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - "$GITHUB_WORKSPACE/${{ inputs.reference }}" \
+                    "$GITHUB_WORKSPACE/${{ inputs.prompt_file }}" \
+                    "${{ inputs.model }}" "${{ inputs.size }}" \
+                    "${{ inputs.seconds }}" "${{ inputs.image_field }}" \
+                    "$OUT_DIR" <<'PY'
+          import base64, json, mimetypes, pathlib, re, sys
+          img, prompt_file, model, size, seconds, field, out = sys.argv[1:8]
+          img_p = pathlib.Path(img)
+          if not img_p.exists():
+              sys.exit(f"reference image not found: {img}")
+          text = pathlib.Path(prompt_file).read_text()
+          # positive prompt = blockquotes before the "## Negative prompt" heading
+          head = text.split("## Negative prompt")[0]
+          lines = [l[1:].strip() for l in head.splitlines() if l.startswith(">")]
+          prompt = " ".join(l for l in lines if l)
+          if not prompt:
+              sys.exit(f"no blockquote prompt found in {prompt_file}")
+          mime = mimetypes.guess_type(img_p.name)[0] or "image/png"
+          b64 = base64.b64encode(img_p.read_bytes()).decode("ascii")
+          payload = {
+              "model": model,
+              "prompt": prompt,
+              "size": size,
+              "seconds": int(seconds) if str(seconds).isdigit() else seconds,
+              field: f"data:{mime};base64,{b64}",
+          }
+          pathlib.Path(out, "payload.json").write_text(json.dumps(payload))
+          redacted = dict(payload)
+          redacted[field] = f"<base64 {mime}, {len(b64)} chars>"
+          pathlib.Path(out, "payload.preview.json").write_text(json.dumps(redacted, indent=2))
+          print(json.dumps(redacted, indent=2)[:1200])
+          print(f"\nprompt length: {len(prompt)} chars")
+          PY
+
+      - name: Confirm this is really the intended single paid call
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ inputs.confirm }}" != "GENERATE" ]; then
+            echo "DRY RUN: confirm was not 'GENERATE', so no request will be sent."
+            {
+              echo "### Dry run - nothing was generated"
+              echo ""
+              echo "Preflight passed (secret present, model in catalog). The request was built:"
+              echo '```json'
+              cat "$OUT_DIR/payload.preview.json"
+              echo '```'
+              echo "Re-run with confirm = \`GENERATE\` to submit this one request."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "Confirmed: exactly one image-to-video request will be submitted."
+
+      - name: Submit ONE image-to-video request (no retry)
+        if: ${{ inputs.confirm == 'GENERATE' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Documented route for NIM visual-genai video generation:
+          # POST {BASE}/v1/videos/generations  (see the Wan2.2 API reference)
+          ROUTE="${BASE_URL}/videos/generations"
+          echo "POST ${ROUTE}"
+          code=$(curl -sS --max-time 900 -o "$OUT_DIR/resp.raw.json" -w '%{http_code}' \
+            -H "Authorization: Bearer ${NVIDIA_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -H "Accept: application/json" \
+            -X POST "${ROUTE}" \
+            --data-binary "@${OUT_DIR}/payload.json" || echo "000")
+          python3 "$OUT_DIR/redact.py" < "$OUT_DIR/resp.raw.json" > "$OUT_DIR/resp.json"
+          echo "HTTP ${code}"
+          echo "$code" > "$OUT_DIR/http_code.txt"
+          if [ "$code" != "200" ]; then
+            {
+              echo "### Generation request failed: HTTP ${code}"
+              echo ""
+              echo "No retry will be attempted. Redacted response:"
+              echo '```json'
+              head -c 6000 "$OUT_DIR/resp.json"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning title=Request failed::HTTP ${code}. Read the summary; nothing was retried."
+            exit 1
+          fi
+
+      - name: Extract the video from the response
+        if: ${{ inputs.confirm == 'GENERATE' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - "$OUT_DIR" <<'PY'
+          import base64, json, pathlib, sys, urllib.request
+          out = pathlib.Path(sys.argv[1])
+          raw = (out / "resp.json").read_text()
+          body = json.loads(raw)
+          data = body.get("data") or []
+          got = None
+          if data and isinstance(data[0], dict):
+              b64 = data[0].get("b64_json") or data[0].get("b64_mp4")
+              url = data[0].get("url")
+              if b64:
+                  got = ("b64", b64)
+              elif url:
+                  got = ("url", url)
+          if got is None:
+              # fall back to a top-level url / base64 shape
+              for k in ("url", "video_url", "video"):
+                  if isinstance(body.get(k), str):
+                      got = ("url", body[k]); break
+          if got is None:
+              sys.exit("response did not contain b64_json or url; see resp.json in the artifact")
+          kind, val = got
+          dest = out / "clip_test.mp4"
+          if kind == "b64":
+              dest.write_bytes(base64.b64decode(val))
+          else:
+              req = urllib.request.Request(val, headers={"User-Agent": "github-actions"})
+              with urllib.request.urlopen(req, timeout=300) as r:
+                  dest.write_bytes(r.read())
+          print(f"wrote {dest} ({dest.stat().st_size/1e6:.2f} MB)")
+          # keep only the small, useful metadata; the base64 blob is huge and useless in an artifact
+          slim = {k: v for k, v in body.items() if k != "data"}
+          slim["data"] = [{k: v for k, v in d.items() if k not in ("b64_json", "b64_mp4")}
+                          for d in data]
+          (out / "resp_slim.json").write_text(json.dumps(slim, indent=2)[:20000])
+          PY
+
+      - name: Verify the clip technically
+        if: ${{ inputs.confirm == 'GENERATE' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          F="$OUT_DIR/clip_test.mp4"
+          if [ ! -s "$F" ]; then
+            echo "::error title=No video::the response produced no usable file"; exit 1
+          fi
+          python3 - "$F" "$OUT_DIR/report.json" <<'PY'
+          import hashlib, json, pathlib, subprocess, sys
+          f = pathlib.Path(sys.argv[1])
+          def probe():
+              try:
+                  out = subprocess.run(["ffprobe", "-v", "error", "-show_streams",
+                                        "-show_format", "-of", "json", str(f)],
+                                       capture_output=True, text=True)
+                  if out.returncode == 0:
+                      return json.loads(out.stdout or "{}")
+              except FileNotFoundError:
+                  pass
+              return {}
+          meta = probe()
+          v = next((s for s in meta.get("streams", []) if s.get("codec_type") == "video"), {})
+          rep = {
+              "file": f.name,
+              "bytes": f.stat().st_size,
+              "sha256": hashlib.sha256(f.read_bytes()).hexdigest(),
+              "width": v.get("width"), "height": v.get("height"),
+              "codec": v.get("codec_name"),
+              "frame_rate": v.get("avg_frame_rate"),
+              "frames": v.get("nb_frames"),
+              "duration_s": meta.get("format", {}).get("duration"),
+          }
+          pathlib.Path(sys.argv[2]).write_text(json.dumps(rep, indent=2))
+          print(json.dumps(rep, indent=2))
+          PY
+          ffprobe -v error -count_frames -select_streams v:0 \
+            -show_entries stream=nb_read_frames -of default=nw=1:nk=1 "$F" || true
+
+      - name: Summary
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo ""
+            echo "### Request parameters"
+            echo '```json'
+            cat "$OUT_DIR/payload.preview.json" 2>/dev/null | head -c 1500 || echo "(not built)"
+            echo '```'
+            echo ""
+            echo "### Provenance"
+            echo "- Reference: \`${{ inputs.reference }}\` (approved, unmodified)"
+            echo "- Prompt: \`${{ inputs.prompt_file }}\`"
+            echo "- Model: \`${{ inputs.model }}\`, size \`${{ inputs.size }}\`, seconds \`${{ inputs.seconds }}\`"
+            echo "- Exactly one request was attempted. No retries, no batch."
+            echo "- Nothing was committed; results are artifacts only."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload clip and technical report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nvidia-test-clip
+          path: |
+            ${{ runner.temp }}/nvidia-test/clip_test.mp4
+            ${{ runner.temp }}/nvidia-test/report.json
+            ${{ runner.temp }}/nvidia-test/resp_slim.json
+            ${{ runner.temp }}/nvidia-test/payload.preview.json
+            ${{ runner.temp }}/nvidia-test/models.json
+            ${{ runner.temp }}/nvidia-test/http_code.txt
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Tripwire - repository must be untouched
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error title=Unexpected change::working tree changed; nothing was committed."
+            git status --porcelain
+            exit 1
+          fi
+          echo "repository clean"
