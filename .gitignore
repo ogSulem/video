@@ -4,3 +4,6 @@
 *.py[cod]
 *.partial
 *.partial.mp4
+__pycache__/
+*.pyc
+video/shots/*/out/*.mp4

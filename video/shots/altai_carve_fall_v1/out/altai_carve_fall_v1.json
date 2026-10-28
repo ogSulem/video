@@ -1,0 +1,48 @@
+{
+  "output": "shots/altai_carve_fall_v1/out/altai_carve_fall_v1.mp4",
+  "sha256": "6b64adbedcdf871a1dad5035d7eef85394bb9550496bfb3450acaf515e8cf7f2",
+  "duration_s": 5.0,
+  "fps": 24,
+  "frames": 120,
+  "size": [
+    1920,
+    1080
+  ],
+  "keyframes": [
+    {
+      "file": "shots/altai_carve_fall_v1/keyframes/kf01.png",
+      "t": 0.0,
+      "sha256": "aee913815c88e6c061ca35074f02c5f5cb7e88bf6a7fbf37f60c18ad48f035cc"
+    },
+    {
+      "file": "shots/altai_carve_fall_v1/keyframes/kf01b.png",
+      "t": 0.55,
+      "sha256": "d0a6428704ce23963b15239614daf17545dd3b5d89c03cafa73817ef4640ccba"
+    },
+    {
+      "file": "shots/altai_carve_fall_v1/keyframes/kf02.png",
+      "t": 1.35,
+      "sha256": "71aae86f3ff9954b2445aec5e3c235fef6f3021a1c4e8cf0d7593df08f48d6af"
+    },
+    {
+      "file": "shots/altai_carve_fall_v1/keyframes/kf02b.png",
+      "t": 2.1,
+      "sha256": "8b4c670e1ec6bdb41ddb0abbf6d65fb58670a43f7d1c060eacd0fc61702e3fda"
+    },
+    {
+      "file": "shots/altai_carve_fall_v1/keyframes/kf03.png",
+      "t": 2.85,
+      "sha256": "e4ae38da89b1e85f3ed4b0345ab89e8e30704f2d48e01e2206574b75c1102b9a"
+    },
+    {
+      "file": "shots/altai_carve_fall_v1/keyframes/kf04.png",
+      "t": 3.75,
+      "sha256": "a589ac1b7e779c264e0e46bc7cc6a9e10c196901080436943b686496ffbb39f1"
+    },
+    {
+      "file": "shots/altai_carve_fall_v1/keyframes/kf05.png",
+      "t": 4.95,
+      "sha256": "d0761d498c04ea7ff57481c17966a14553e755318195ada3ce4df940b790c603"
+    }
+  ]
+}
