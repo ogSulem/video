@@ -1,0 +1,8 @@
+{
+  "delivery": "video/shots/altai_carve_fall_v1/final/altai_carve_fall_v1_5s.mp4",
+  "sha256": "7e7566e6b8c594c0459016671f4e217d16d05e84588a626ada350ccaf2570231",
+  "picture_master": "video/shots/altai_carve_fall_v1/out/altai_carve_fall_v1.mp4",
+  "picture_sha256": "945d4922bf89911c149aef00e02d050162e58c8cf8f2ed11e322d473b08c101a",
+  "audio_master": "video/shots/altai_carve_fall_v1/out/altai_carve_fall_v1_audio.wav",
+  "audio_sha256": "9986d4ba6dc40ad222d150d9585ad2d3124f6acc7bbaf84c446698652a69a769"
+}

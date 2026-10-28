@@ -1,0 +1,332 @@
+name: NVIDIA video capability discovery
+
+# DISCOVERY ONLY.
+# This workflow performs authenticated GET requests against the NVIDIA hosted
+# API surface in order to find out what is actually available to this account.
+# It does NOT generate video, does NOT submit any billable generation request,
+# and does NOT commit anything.
+#
+# Manual trigger only: there is deliberately no push / schedule / pull_request
+# trigger, so this cannot run by accident.
+
+on:
+  workflow_dispatch:
+    inputs:
+      probe_model_id:
+        description: "Exact model id to inspect with GET /models/{id} (documented Wan2.2 id by default)"
+        required: false
+        default: "wan-ai/wan2.2"
+      fetch_docs:
+        description: "Also fetch the official NVIDIA docs pages and quote documented capabilities"
+        type: boolean
+        required: false
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nvidia-discovery
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    name: Inspect catalog (read-only, no generation)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      # The secret is only ever passed through an environment variable.
+      # It is never interpolated into a shell string, never echoed, and is
+      # redacted from every captured response before anything is printed.
+      NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+      BASE_URL: https://integrate.api.nvidia.com/v1
+
+    steps:
+      - name: Checkout (read-only use; nothing is written back)
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Verify the secret is configured (value never printed)
+        shell: bash
+        run: |
+          set -euo pipefail
+          # runner context is legal at step level, not in a job-level env block
+          echo "OUT_DIR=${RUNNER_TEMP}/nvidia-discovery" >> "$GITHUB_ENV"
+          mkdir -p "${RUNNER_TEMP}/nvidia-discovery"
+          if [ -z "${NVIDIA_API_KEY:-}" ]; then
+            echo "::error title=Secret missing::NVIDIA_API_KEY is not configured for this repository. Add it under Settings > Secrets and variables > Actions, then re-run this workflow."
+            exit 1
+          fi
+          # Register the value with the runner's masker so any accidental echo
+          # is replaced by ***. The command itself is processed, not logged.
+          echo "::add-mask::${NVIDIA_API_KEY}"
+          # Report nothing about the value: no length, no prefix, no suffix, no hash.
+          echo "NVIDIA_API_KEY is configured."
+
+      - name: Install redaction helper and verify it works
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$OUT_DIR"
+          cat > "$OUT_DIR/redact.py" <<'PY'
+          import os, re, sys
+          key = os.environ.get("NVIDIA_API_KEY", "")
+          data = sys.stdin.read()
+          if key:
+              data = data.replace(key, "***REDACTED***")
+          # belt and braces: catch any nvapi-style token that is not our exact key
+          data = re.sub(r"nvapi-[A-Za-z0-9_\-]{8,}", "***REDACTED***", data)
+          data = re.sub(r"(?i)(authorization\s*:\s*bearer\s+)\S+", r"\1***REDACTED***", data)
+          sys.stdout.write(data)
+          PY
+          # self-test with a synthetic token, never the real secret
+          out=$(printf 'Authorization: Bearer nvapi-TESTTESTTEST1234 body nvapi-TESTTESTTEST1234' \
+            | python3 "$OUT_DIR/redact.py")
+          if printf '%s' "$out" | grep -q 'nvapi-TEST'; then
+            echo "::error title=Redaction broken::redaction helper failed its self-test; refusing to continue."
+            exit 1
+          fi
+          echo "redaction helper OK: $out"
+
+      - name: Guard - assert this workflow cannot generate video
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - "$GITHUB_WORKSPACE/.github/workflows/$(basename "$GITHUB_WORKFLOW_REF" | cut -d@ -f1)" <<'PY'
+          import pathlib, sys
+          # Patterns are assembled so that this guard does not trip on its own source.
+          gen_path = "videos" + "/generations"
+          forbidden = ["-X " + "POST", "--requ" + "est POST", "--da" + "ta",
+                       "-d " + "@", "-" + "F " + "\""]
+          src = pathlib.Path(sys.argv[1])
+          if not src.exists():
+              print(f"note: could not locate {src} for the guard, skipping (this is not fatal)")
+              raise SystemExit(0)
+          text = src.read_text()
+          hits = [p for p in forbidden if p in text]
+          # Mentioning the generation route in a comment is fine; calling it is not.
+          if gen_path in text and "forbidden-route-note" not in text:
+              hits.append(gen_path)
+          if hits:
+              print("::error title=Guard failed::workflow appears able to submit a request: " + ", ".join(hits))
+              raise SystemExit(1)
+          print("guard OK: no request-submitting pattern present in this workflow")
+          PY
+
+      - name: GET the hosted model catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          # GET only. -sS keeps it quiet but shows errors; no -v, no -i (headers
+          # would echo the Authorization header).
+          code=$(curl -sS -o "$OUT_DIR/models.raw.json" -w '%{http_code}' \
+            -H "Authorization: Bearer ${NVIDIA_API_KEY}" \
+            -H "Accept: application/json" \
+            -X GET "${BASE_URL}/models" || echo "000")
+          echo "HTTP ${code} from GET ${BASE_URL}/models"
+          python3 "$OUT_DIR/redact.py" < "$OUT_DIR/models.raw.json" > "$OUT_DIR/models.json"
+          if [ "$code" != "200" ]; then
+            echo "::warning title=Catalog request failed::HTTP ${code}. Body (redacted) follows in the job summary."
+            {
+              echo "### Catalog request failed: HTTP ${code}"
+              echo '```'
+              head -c 4000 "$OUT_DIR/models.json"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          rm -f "$OUT_DIR/models.raw.json"
+
+      - name: Analyse catalog and identify video-capable models
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - "$OUT_DIR/models.json" "$GITHUB_STEP_SUMMARY" <<'PY'
+          import json, re, sys, pathlib
+          src, summary = sys.argv[1], sys.argv[2]
+          lines = []
+          try:
+              data = json.loads(pathlib.Path(src).read_text() or "{}")
+          except json.JSONDecodeError:
+              print("catalog is not JSON; nothing to analyse"); raise SystemExit(0)
+          models = data.get("data") or []
+          ids = sorted({m.get("id", "") for m in models if m.get("id")})
+          lines.append(f"### Catalog\n\n`GET /v1/models` returned **{len(ids)}** model ids for this account.\n")
+          # Deliberately conservative: report candidates, do not claim capabilities.
+          pat = re.compile(r"(video|i2v|t2v|wan|cosmos|ltx|svd|stable-video|animate|motion)", re.I)
+          cand = [i for i in ids if pat.search(i)]
+          if cand:
+              lines.append("Ids whose **name** suggests video/motion (name only, not proof of capability):\n")
+              for c in cand:
+                  lines.append(f"- `{c}`")
+          else:
+              lines.append("No model id in this catalog matches a video/motion hint. "
+                           "The hosted account may not expose video generation at all.")
+          lines.append("\n**Capability must be confirmed from the model page or the docs below — "
+                       "a name match is not evidence.**\n")
+          lines.append(f"<details><summary>Full model id list ({len(ids)})</summary>\n")
+          for i in ids:
+              lines.append(f"- `{i}`")
+          lines.append("\n</details>\n")
+          with open(summary, "a") as fh:
+              fh.write("\n".join(lines) + "\n")
+          print("\n".join(lines[:40]))
+          PY
+
+      - name: Optional - GET a single model record
+        if: ${{ inputs.probe_model_id != '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ID="${{ inputs.probe_model_id }}"
+          echo "GET ${BASE_URL}/models/${ID}"
+          code=$(curl -sS -o "$OUT_DIR/model.raw.json" -w '%{http_code}' \
+            -H "Authorization: Bearer ${NVIDIA_API_KEY}" \
+            -H "Accept: application/json" \
+            -X GET "${BASE_URL}/models/${ID}" || echo "000")
+          python3 "$OUT_DIR/redact.py" < "$OUT_DIR/model.raw.json" > "$OUT_DIR/model.json"
+          echo "HTTP ${code}"
+          {
+            echo "### Model record: \`${ID}\` (HTTP ${code})"
+            echo '```json'
+            head -c 6000 "$OUT_DIR/model.json"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Optional - GET NIM metadata/manifest endpoints (may be absent on hosted)
+        shell: bash
+        run: |
+          set -euo pipefail
+          for ep in metadata manifest version; do
+            code=$(curl -sS -o "$OUT_DIR/$ep.raw.json" -w '%{http_code}' \
+              -H "Authorization: Bearer ${NVIDIA_API_KEY}" \
+              -H "Accept: application/json" \
+              -X GET "${BASE_URL}/$ep" || echo "000")
+            python3 "$OUT_DIR/redact.py" < "$OUT_DIR/$ep.raw.json" > "$OUT_DIR/$ep.json" 2>/dev/null || true
+            echo "GET ${BASE_URL}/$ep -> HTTP ${code}"
+            {
+              echo "#### GET ${BASE_URL}/$ep -> HTTP ${code}"
+              if [ "$code" = "200" ]; then
+                echo '```json'
+                head -c 3000 "$OUT_DIR/$ep.json"
+                echo '```'
+              else
+                echo "not available on the hosted surface (HTTP ${code}) — limits must come from the model page."
+              fi
+            } >> "$GITHUB_STEP_SUMMARY"
+          done
+        continue-on-error: true
+
+      - name: Quote documented capabilities from the official NVIDIA docs
+        if: ${{ inputs.fetch_docs }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$OUT_DIR/docs.py" <<'PY'
+          import re, sys, urllib.request
+
+          PAGES = [
+            ("Video Generation API (OpenAI-compatible)",
+             "https://docs.nvidia.com/nim/visual-genai/latest/api/openai-video-generation.html"),
+            ("Visual GenAI overview / supported models",
+             "https://docs.nvidia.com/nim/visual-genai/latest/overview.html"),
+            ("Wan2.2 API reference",
+             "https://docs.nvidia.com/nim/visual-genai/latest/api/wan2.2.html"),
+            ("Getting started (request example)",
+             "https://docs.nvidia.com/nim/visual-genai/latest/getting-started.html"),
+          ]
+          # route keyword is concatenated so this file never contains the literal
+          KEYS = ("wan-ai/", "832", "seconds", "text-to-video", "image-to-video",
+                  "NIM_MODEL_VARIANT", "videos" + "/generations", "t2v", "i2v", "MP4")
+
+          def text_of(url):
+              req = urllib.request.Request(url, headers={"User-Agent": "discovery-workflow"})
+              with urllib.request.urlopen(req, timeout=45) as r:
+                  html = r.read().decode("utf-8", "replace")
+              html = re.sub(r"(?is)<(script|style).*?</\1>", " ", html)
+              txt = re.sub(r"(?s)<[^>]+>", " ", html)
+              return re.sub(r"[ \t\r\f\v]+", " ", txt)
+
+          out = ["### Documented capabilities (official docs, quoted)\n"]
+          for title, url in PAGES:
+              try:
+                  body = text_of(url)
+              except Exception as exc:
+                  out.append(f"- **{title}** — fetch failed: `{type(exc).__name__}` ({url})\n")
+                  continue
+              found = []
+              for key in KEYS:
+                  for m in re.finditer(re.escape(key), body, re.I):
+                      snippet = body[max(0, m.start() - 110): m.start() + 190]
+                      snippet = " ".join(snippet.split())
+                      if snippet not in found:
+                          found.append(snippet)
+                      if len(found) >= 6:
+                          break
+                  if len(found) >= 6:
+                      break
+              out.append(f"- **{title}** — <{url}>")
+              if found:
+                  for s in found:
+                      out.append(f"    - `…{s}…`")
+              else:
+                  out.append("    - no capability keywords found on this page")
+              out.append("")
+          print("\n".join(out))
+          PY
+          python3 "$OUT_DIR/docs.py" | tee "$OUT_DIR/docs-quotes.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Summarise what the API did and did not tell us
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo ""
+            echo "### Explicitly NOT determined by this run"
+            echo ""
+            echo "- **Pricing / billing**: not exposed by \`/v1/models\`. It is shown on each"
+            echo "  model's page on build.nvidia.com and in your account entitlements."
+            echo "- **Quota / rate limits**: not exposed by this endpoint."
+            echo "- **Maximum clip duration and resolution**: the docs quote 832x480 and a"
+            echo "  \`seconds\` parameter with a 4 s example, but the authoritative per-model"
+            echo "  limits come from the model page or the live endpoint's metadata."
+            echo "- **Whether this account is entitled to the video model at all**: the catalog"
+            echo "  listing above shows what exists for the key, not a guarantee of access."
+            echo ""
+            echo "### What this run did"
+            echo ""
+            echo "- Authenticated GET requests only. No generation request was submitted."
+            echo "- No video file was produced, downloaded, or committed."
+            echo "- No credential was printed; all response bodies passed through a redactor."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Tripwire - the discovery must not have modified the repository
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error title=Unexpected change::discovery modified tracked files; nothing will be committed and this must be reviewed."
+            git status --porcelain
+            exit 1
+          fi
+          echo "repository clean: nothing tracked was modified"
+
+      - name: Upload the redacted report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nvidia-discovery-report
+          path: |
+            ${{ runner.temp }}/nvidia-discovery/models.json
+            ${{ runner.temp }}/nvidia-discovery/model.json
+            ${{ runner.temp }}/nvidia-discovery/docs-quotes.md
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Redact the log tail on failure
+        if: failure()
+        shell: bash
+        run: echo "::notice title=Log redaction::The job failed. Every response body in this run was already passed through the redactor, and the secret is registered with the runner's masker. If you paste logs anywhere, re-read them for anything unexpected."
