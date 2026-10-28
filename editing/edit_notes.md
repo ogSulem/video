@@ -1,6 +1,6 @@
 # Edit notes — initial finishing plan
 
-**Status:** The full Russian VO script and 70.16-second reading are APPROVED — LOCKED by the owner. No video edit exists; the short technical VO test is retained.
+**Status:** The full Russian VO script and 70.16-second reading are APPROVED — LOCKED by the owner. No clips or video render exist. No I2V tool, NLE, or FFmpeg is available in this runtime; an ImageMagick MP4 write probe failed at its missing `ffmpeg` delegate. The short technical VO test is retained.
 
 - Aim for approximately 75–77 seconds while retaining all ten story beats; trim by shot rhythm, not by dropping essential ideas.
 - Start with geographic clarity and emotional space; use short, purposeful images through assessment/training; give the athlete/team connection enough time to read; let the return feel earned.

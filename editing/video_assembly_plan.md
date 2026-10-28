@@ -1,6 +1,6 @@
 # Video Assembly Plan — RETURN TO THE SLOPE
 
-**Status:** The full Russian VO script/audio are APPROVED — LOCKED; no video has been assembled.
+**Status:** The full Russian VO script/audio are APPROVED — LOCKED. No video clips/render were produced: this runtime lacks an I2V tool and working encoder; the ImageMagick MP4 probe failed without `ffmpeg`.
 **Target runtime:** 77 seconds (within the requested 75–85 second range).
 **Current edit basis:** Scenes 1–9 and the Scene 10 backup background are **APPROVED — LOCKED**. The existing Scene 10 PNG remains unchanged.
 

@@ -10,7 +10,7 @@
 3. **Stage 3 — master skier:** REF-CHAR-01 generated once and approved; locked canonical skier identity and wardrobe.
 4. **Stage 4 — interiors and equipment:** REF-INT-01 reception and REF-INT-02 rehabilitation room approved and locked. Specialized equipment remains unverified.
 5. **Stage 5 — scene continuity stills:** REF-SCENE-02 v2, REF-SCENE-01 pre-fall descent, REF-SCENE-03 center exterior reveal, REF-SCENE-04 reception welcome, REF-SCENE-05 v2 biomechanics assessment, REF-SCENE-06 rehabilitation exercises, REF-SCENE-07 recovery physiotherapy, REF-SCENE-08 rehabilitation team, REF-SCENE-09 return to slopes, and REF-SCENE-10 final brand-card backup are APPROVED — LOCKED; REF-SCENE-02 v1 remains archived and unapproved, and REF-SCENE-05 v1 is archived as an unapproved alternative.
-6. **Stage 6 — video:** generate clips in narrative order and review each batch before continuing.
+6. **Stage 6 — video:** BLOCKED in this runtime. No image-to-video integration, NLE, FFmpeg, or video encoder is available. An ImageMagick MP4 write probe failed because its configured encoder delegates to missing `ffmpeg`; no clips or renders were created. Continue only in an authorized external I2V/editing environment.
 7. **Stage 7 — finishing:** edit, sound, VO, Russian titles, verified brand card, and separately composed vertical cut.
 
 No paid operation without explicit authorization. Do not skip gates or replace approved assets without explicit approval.
@@ -44,7 +44,7 @@ No paid operation without explicit authorization. Do not skip gates or replace a
 | `production/master_script.md` | 10-beat timing, Russian titles and VO | Stage 1 timing proposal | Owner-approved final brand copy; factual VO claims still require review |
 | `production/shot_list.md` | 20-shot production plan | Stage 1 approved | Service/equipment shots are conditional |
 | `production/continuity_guide.md` | Character, facility, action-axis rules | Updated — fourteen references locked, including Scene 10 backup | Scene 10 background remains unchanged; its motif is decorative only |
-| `editing/video_assembly_plan.md` | Editor-ready 77-second assembly timeline and finishing/QC plan | Prepared — plan only; no video rendered | Scenes 1–10 and full VO script/audio approved/locked; moving footage, music/SFX, and rendering toolchain remain pending |
+| `editing/video_assembly_plan.md` | Editor-ready 77-second assembly timeline and finishing/QC plan | Prepared — plan only; no video rendered | Scenes 1–10 and full VO script/audio approved/locked; no I2V service or working renderer in this environment; moving footage and music/SFX remain absent |
 | `editing/voiceover_final_ru.md` | Final Russian narration and scene cues | APPROVED — LOCKED (owner approval, 2026-10-28) | Approximately 65–77 seconds; non-guaranteed, no diagnosis or unverified treatment/equipment claims; exact approved end-card copy included as on-screen text only; preserve unchanged |
 | `prompts/interiors.md` | Interior prompts and generation records | REF-INT-01 and REF-INT-02 approved | Approved reference images preserved; equipment availability remains unverified |
 
