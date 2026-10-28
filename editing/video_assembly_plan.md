@@ -1,6 +1,6 @@
 # Video Assembly Plan — RETURN TO THE SLOPE
 
-**Status:** Editor-ready plan; one short synthetic Russian VO excerpt has been generated, but no video has been assembled.
+**Status:** Editor-ready plan; a short VO test and a full proposed Russian narration have been generated, but no video has been assembled.
 **Target runtime:** 77 seconds (within the requested 75–85 second range).
 **Current edit basis:** Scenes 1–9 and the Scene 10 backup background are **APPROVED — LOCKED**. The existing Scene 10 PNG remains unchanged.
 
@@ -9,7 +9,7 @@
 - The creative brief targets a premium 16:9 commercial, approximately 75 seconds, with ten narrative beats. The visual-style guide calls for restrained motion, natural anatomy, controlled color, and no fabricated text/logos or unsupported equipment.
 - The asset manifest and continuity guide mark Scenes 1–10 **APPROVED — LOCKED** (Scene 10 approved by the owner on 2026-10-28 as a backup end-card background). Preserve all locked source files byte-for-byte.
 - The available scene references are still PNGs, not clips. Scene 10 is a near-black 16:9 background with a decorative mountain/trail/cross motif and blank type bands; it contains no Russian text and is not an official logo.
-- No video, final voice-over, music, sound effects, licensed footage, official logo file, or brand font is present. The VO draft and sound-design proposal remain provisional. A short synthetic Russian excerpt from non-diagnostic draft wording is saved at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3` for review.
+- No video, owner-approved final VO, music, sound effects, licensed footage, official logo file, or brand font is present. The earlier VO and sound-design documents remain proposals. A short technical VO test and a full proposed Russian reading are saved at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3` and `audio/voiceover/voiceover_ru_full_v1.mp3`; the full script is `editing/voiceover_final_ru.md` and awaits owner approval.
 - The current `prompts/scene_prompts.md` records exact prompts through Scene 5; later asset statuses are tracked in the manifest and continuity guide. This prompt-archive gap does not change their approval status.
 - The legacy shot list includes a simulator, diagnostic display/sensors, and conditional modalities. Do not include these unless availability and references are verified. The assembly below uses the approved simple exercises and team stills instead.
 - The owner-approved brand name, tagline, and URL are production-ready. Factual medical/service claims in the VO draft remain subject to substantiation and review.
@@ -52,7 +52,7 @@ The timecodes are an editorial proposal. “Still move” means a 2D pan/scale o
 
 ## 4. Voice-over, music, pauses, and effects
 
-`editing/voiceover.md` is a **draft script, not a recording**. Use the proposed line placements in the timeline only after clinical, legal, brand, and delivery approval. Specifically hold the fracture/ligament line, diagnostic certainty, 3D simulator claims, “every procedure” wording, and absolute return language until substantiated or rewritten. The psychology/team wording must not imply unverified staff credentials. The final card is VO-free; let the last approved line resolve over Scene 9, then leave the card to music.
+`editing/voiceover_final_ru.md` is the complete **proposed final script awaiting owner approval**; its continuous synthetic reading is `audio/voiceover/voiceover_ru_full_v1.mp3` (approximately 70.2 seconds by MP3 frame count), also awaiting approval. It avoids the earlier draft’s injury diagnoses, diagnostic certainty, 3D simulator, treatment/outcome promises, and universal return claim. The older `editing/voiceover.md` remains as source history; its unsupported lines are not part of this proposed read. The final card is VO-free; the narration leaves a short breath before the sequential card copy.
 
 `editing/sound_design.md` is a **proposal only**; no music or SFX are generated or licensed. Production cues: spacious alpine wind; restrained ski-edge/powder detail; a soft off-screen snow impact and breath at the implied fall; quiet interior room tone; human-scale rehab movement; broader wind on return; controlled musical lift and clean resolution. Source/record only sounds that correspond to the pictured action. No futuristic medical effects, sensational impact, or invented device sounds. Mix intelligibly around the finally approved VO and confirm delivery loudness/true-peak requirements with the platform/client.
 
@@ -74,12 +74,12 @@ The owner approved this name, tagline, and website for production. Add them as e
 
 - **APPROVED — LOCKED:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-01, REF-SCENE-02 v2, and REF-SCENE-03 through REF-SCENE-09. Use v2 for Scene 5; preserve archived Scene 2 v1 and Scene 5 v1 as unapproved alternatives only.
 - **APPROVED — LOCKED:** REF-SCENE-10 final brand-card background, approved as a backup on 2026-10-28; it is not a finished title card or official logo.
-- Production documents, a 20-shot proposal, draft Russian VO text, a sound-design proposal, and one short generated Russian VO excerpt at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3`.
+- Production documents, a 20-shot proposal, the proposed final script at `editing/voiceover_final_ru.md`, and two generated readings: the retained technical test and the full draft at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3` and `audio/voiceover/voiceover_ru_full_v1.mp3`.
 
 ### Still missing or pending
 
 - Actual moving Altai descent/return and mountain-to-sky footage if those beats must have real camera/subject movement; none is in the repository.
-- Owner-approved full VO wording that avoids unsupported diagnoses, outcomes, device, and service claims; the generated file is only a short safe excerpt, not a complete narration.
+- Owner approval of the complete proposed VO script and its generated reading; they are drafts until approved.
 - Licensed/original music, SFX and room tone, plus final mix.
 - An official logo/font package if one is desired. The Scene 10 decorative motif is approved as a backup graphic, not an official logo.
 

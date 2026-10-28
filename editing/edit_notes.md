@@ -1,6 +1,6 @@
 # Edit notes — initial finishing plan
 
-**Status:** Stage 1 proposal; no video edit exists. One short synthetic Russian VO excerpt has been generated for review.
+**Status:** No video edit exists. A short VO test and a full proposed Russian narration have been generated for review; both remain unapproved.
 
 - Aim for approximately 75–77 seconds while retaining all ten story beats; trim by shot rhythm, not by dropping essential ideas.
 - Start with geographic clarity and emotional space; use short, purposeful images through assessment/training; give the athlete/team connection enough time to read; let the return feel earned.

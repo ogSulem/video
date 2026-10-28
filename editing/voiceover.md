@@ -1,6 +1,6 @@
 # Voice-over — working Russian script
 
-**Status:** Complete VO remains a draft and is not approved/recorded. Owner-approved end-card brand copy is production-ready; medical/factual claims remain under review. A short synthetic excerpt is saved at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3`; the end card remains VO-free.
+**Status:** The original VO remains a working draft; the proposed full script is `editing/voiceover_final_ru.md` and awaits owner approval. Its synthetic reading is saved at `audio/voiceover/voiceover_ru_full_v1.mp3` (70.19 seconds by MP3 frame/Xing metadata, voice-00) and is also unapproved. The short technical test remains at `audio/voiceover/voiceover_ru_safe_excerpt_v1.mp3`. Owner-approved end-card copy is production-ready; the end card remains VO-free.
 
 1. «Каждый спуск — это риск. Но каждый спуск достоин второго шанса.»
 2. «Перелом. Разрыв связок. И вопрос, который звучит в голове: смогу ли я вернуться?»
