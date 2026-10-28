@@ -1,6 +1,6 @@
 # Approval workflow and asset manifest
 
-**Project status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01, REF-SCENE-03 center exterior reveal, and REF-SCENE-04 reception welcome are approved and locked. REF-SCENE-05 v2 biomechanics assessment is generated and awaiting user visual approval; v1 is preserved as an unapproved alternative. Preserve all approved references unchanged. No video has been generated.
+**Project status:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01, REF-SCENE-03 center exterior reveal, REF-SCENE-04 reception welcome, and REF-SCENE-05 v2 biomechanics assessment are approved and locked. REF-SCENE-05 v1 is archived as an unapproved alternative. Preserve all approved references unchanged. No video has been generated.
 **Repository:** Workspace checkout `ogSulem/video`, branch `arena/f2208454-video`.
 
 ## Sequential approval gates
@@ -9,7 +9,7 @@
 2. **Stage 2 — master exterior architecture:** REF-ARC-01 generated once and approved; locked canonical facility exterior.
 3. **Stage 3 — master skier:** REF-CHAR-01 generated once and approved; locked canonical skier identity and wardrobe.
 4. **Stage 4 — interiors and equipment:** REF-INT-01 reception and REF-INT-02 rehabilitation room approved and locked. Specialized equipment remains unverified.
-5. **Stage 5 — scene continuity stills:** REF-SCENE-02 v2, REF-SCENE-01 pre-fall descent, REF-SCENE-03 center exterior reveal, and REF-SCENE-04 reception welcome are approved and locked; REF-SCENE-02 v1 is archived and unapproved. REF-SCENE-05 v2 is generated and awaiting approval; v1 remains preserved as an unapproved alternative.
+5. **Stage 5 — scene continuity stills:** REF-SCENE-02 v2, REF-SCENE-01 pre-fall descent, REF-SCENE-03 center exterior reveal, REF-SCENE-04 reception welcome, and REF-SCENE-05 v2 biomechanics assessment are approved and locked; REF-SCENE-02 v1 remains archived and unapproved, and REF-SCENE-05 v1 is archived as an unapproved alternative.
 6. **Stage 6 — video:** generate clips in narrative order and review each batch before continuing.
 7. **Stage 7 — finishing:** edit, sound, VO, Russian titles, verified brand card, and separately composed vertical cut.
 
@@ -29,14 +29,14 @@ No paid operation without explicit authorization. Do not skip gates or replace a
 | `references/scenes/REF-SCENE-01-ski-descent.png` | Canonical pre-fall descent continuity still | APPROVED — LOCKED | PNG; 1376 × 768; 2,247,593 bytes; REF-CHAR-01 primary and REF-SCENE-02 v2 secondary references; preserve unchanged; exact prompt and hash in `prompts/scene_prompts.md` |
 | `references/scenes/REF-SCENE-03-center-exterior-reveal.png` | Canonical center exterior reveal still | APPROVED — LOCKED | PNG; 1376 × 768; 2,630,607 bytes; SHA-256 `3cff05af0b82055281a203e5187ac4a0266cd4f53d6b05440de280dc74543ac0`; REF-ARC-01 sole architectural reference; preserve image unchanged |
 | `references/scenes/REF-SCENE-04-reception-welcome.png` | Canonical skier reception welcome still | APPROVED — LOCKED | PNG; 1376 × 768; 2,773,335 bytes; SHA-256 `dcc6b97af2e1452d9a09a6bf5397ab1b8282a56c08aac864cecf9db7a6f00320`; REF-INT-01 and REF-CHAR-01 references; preserve image unchanged |
-| `references/scenes/REF-SCENE-05-biomechanics-assessment.png` | First functional movement assessment candidate (v1) | UNAPPROVED — ALTERNATIVE | PNG; 1376 × 768; 2,660,634 bytes; SHA-256 `56cccf4c639787858c0b8dea3b0be8e57491df78895ac1d48626c468bdc38ecf`; preserve unchanged; not canonical |
-| `references/scenes/REF-SCENE-05-biomechanics-assessment-v2.png` | Revised indoor biomechanics assessment still | GENERATED — AWAITING APPROVAL | PNG; 1376 × 768; 2,727,414 bytes; SHA-256 `0a6d303ee25232ba9d82474e120001cbcf0c2813debdaf9ea44d3031f4722acb`; REF-SCENE-05 v1 composition reference, REF-CHAR-01 identity reference; corrected indoor training clothes and footwear; preserve v1 unchanged; do not lock until approved |
-| `prompts/scene_prompts.md` | Scene 1, Scene 2, and Scene 4 prompt/generation records | Updated — Scene 4 approved and locked | Exact prompt and output metadata recorded; no video generated |
+| `references/scenes/REF-SCENE-05-biomechanics-assessment.png` | First functional movement assessment candidate (v1) | ARCHIVED — UNAPPROVED ALTERNATIVE | PNG; 1376 × 768; 2,660,634 bytes; SHA-256 `56cccf4c639787858c0b8dea3b0be8e57491df78895ac1d48626c468bdc38ecf`; preserve unchanged; not canonical |
+| `references/scenes/REF-SCENE-05-biomechanics-assessment-v2.png` | Canonical indoor biomechanics assessment still | APPROVED — LOCKED | PNG; 1376 × 768; 2,727,414 bytes; SHA-256 `0a6d303ee25232ba9d82474e120001cbcf0c2813debdaf9ea44d3031f4722acb`; REF-SCENE-05 v1 composition reference, REF-CHAR-01 identity reference; preserve image unchanged |
+| `prompts/scene_prompts.md` | Scene 1, Scene 2, Scene 4, and Scene 5 prompt/generation records | Updated — Scene 5 v2 approved and locked | Exact prompt and output metadata recorded; no video generated |
 | `production/creative_brief.md` | Project goals and guardrails | Stage 1 approved | Brand details and factual claims still need verification |
 | `production/visual_style_guide.md` | Shared look, light, camera, credibility rules | Approved baseline | Maintain reference continuity |
 | `production/master_script.md` | 10-beat timing, Russian titles and VO | Stage 1 approved | Brand, URL, medical claims unverified |
 | `production/shot_list.md` | 20-shot production plan | Stage 1 approved | Service/equipment shots are conditional |
-| `production/continuity_guide.md` | Character, facility, action-axis rules | Updated — eight references locked; REF-SCENE-05 v2 awaiting approval | Scene 5 v2 documents the clothing correction; v1 remains an unapproved alternative |
+| `production/continuity_guide.md` | Character, facility, action-axis rules | Updated — nine references locked | Scene 5 v2 is canonical; v1 remains archived and unapproved |
 | `prompts/interiors.md` | Interior prompts and generation records | REF-INT-01 and REF-INT-02 approved | Approved reference images preserved; equipment availability remains unverified |
 
 ## Equipment verification status

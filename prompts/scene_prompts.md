@@ -1,7 +1,7 @@
 # Injury and return continuity — REF-SCENE-02
 
-**Status:** REF-SCENE-02 v2, REF-SCENE-01 descent, REF-SCENE-03 center exterior reveal, and REF-SCENE-04 reception welcome are APPROVED — LOCKED; REF-SCENE-02 v1 is archived and unapproved. No video has been generated.
-**Approved references:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01, REF-SCENE-03, and REF-SCENE-04. Preserve all unchanged.
+**Status:** REF-SCENE-02 v2, REF-SCENE-01 descent, REF-SCENE-03 center exterior reveal, REF-SCENE-04 reception welcome, and REF-SCENE-05 v2 biomechanics assessment are APPROVED — LOCKED; REF-SCENE-02 v1 is archived and unapproved; REF-SCENE-05 v1 is archived as an unapproved alternative. No video has been generated.
+**Approved references:** REF-ARC-01, REF-CHAR-01, REF-INT-01, REF-INT-02, REF-SCENE-02 v2, REF-SCENE-01, REF-SCENE-03, REF-SCENE-04, and REF-SCENE-05 v2. Preserve all unchanged.
 **V1 archive:** `references/scenes/REF-SCENE-02-injury-aftermath.png`, PNG, 1376 × 768, 2,274,093 bytes; retain unchanged, unapproved.
 **Canonical v2:** `references/scenes/REF-SCENE-02-injury-aftermath-v2.png`, PNG, 1376 × 768, 2,045,368 bytes; approved and locked.
 **REF-SCENE-01 canonical output:** `references/scenes/REF-SCENE-01-ski-descent.png`, PNG, 1376 × 768, 2,247,593 bytes; APPROVED — LOCKED; generated using REF-CHAR-01 primary and REF-SCENE-02 v2 secondary reference. Preserve unchanged.
@@ -81,6 +81,23 @@
 > Use a medium-wide cinematic composition at natural standing eye level, framing both people and making the reception unmistakable. Keep the existing reception desk, timber and stone finishes, panoramic glazing and decorative elements consistent with REF-INT-01; do not add or rearrange architectural features. Through the windows, any visible mountain setting should be plausible snowy Altai terrain. Preserve the interior's warm amber light balanced with cool winter daylight and the established premium sports-commercial visual style. Refined contrast, realistic materials and skin, subtle depth of field and restrained film grain.
 >
 > No white coats, hospital beds, operating rooms, invented medical devices, crutches, bandages, visible injury, diagnosis, additional people, extra architectural features, readable signage, fabricated logos, text, watermarks, extra fingers, distorted faces, exaggerated emotion, collage, alternate views, or additional images. No medical claims. One image only.
+
+## REF-SCENE-05 — biomechanics assessment
+
+**Status:** V2 APPROVED — LOCKED by user; preserve unchanged. V1 is archived and unapproved as an alternative.
+**V1:** `references/scenes/REF-SCENE-05-biomechanics-assessment.png`, PNG, 1376 × 768, 2,660,634 bytes; SHA-256 `56cccf4c639787858c0b8dea3b0be8e57491df78895ac1d48626c468bdc38ecf`.
+**Canonical V2:** `references/scenes/REF-SCENE-05-biomechanics-assessment-v2.png`, PNG, 1376 × 768, 2,727,414 bytes; SHA-256 `0a6d303ee25232ba9d82474e120001cbcf0c2813debdaf9ea44d3031f4722acb`.
+**V2 revision inputs:** V1 as the primary composition reference; REF-CHAR-01 as the secondary identity reference. The underlying room continuity originates from locked REF-INT-02 through V1.
+
+### Exact revision prompt used — REF-SCENE-05 v2
+
+> Edit the supplied existing REF-SCENE-05-biomechanics-assessment image into exactly ONE revised standalone photorealistic cinematic 16:9 still. This is a focused continuity correction: use the current Scene 5 image as the primary composition reference and preserve its approved rehabilitation room, camera angle, framing, lighting, specialist, spatial arrangement, and calm interaction as closely as possible. Use the supplied approved REF-CHAR-01 image only as a secondary reference for the skier's recognizable identity—face, hair, subtle stubble, age impression, and athletic build—not for his clothing in this indoor exercise scene. Do not alter either source image.
+>
+> Keep the same skier in the same shallow, controlled bodyweight squat, with both feet planted flat and stable on the floor, knees aligned naturally over the feet, balanced posture, and credible body mechanics. Change his clothing from bulky winter ski gear to appropriate indoor rehabilitation training clothing: a fitted premium dark navy technical training top with only subtle restrained orange accents, dark charcoal athletic training pants, and clean neutral indoor cross-training shoes with realistic low-profile flat stable soles. The shoes must clearly be ordinary indoor trainers—not ski boots, snow footwear, or bulky winter boots. Make the training outfit functional and understated, with natural fit and realistic fabric. Preserve the skier's recognizable face, hairstyle, stubble, age impression, and build.
+>
+> Keep the same female rehabilitation specialist, her existing understated sports-clinic T-shirt and athletic trousers, her identity, position, expression, and calm observing gesture as close to the current image as possible. She observes without touching the skier. Preserve the existing rehabilitation room design, architecture, furnishings, and composition; do not add or rearrange objects.
+>
+> Maintain the current premium photorealistic cinematic style, realistic skin and hands, natural anatomy, refined contrast, cool daylight balanced with warm interior accents, and restrained film grain. No medical equipment, diagnostic screens, logos, text, extra people, changes to the room, distorted anatomy, altered facial identity, collage, alternate views, or additional images. Generate exactly one revised image.
 
 ## Production cautions
 
