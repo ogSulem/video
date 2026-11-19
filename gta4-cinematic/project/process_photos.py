@@ -7,6 +7,7 @@ Applies per-photo color grading in Liberty City aesthetic.
 - Outputs: processed/ (full-res) + assets/cinematic_16x9/ (1920x1080 crops for video)
 """
 import argparse
+import hashlib
 import os, random
 import numpy as np
 from PIL import Image, ImageOps, ImageEnhance, ImageFilter
@@ -19,6 +20,12 @@ DST_FULL = BASE / "processed"
 DST_169 = BASE / "assets" / "cinematic_16x9"
 os.makedirs(DST_FULL, exist_ok=True)
 os.makedirs(DST_169, exist_ok=True)
+
+# New photos use a filename-derived grain seed. They are processed after the
+# original sixteen so adding them does not change the earlier random sequence.
+NEW_PHOTOS = {
+    "IMG_6847.jpeg", "IMG_6515.jpeg", "IMG_20200819_205213_Original.jpeg", "IMG_6090.jpeg",
+}
 
 # Per-photo grade presets: (saturation, contrast, brightness, color_temp_shift, vignette_strength, grain)
 # color_temp_shift: -1 cool .. +1 warm (applied as RGB gain)
@@ -39,6 +46,10 @@ PRESETS = {
     "IMG_6923.jpeg": dict(sat=0.66, con=1.15, bri=0.90, temp=-0.09, vig=0.38, grain=15, note="Night trees duo bottle"),
     "IMG_7149.jpeg": dict(sat=0.82, con=1.14, bri=0.99, temp=-0.08, vig=0.38, grain=15, note="Lada night city - neon, phone glow"),
     "IMG_7373.jpeg": dict(sat=0.73, con=1.12, bri=0.90, temp=-0.05, vig=0.30, grain=12, note="Construction day - gritty overcast"),
+    "IMG_6847.jpeg": dict(sat=0.80, con=1.10, bri=1.02, temp=-0.04, vig=0.25, grain=11, note="Night portrait - warm edge light"),
+    "IMG_6515.jpeg": dict(sat=0.80, con=1.12, bri=0.99, temp=-0.07, vig=0.28, grain=12, note="Bench portrait - cool winter shadows"),
+    "IMG_20200819_205213_Original.jpeg": dict(sat=0.78, con=1.09, bri=1.00, temp=-0.07, vig=0.25, grain=11, note="Night street - retain entire group"),
+    "IMG_6090.jpeg": dict(sat=0.81, con=1.10, bri=0.98, temp=-0.04, vig=0.25, grain=11, note="Leather jacket portrait - restrained warm light"),
 }
 
 def grade_image(im, p):
@@ -104,6 +115,10 @@ CROP_CENTERS = {
     "IMG_6923.jpeg": 0.60,
     "IMG_7149.jpeg": 0.23,
     "IMG_7373.jpeg": 0.39,
+    "IMG_6847.jpeg": 0.38,
+    "IMG_6515.jpeg": 0.43,
+    "IMG_20200819_205213_Original.jpeg": 0.39,
+    "IMG_6090.jpeg": 0.30,
 }
 
 def crop_16x9(im, center_y=0.5, target=(1920,1080)):
@@ -128,11 +143,17 @@ def crop_16x9(im, center_y=0.5, target=(1920,1080)):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--lossless", action="store_true", help="also save full-resolution PNGs (requires substantial disk space)")
+    parser.add_argument("--only-new", action="store_true", help="process only the four photos added in the latest revision")
     args = parser.parse_args()
     random.seed(42); np.random.seed(42)
-    files = sorted(os.listdir(SRC))
+    files = sorted(f for f in os.listdir(SRC) if f not in NEW_PHOTOS) + sorted(NEW_PHOTOS)
     for f in files:
         if not f.lower().endswith(('.jpg','.jpeg','.png')): continue
+        if args.only_new and f not in NEW_PHOTOS: continue
+        if f in NEW_PHOTOS:
+            # Preserve the earlier photos' seeded grain sequence while making
+            # each added photo independent of the order in which it is processed.
+            np.random.seed(int.from_bytes(hashlib.sha256(f.encode('utf-8')).digest()[:4], 'big'))
         src = os.path.join(SRC,f)
         im = Image.open(src)
         im = ImageOps.exif_transpose(im).convert("RGB")
