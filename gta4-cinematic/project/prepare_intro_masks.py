@@ -1,7 +1,8 @@
 """Prepare photographed-person masks for the GTA IV-inspired intro.
 
 The video renderer uses the saved PNG masks and does *not* require MediaPipe.
-Regenerating masks is optional and requires mediapipe==0.10.21 and OpenCV.
+Regenerating the initial masks is optional and requires mediapipe==0.10.21
+and OpenCV. Afterwards run refine_people_masks.py for the final masks.
 No face generation or face replacement is used. All RGB pixels remain the
 provided photographs; the masks only select the foreground.
 """
@@ -12,7 +13,7 @@ import numpy as np
 from PIL import Image, ImageFilter, ImageOps
 
 BASE = Path(__file__).resolve().parents[1]
-OUT = BASE / "assets" / "intro_masks"
+OUT = BASE / "assets" / "intro_masks_initial"
 # Individual regions are used only when the subject is very small or when an
 # original mirror background would otherwise be mistaken for the subject.
 ROIS = {
