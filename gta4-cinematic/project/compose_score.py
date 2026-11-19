@@ -1,8 +1,8 @@
-"""Compose a small original synth score precisely for this edit.
+"""Recreate the original synth score from the previous version of the intro.
 
-No existing GTA IV recording, tune, voice or external sample is used. The
-90 BPM grid is exact at 24 fps (16 video frames/beat). The music is a
-purpose-built stand-in until a desired original track is supplied.
+No existing GTA IV recording, tune, voice or external sample is used. This
+legacy 90 BPM score is preserved for reproducibility but is not used by the
+current Spartak video, which has the user-supplied track and a different grid.
 """
 from __future__ import annotations
 import math
@@ -15,11 +15,16 @@ from pathlib import Path
 import imageio_ffmpeg
 import numpy as np
 from scipy.signal import butter, sosfilt
-from intro_design import BASE, FPS, BEAT_FRAMES, SCENES
+from intro_design import BASE
 
 SR = 48000
-BEAT = BEAT_FRAMES / FPS  # 2/3 seconds, exactly 90 BPM
-DURATION = sum(s.frames for s in SCENES) / FPS
+FPS = 24
+BEAT = 16 / FPS  # 2/3 seconds, exactly 90 BPM
+# Preserve the timing of the original 19-scene edit, independent of the new
+# music-specific SCENES. These values yield the original 64-second score.
+LEGACY_SCENE_FRAMES = (64, 96, 64, 64, 96, 96, 64, 96, 64, 64,
+                       64, 96, 96, 64, 64, 64, 96, 96, 128)
+DURATION = sum(LEGACY_SCENE_FRAMES) / FPS
 RNG = np.random.default_rng(5808)
 
 
@@ -132,11 +137,11 @@ def main():
 
     # A short low impact on scene changes, quantized to the exact frame grid.
     frame=0
-    for i,scene in enumerate(SCENES):
+    for i,frames in enumerate(LEGACY_SCENE_FRAMES):
         if i and i not in (1,18):
             t=frame/FPS
             put(mix,kick(.07),t)
-        frame += scene.frames
+        frame += frames
 
     # Fade in/out and normalize with gentle saturation; protect against clipping.
     envelope=np.ones(samples,dtype=np.float32)

@@ -14,10 +14,20 @@ from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter, ImageOps
 
 BASE = Path(__file__).resolve().parents[1]
 W, H, FPS = 1920, 1080, 24
-BEAT_FRAMES = 16  # 90 BPM at 24fps
-INK = (8, 14, 16)
 PAPER = (237, 232, 218)
 AMBER = (201, 157, 107)
+
+# Phrase accents in the supplied, slowed track. Most were matched against the
+# same percussive transient; 45.0252 is the corresponding rhythmic-grid point
+# in a quieter/changed bar. The last marker is the end of the music excerpt.
+# At 24 fps, each accent can be represented only to the nearest 1/24 second.
+MUSIC_ACCENTS = (
+    4.8400, 8.4932, 12.1464, 15.7995, 19.4528, 23.1060,
+    26.7591, 30.4123, 34.0654, 37.7186, 41.3717, 45.0252,
+    48.6781, 52.3312, 55.9845, 59.6376, 63.2910,
+)
+ACCENT_FRAMES = tuple(round(t * FPS) for t in MUSIC_ACCENTS)
+SCENE_DURATIONS = tuple(b - a for a, b in zip((0,) + ACCENT_FRAMES, ACCENT_FRAMES))
 # Complex group/seat/arm poses remain inside intact angled photo panels rather
 # than using an imperfect mask that could make limbs or bodies look broken.
 PHOTO_PANELS = {"drive", "party", "escape", "longnight"}
@@ -25,40 +35,37 @@ PHOTO_PANELS = {"drive", "party", "escape", "longnight"}
 
 @dataclass(frozen=True)
 class Scene:
-    key: str
+    key: str  # internal identifier only; never rendered as text
     photo: str | None
     plate: str
-    title: str
-    sub: str
     side: str
-    frames: int
+    frames: int  # time between the centres of adjacent transitions
     crop: float = .72  # fraction of foreground height, from the top
     scale: int = 1210
     split: str = "fade"
 
 
-# The start of every scene lies on the beat: all frame counts are multiples
-# of 16. Short dissolves / panel slides begin on those same beats.
+# One title card and all sixteen photographs. The last image fades out; there
+# is no separate GTA title card. Scene durations are quantized independently,
+# avoiding cumulative drift from rounding a constant number of frames per beat.
 SCENES = [
-    Scene("opening", None, "harbor_blue_hour", "LIBERTY\nCITY", "EVERY CITY HAS A STORY", "right", 64, split="fade"),
-    Scene("arrival", "IMG_6782", "harbor_blue_hour", "THE\nARRIVAL", "A NEW BEGINNING", "right", 96, .78, split="slideleft"),
-    Scene("work", "IMG_7373", "industrial_dawn", "HARD\nWORK", "NO EASY WAY OUT", "left", 64, .67, split="fade"),
-    Scene("street", "IMG_20191118_130227_Original", "diner_night", "THE\nSTREETS", "ONE DAY AT A TIME", "right", 64, .66, split="slideright"),
-    Scene("drive", "IMG_6871", "rain_street", "NO TURNING\nBACK", "THE ROAD AHEAD", "left", 96, .80, split="fade"),
-    Scene("night", "IMG_7149", "rain_street", "AFTER\nDARK", "THE CITY NEVER SLEEPS", "right", 96, .57, split="slideleft"),
-    Scene("party", "IMG_20210101_003521_Original", "diner_night", "GOOD\nTIMES", "THE ONES WHO STAY", "left", 64, .65, split="fade"),
-    Scene("bond", "IMG_6919", "subway_platform", "BROTHER\nHOOD", "THROUGH THE NIGHT", "right", 96, .95, split="slideleft"),
-    Scene("interlude", None, "industrial_dawn", "EVERY DREAM\nHAS A PRICE", "LIBERTY CITY // 2008", "left", 64, split="fade"),
-    Scene("loyalty", "IMG_6864", "diner_night", "LOYALTY", "STICK TOGETHER", "left", 64, .80, split="slideright"),
-    Scene("together", "IMG_6923", "rain_street", "NO\nSHORTCUTS", "THE LONG WAY HOME", "right", 64, .94, split="fade"),
-    Scene("rules", "IMG_6853", "subway_platform", "STREET\nRULES", "A DIFFERENT KIND OF FREEDOM", "left", 96, .65, split="slideleft"),
-    Scene("crew", "IMG_6854", "diner_night", "THE\nCREW", "NO ONE GOES ALONE", "right", 96, .70, split="fade"),
-    Scene("escape", "IMG_6868", "harbor_blue_hour", "A MOMENT\nAWAY", "OUTSIDE THE CITY", "left", 64, .85, split="slideright"),
-    Scene("freedom", "IMG_6859", "rain_street", "FREEDOM", "AFTER HOURS", "right", 64, .72, split="fade"),
-    Scene("longnight", "IMG_6851", "subway_platform", "THE LONG\nNIGHT", "EVERY STORY LEAVES A MARK", "left", 64, .95, split="slideleft"),
-    Scene("smoke", "IMG_6759", "industrial_dawn", "THROUGH\nTHE SMOKE", "THE ONES WE REMEMBER", "right", 96, .69, split="fade"),
-    Scene("portrait", "IMG_6779", "diner_night", "ONE LAST\nLOOK", "THE STORY GOES ON", "left", 96, .70, split="slideright"),
-    Scene("closing", None, "harbor_blue_hour", "GRAND\nTHEFT\nAUTO", "A CINEMATIC FAN INTRO", "right", 128, split="fade"),
+    Scene("opening", None, "harbor_blue_hour", "right", SCENE_DURATIONS[0]),
+    Scene("arrival", "IMG_6782", "harbor_blue_hour", "right", SCENE_DURATIONS[1], .78, split="slideleft"),
+    Scene("work", "IMG_7373", "industrial_dawn", "left", SCENE_DURATIONS[2], .67, split="fade"),
+    Scene("street", "IMG_20191118_130227_Original", "diner_night", "right", SCENE_DURATIONS[3], .66, split="slideright"),
+    Scene("drive", "IMG_6871", "rain_street", "left", SCENE_DURATIONS[4], .80, split="fade"),
+    Scene("night", "IMG_7149", "rain_street", "right", SCENE_DURATIONS[5], .57, split="slideleft"),
+    Scene("party", "IMG_20210101_003521_Original", "diner_night", "left", SCENE_DURATIONS[6], .65, split="fade"),
+    Scene("bond", "IMG_6919", "subway_platform", "right", SCENE_DURATIONS[7], .95, split="slideleft"),
+    Scene("loyalty", "IMG_6864", "diner_night", "left", SCENE_DURATIONS[8], .80, split="slideright"),
+    Scene("together", "IMG_6923", "rain_street", "right", SCENE_DURATIONS[9], .94, split="fade"),
+    Scene("rules", "IMG_6853", "subway_platform", "left", SCENE_DURATIONS[10], .65, split="slideleft"),
+    Scene("crew", "IMG_6854", "diner_night", "right", SCENE_DURATIONS[11], .70, split="fade"),
+    Scene("escape", "IMG_6868", "harbor_blue_hour", "left", SCENE_DURATIONS[12], .85, split="slideright"),
+    Scene("freedom", "IMG_6859", "rain_street", "right", SCENE_DURATIONS[13], .72, split="fade"),
+    Scene("longnight", "IMG_6851", "subway_platform", "left", SCENE_DURATIONS[14], .95, split="slideleft"),
+    Scene("smoke", "IMG_6759", "industrial_dawn", "right", SCENE_DURATIONS[15], .69, split="fade"),
+    Scene("portrait", "IMG_6779", "diner_night", "left", SCENE_DURATIONS[16], .70, split="slideright"),
 ]
 
 
@@ -69,12 +76,6 @@ def font(name: str, size: int) -> ImageFont.FreeTypeFont:
 def image_fill(im: Image.Image, size: tuple[int, int]) -> Image.Image:
     return ImageOps.fit(im, size, method=Image.Resampling.LANCZOS, centering=(.5, .5))
 
-
-def draw_tracking(draw, xy, text, f, fill, spacing=3):
-    x, y = xy
-    for c in text:
-        draw.text((x, y), c, font=f, fill=fill)
-        x += draw.textlength(c, font=f) + spacing
 
 
 def load_plate(name: str) -> Image.Image:
@@ -100,32 +101,31 @@ def base_layer(scene: Scene, index: int) -> Image.Image:
     d.rectangle((0, H - 190, W, H), fill=(3, 8, 9, 55))
     plate = Image.alpha_composite(plate, shade)
     if scene.photo:
-        source = Image.open(BASE / "assets" / "cinematic_16x9" / f"{scene.photo}_16x9.jpg").convert("RGB")
+        # The full-height inset replaces the old dark box for numbered titles.
+        # Use the original portrait framing, so the bottom remains photographic.
+        source = Image.open(BASE / "processed" / f"{scene.photo}_gta4.jpg").convert("RGB")
         # For complex poses the main panel retains the whole photo, so its side
-        # panel shows the city instead of a second, duplicated copy of the people.
+        # panel shows the city instead of duplicating the people.
         inset_source = load_plate(scene.plate) if scene.key in PHOTO_PANELS else source
-        inset = image_fill(inset_source, (790, 700))
+        inset = image_fill(inset_source, (840, H))
         inset = ImageEnhance.Color(inset).enhance(.55)
-        inset = ImageEnhance.Brightness(inset).enhance(.60).convert("RGBA")
+        inset = ImageEnhance.Brightness(inset).enhance(.64).convert("RGBA")
         if scene.side == "right":
             origin = (0, 0)
-            poly = [(0, 0), (810, 0), (744, 710), (0, 710)]
-            border = [(814, -10), (838, -10), (767, 723), (742, 723)]
-            bottom = [(0, 710), (745, 710), (708, H), (0, H)]
+            poly = [(0, 0), (810, 0), (744, H), (0, H)]
+            border = [(810, -10), (831, -10), (765, H+10), (744, H+10)]
+            line = (819, 0, 753, H)
         else:
-            origin = (W - 790, 0)
-            poly = [(W - 810, 0), (W, 0), (W, 710), (W - 744, 710)]
-            border = [(W - 838, -10), (W - 814, -10), (W - 742, 723), (W - 767, 723)]
-            bottom = [(W - 745, 710), (W, 710), (W, H), (W - 708, H)]
+            origin = (W - 840, 0)
+            poly = [(W - 810, 0), (W, 0), (W, H), (W - 744, H)]
+            border = [(W - 831, -10), (W - 810, -10), (W - 744, H+10), (W - 765, H+10)]
+            line = (W - 819, 0, W - 753, H)
         tmp = Image.new("RGBA", (W, H));tmp.paste(inset, origin)
         stencil = Image.new("L", (W, H));ImageDraw.Draw(stencil).polygon(poly, fill=255)
         tmp.putalpha(stencil);plate = Image.alpha_composite(plate, tmp)
         graphics = Image.new("RGBA", (W, H));gd = ImageDraw.Draw(graphics)
-        gd.polygon(bottom, fill=(6, 13, 15, 225))
         gd.polygon(border, fill=(5, 9, 10, 255))
-        gd.line((0, 705, 780, 705) if scene.side == "right" else (W-780, 705, W, 705), fill=(7, 10, 11, 255), width=16)
         # A tiny warm edge provides the poster-ink separation without neon.
-        line = (819, 0, 754, 705) if scene.side == "right" else (W - 819, 0, W - 754, 705)
         gd.line(line, fill=(*AMBER, 150), width=3)
         plate = Image.alpha_composite(plate, graphics)
     else:
@@ -205,53 +205,17 @@ def cutout(scene: Scene) -> Image.Image:
     return canvas
 
 
-def title_layer(scene: Scene, index: int) -> Image.Image:
-    im=Image.new("RGBA",(W,H));d=ImageDraw.Draw(im)
-    if scene.key == "closing":
-        f=font("Anton-Regular.ttf",188)
-        for i,line in enumerate(scene.title.split("\n")):
-            d.text((155, 140+i*170),line,font=f,fill=(*PAPER,255),stroke_width=4,stroke_fill=(4,7,8,225))
-        d.text((760, 285),"IV",font=font("Anton-Regular.ttf",280),fill=(*AMBER,255),stroke_width=4,stroke_fill=(4,7,8,230))
-        d.line((165, 790, 1110,790),fill=(*AMBER,210),width=3)
-        draw_tracking(d,(165,820),scene.sub,font("IBMPlexMono-Medium.ttf",25),(*PAPER,235),3)
-        draw_tracking(d,(165,870),"NOT AN OFFICIAL ROCKSTAR GAMES PRODUCTION",font("IBMPlexMono-Medium.ttf",17),(194,194,186,215),2)
-        return im
-    if scene.photo is None:
-        label_font=font("IBMPlexMono-Medium.ttf",24)
-        draw_tracking(d,(155,170),"A FAN-MADE STORY",label_font,(*AMBER,240),4)
-        lines=scene.title.split("\n"); fs=164 if scene.key=="opening" else 122
-        f=font("Anton-Regular.ttf",fs)
-        y=265 if scene.key=="opening" else 320
-        for line in lines:
-            d.text((150,y),line,font=f,fill=(*PAPER,250),stroke_width=3,stroke_fill=(0,0,0,150)); y += fs*1.08
-        d.line((157,y+35,460,y+35),fill=(*AMBER,225),width=4)
-        draw_tracking(d,(157,y+68),scene.sub,label_font,(*PAPER,230),3)
-        return im
-
-    # A quiet, consistent title block sits over the dark lower corner.
-    x = 82 if scene.side == "right" else 1175
-    top = 728
-    # Keep lettering legible even where a bright jacket crosses the panel.
-    d.polygon([(x-24,top-18),(x+650,top-18),(x+625,H),(x-24,H)], fill=(5,12,14,218))
-    d.rectangle((x,top,x+52,top+52),fill=(*AMBER,245))
-    d.text((x+8,top+5),f"{index:02d}",font=font("IBMPlexMono-Medium.ttf",27),fill=(10,15,15,255))
-    draw_tracking(d,(x+71,top+14),"LIBERTY CITY",font("IBMPlexMono-Medium.ttf",22),(*PAPER,220),3)
-    lines=scene.title.split("\n")
-    available=630
-    sz=92 if len(lines)>1 else 106
-    f=font("Anton-Regular.ttf",sz)
-    while max(d.textbbox((0,0),line,font=f)[2] for line in lines)>available and sz>55:
-        sz -= 2;f=font("Anton-Regular.ttf",sz)
-    y=top+74
-    for line in lines:
-        # Anton has a large top bearing: position by its actual ink bounds,
-        # so the subtitle never overlaps the final line.
-        box=d.textbbox((0,0),line,font=f)
-        d.text((x,y-box[1]),line,font=f,fill=(*PAPER,255),stroke_width=3,stroke_fill=(2,5,6,200))
-        y+=box[3]-box[1]+10
-    draw_tracking(d,(x,y+10),scene.sub,font("IBMPlexMono-Medium.ttf",20),(*AMBER,235),2)
+def title_layer(scene: Scene) -> Image.Image | None:
+    # The user's single requested title is visible in frame zero. No titles,
+    # numbers, city labels or captions are drawn on the photo scenes.
+    if scene.key != "opening":
+        return None
+    im = Image.new("RGBA", (W, H))
+    d = ImageDraw.Draw(im)
+    d.text((150, 265), "Spartak", font=font("Anton-Regular.ttf", 270),
+           fill=(*PAPER, 255), stroke_width=4, stroke_fill=(0, 0, 0, 175))
+    d.rectangle((157, 650, 450, 654), fill=(*AMBER, 235))
     return im
-
 
 def build_scene(scene: Scene, index: int, folder: Path):
     folder.mkdir(parents=True,exist_ok=True)
@@ -259,21 +223,24 @@ def build_scene(scene: Scene, index: int, folder: Path):
     base_layer(scene,index).save(bg,quality=94,subsampling=0,optimize=True,progressive=True)
     if scene.photo:
         cutout(scene).save(fg,optimize=True)
-    title_layer(scene,index).save(title,optimize=True)
-    return bg,(fg if scene.photo else None),title
+    typography = title_layer(scene)
+    if typography:
+        typography.save(title,optimize=True)
+    return bg,(fg if scene.photo else None),(title if typography else None)
 
 
 def main():
     import argparse
     p=argparse.ArgumentParser();p.add_argument("--examples",action="store_true");args=p.parse_args()
     out=BASE.parent/".qc"/"intro_design";out.mkdir(parents=True,exist_ok=True)
-    scenes=[SCENES[i] for i in (0,1,2,5,6,7,9,11,12,13,15,16,17,18)] if args.examples else SCENES
+    scenes=[SCENES[i] for i in (0,1,2,4,5,6,7,8,9,10,11,12,13,14,15,16)] if args.examples else SCENES
     thumbs=[]
     for scene in scenes:
         i=SCENES.index(scene);bg,fg,title=build_scene(scene,i,out)
         canvas=Image.open(bg).convert("RGBA")
         if fg:canvas.alpha_composite(Image.open(fg))
-        canvas.alpha_composite(Image.open(title));canvas.convert("RGB").resize((640,360)).save(out/f"{scene.key}_preview.jpg",quality=90)
+        if title:canvas.alpha_composite(Image.open(title))
+        canvas.convert("RGB").resize((640,360)).save(out/f"{scene.key}_preview.jpg",quality=90)
         thumbs.append((scene.key,canvas.convert("RGB").resize((480,270))))
         print(scene.key,flush=True)
     rows=math.ceil(len(thumbs)/3);sheet=Image.new("RGB",(1440,rows*294),(12,15,16));d=ImageDraw.Draw(sheet)
