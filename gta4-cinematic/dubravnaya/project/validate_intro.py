@@ -12,6 +12,8 @@ from intro_design import ACCENT_FRAMES, BASE, FPS, H, MUSIC_ACCENTS, MUSIC_START
 from render_intro import FF, MUSIC, hard_cut_before, validate
 from analyze_music import find_accents
 from prepare_images import MAX_EDGE
+from validate_motion import verify_encoded_motion
+from validate_continuity import verify_continuity
 
 
 def ff(*args, check=True):
@@ -98,24 +100,15 @@ def verify_transitions_and_contact_sheet(video):
 
     for i, b in enumerate(ACCENT_FRAMES[:-1], start=1):
         shot = SCENES[i]
-        if hard_cut_before(i):
-            # Groups meet on a hard cut; no xfade is applied at this boundary.
-            diffs = {n: np.abs(images[n].astype('float32') - images[n-1]).mean()
-                     for n in range(b-3, b+4)}
-            if max(diffs, key=diffs.get) != b:
-                raise ValueError(f'Hard cut for {shot.key} is not at frame {b}: {diffs}')
-            print(f'  frame {b:4} {shot.key:10} hard cut on marker')
-        elif shot.split == 'fade':
-            a = images[b-6].astype('float32')
-            z = images[b+6].astype('float32')
-            at = images[b].astype('float32')
-            diff = z-a
-            ratio = float(np.sum((at-a)*diff) / max(1.0, np.sum(diff*diff)))
-            if not .32 <= ratio <= .68:
-                raise ValueError(f'Dissolve midpoint for {shot.key} misses frame {b}: {ratio:.3f}')
-            print(f'  frame {b:4} {shot.key:10} dissolve mix {ratio:.3f}')
-        else:
-            print(f'  frame {b:4} {shot.key:10} {shot.split} midpoint (see contact sheet)')
+        if not hard_cut_before(i) or shot.split != 'cut':
+            raise ValueError(f'Photo layers overlap at {shot.key}')
+        # The first frame of the next shot must appear exactly on the marker;
+        # the cut avoids showing two neighboring versions of one person.
+        diffs = {n: np.abs(images[n].astype('float32') - images[n-1]).mean()
+                 for n in range(b-3, b+4)}
+        if max(diffs, key=diffs.get) != b:
+            raise ValueError(f'Hard cut for {shot.key} is not at frame {b}: {diffs}')
+        print(f'  frame {b:4} {shot.key:10} single-shot cut on marker')
 
     qc = REPO / '.qc' / 'dubravnaya'
     qc.mkdir(parents=True, exist_ok=True)
@@ -178,8 +171,9 @@ def main():
     duration = int(match[1])*3600 + int(match[2])*60 + float(match[3])
     if abs(duration-expected) > 1/FPS+.01:
         raise ValueError(f'Duration {duration}, expected {expected}')
-    if f'{W}x{H}' not in vl or f'{FPS} fps' not in vl or 'h264' not in vl.lower():
-        raise ValueError(vl)
+    if (f'{W}x{H}' not in vl or f'{FPS} fps' not in vl or 'h264' not in vl.lower()
+            or 'yuv420p(tv, bt709' not in vl.lower()):
+        raise ValueError(f'Unexpected video format, range or colour metadata: {vl}')
     if 'aac' not in al.lower() or '48000 Hz' not in al or 'stereo' not in al:
         raise ValueError(f'Audio missing or incorrect: {al}')
     print(f'Duration {duration:.2f}s; {vl}; {al}')
@@ -211,6 +205,10 @@ def main():
     verify_audio_alignment(video)
     print('Checking encoded transitions:')
     verify_transitions_and_contact_sheet(video)
+    print('Tracking motion inside each encoded subject mask:')
+    verify_encoded_motion(video, SCENES, BASE, FF, hard_cut_before, REPO/'.qc'/'dubravnaya_motion')
+    print('Checking frame-by-frame and stereo soundtrack continuity:')
+    verify_continuity(video, MUSIC, FF, FPS, sum(s.frames for s in SCENES), MUSIC_START)
     print('All automated checks passed. Review the visual sheets and listen to the export separately.')
 
 

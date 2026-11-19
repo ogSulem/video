@@ -16,23 +16,32 @@ import imageio_ffmpeg
 from intro_design import (
     ACCENT_FRAMES, BASE, FPS, H, MUSIC_ACCENTS, MUSIC_START, SCENES, W, build_scene,
 )
+from motion_art import INSET
+from motion_render import figure_filters
+from PIL import Image
 from process_photos import NEW_PHOTOS
 
 FF = shutil.which("ffmpeg") or imageio_ffmpeg.get_ffmpeg_exe()
 MUSIC = BASE / 'audio' / 'gta 4 — main theme.m4a'
 MUSIC_SHA256 = 'd7bd9c1928ea5c264f0ea524ef11fc86127915fe292a7340a7b76176c33e900c'
-TRANSITION_FRAMES = 8
-HALF_TRANSITION = TRANSITION_FRAMES // 2
-GROUP_SIZE = 5
+# Preserve the approved photo order as well as membership. A set-only check
+# would miss accidentally reordered scenes in a future edit.
+PHOTO_ORDER = (
+    'IMG_6847', 'IMG_6515', 'IMG_20200819_205213_Original', 'IMG_6090',
+    'IMG_6782', 'IMG_7373', 'IMG_20191118_130227_Original', 'IMG_6871',
+    'IMG_7149', 'IMG_20210101_003521_Original', 'IMG_6919', 'IMG_6864',
+    'IMG_6923', 'IMG_6853', 'IMG_6854', 'IMG_6868', 'IMG_6859',
+    'IMG_6851', 'IMG_6759', 'IMG_6779',
+)
 
 
 def hard_cut_before(index):
-    """Keep the opening entirely on screen until the first musical attack.
+    """Show only one photo at a time, including at every beat-marked cut.
 
-    Later hard cuts divide rendering into manageable groups. Other boundaries
-    use the incoming scene's eight-frame dissolve or slide.
+    The same person may appear in adjacent photos. Mixing or wiping those
+    shots together would create a visible duplicate even with distinct images.
     """
-    return index == 1 or (index > 1 and (index - 1) % GROUP_SIZE == 0)
+    return index > 0
 
 
 def run(args):
@@ -58,29 +67,37 @@ def validate():
         elapsed += s.frames
         if elapsed != frame or abs(frame / FPS - (accent - MUSIC_START)) > .5 / FPS + 1e-9:
             raise ValueError(f'Music marker out of frame tolerance: {s.key}')
-        if s.frames < TRANSITION_FRAMES * 2:
-            raise ValueError(f'Scene too short for its transition: {s.key}')
-        required = [BASE / 'assets' / 'plates' / f'{s.plate}.jpg']
+        if s.frames < 16:
+            raise ValueError(f'Scene too short for continuous motion: {s.key}')
+        if s.split != 'cut':
+            raise ValueError(f'Overlapping transitions could duplicate a person: {s.key}')
+        if s.side not in ('left', 'right') or not 0 < s.crop <= 1:
+            raise ValueError(f'Invalid figure framing: {s.key}')
+        required = [BASE/'assets'/'plates'/f'{s.plate}.jpg']
         if s.photo:
-            required += [BASE / 'processed' / f'{s.photo}_gta4.jpg',
-                         BASE / 'assets' / 'cinematic_16x9' / f'{s.photo}_16x9.jpg',
-                         BASE / 'assets' / 'intro_masks' / f'{s.photo}.png']
+            required += [BASE/'assets'/'plates'/f'{INSET[s.plate]}.jpg',
+                         BASE/'processed'/f'{s.photo}_gta4.jpg',
+                         BASE/'assets'/'motion_masks'/f'{s.photo}.png']
         for path in required:
             if not path.is_file():
                 raise FileNotFoundError(path)
+        if s.photo:
+            with Image.open(required[-1]) as mask:
+                hist = mask.convert('L').histogram()
+            if sum(hist[86:]) < 50 or hist[0] < 50:
+                raise ValueError(f'Mask is empty or is an uncut photo: {s.photo}')
     originals = {p.stem for p in (BASE / 'originals').glob('*.jpeg')}
-    used = [s.photo for s in SCENES if s.photo]
-    if len(used) != 20 or len(set(used)) != 20 or set(used) != originals:
-        raise ValueError('All twenty original photos must appear exactly once')
+    used = tuple(s.photo for s in SCENES if s.photo)
+    if used != PHOTO_ORDER or len(set(used)) != 20 or set(used) != originals:
+        raise ValueError('All twenty original photos must appear once, in the approved order')
     font = BASE / 'assets' / 'fonts' / 'Anton-Regular.ttf'
     if not font.is_file():
         raise FileNotFoundError(font)
 
 
-def render_scene(scene, index, output, art, head, tail):
+def render_scene(scene, index, output, art):
     background, foreground, title = build_scene(scene, index, art)
-    frames = scene.frames + head + tail
-    seconds = frames / FPS
+    frames = scene.frames
     cmd = [FF, '-hide_banner', '-loglevel', 'error', '-y', '-filter_complex_threads', '1',
            '-loop', '1', '-framerate', str(FPS), '-i', str(background)]
     if foreground:
@@ -88,20 +105,16 @@ def render_scene(scene, index, output, art, head, tail):
     if title:
         cmd += ['-loop', '1', '-framerate', str(FPS), '-i', str(title)]
 
-    # d=1: a looped still must yield one video frame per input frame, not a
-    # full clip per still. Both motion and transition durations are frame-based.
+    # The environment drifts independently of the subject. d=1 ensures each
+    # input still produces exactly one output frame. The foreground follows its
+    # own continuous 160 px pan and 6.5% zoom across the entire photo scene.
     progress = f'on/{max(1, frames-1)}'
-    zoom = f'1.018+0.025*({progress})' if index % 2 == 0 else f'1.043-0.025*({progress})'
-    x = '(iw-iw/zoom)*.42' if scene.side == 'right' else '(iw-iw/zoom)*.58'
+    zoom = f'1.018+0.045*({progress})' if index % 2 == 0 else f'1.063-0.045*({progress})'
+    x = f'(iw-iw/zoom)*(.30+.40*({progress}))'
     graph = [(f'[0:v]scale={W}:{H},zoompan=z=\'{zoom}\':x=\'{x}\':'
               f'y=\'(ih-ih/zoom)/2\':d=1:s={W}x{H}:fps={FPS},setsar=1[bg]')]
     if foreground:
-        sign = 1 if scene.side == 'right' else -1
-        # The cutout is present from the first frame of the transition instead
-        # of fading in after the beat. Its small entrance movement settles fast.
-        xpos = f'if(lt(t,0.20),{sign}*36*(1-t/0.20),0)+{sign}*12*t/{seconds:.6f}'
-        graph += ['[1:v]format=rgba[figure]',
-                  f"[bg][figure]overlay=x='{xpos}':y=0:shortest=1:format=auto[composite]"]
+        graph += figure_filters(scene, index, foreground, frames)
     else:
         graph += ['[bg]null[composite]']
     if title:
@@ -119,38 +132,14 @@ def render_scene(scene, index, output, art, head, tail):
         fade = f',fade=t=out:st={(frames-fade_frames)/FPS:.9f}:d={fade_frames/FPS:.9f}'
     graph += [f'[framed]null{fade},scale=iw:ih:in_range=full:out_range=tv,format=yuv420p,'
               'setparams=range=limited:color_primaries=bt709:color_trc=bt709:colorspace=bt709[out]']
+    # A low CRF and the medium preset retain more fine detail than the faster
+    # draft encode; yuv420p keeps the MP4 broadly playable on common devices.
     cmd += ['-filter_complex', ';'.join(graph), '-map', '[out]', '-frames:v', str(frames), '-an',
-            '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '17', '-threads', '2',
+            '-c:v', 'libx264', '-preset', 'medium', '-crf', '14', '-threads', '2',
             '-pix_fmt', 'yuv420p', '-r', str(FPS), '-color_range', 'tv',
             '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', str(output)]
     run(cmd)
 
-
-def render_group(shots, clips, output, group_index):
-    if any(shot.split == 'cut' for shot in shots[1:]):
-        raise ValueError('A hard cut must begin a separate rendering group')
-    cmd = [FF, '-hide_banner', '-loglevel', 'error', '-y', '-filter_complex_threads', '1']
-    for clip in clips:
-        cmd += ['-i', str(clip)]
-    filters = [f'[{i}:v]settb=AVTB,setpts=PTS-STARTPTS[v{i}]' for i in range(len(clips))]
-    prev = 'v0'
-    elapsed = shots[0].frames
-    for i in range(1, len(shots)):
-        # Extend both clips by half a transition. A dissolve/slide starts four
-        # frames before the musical marker, so its visual midpoint is on it.
-        offset = (elapsed - HALF_TRANSITION) / FPS
-        filters.append(f'[{prev}][v{i}]xfade=transition={shots[i].split}:'
-                       f'duration={TRANSITION_FRAMES/FPS:.9f}:offset={offset:.9f}[vout{i}]')
-        prev = f'vout{i}'
-        elapsed += shots[i].frames
-    filters.append(f'[{prev}]format=yuv420p[out]')
-    cmd += ['-filter_complex', ';'.join(filters), '-map', '[out]', '-frames:v', str(elapsed), '-an',
-            '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-threads', '2',
-            '-pix_fmt', 'yuv420p', '-r', str(FPS), '-color_range', 'tv',
-            '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', str(output)]
-    print(f'Combining section {group_index + 1} ({elapsed/FPS:.3f}s)', flush=True)
-    run(cmd)
-    return elapsed
 
 
 def main():
@@ -169,20 +158,15 @@ def main():
         clips = []
         for i, scene in enumerate(shots):
             clip = tmp / f'shot_{i:02d}.mp4'
-            head = HALF_TRANSITION if i > 0 and not hard_cut_before(i) else 0
-            tail = HALF_TRANSITION if i + 1 < len(shots) and not hard_cut_before(i + 1) else 0
             print(f'Rendering {i+1:02}/{len(shots)} {scene.key} ({scene.frames/FPS:.3f}s)', flush=True)
-            render_scene(scene, i, clip, tmp / 'art', head, tail)
+            render_scene(scene, i, clip, tmp / 'art')
             clips.append(clip)
-        groups = []
-        total_frames = 0
-        boundaries = [0] + [i for i in range(1, len(shots)) if hard_cut_before(i)] + [len(shots)]
-        for group_index, (start, end) in enumerate(zip(boundaries, boundaries[1:])):
-            group = tmp / f'group_{group_index:02d}.mp4'
-            total_frames += render_group(shots[start:end], clips[start:end], group, group_index)
-            groups.append(group)
+        # The clips have matching codec settings and are joined without overlap
+        # or another generation of lossy video encoding. Each boundary is a
+        # single musical cut, so there cannot be two photographs in one frame.
+        total_frames = sum(s.frames for s in shots)
         listing = tmp / 'list.txt'
-        listing.write_text(''.join(f"file '{g.as_posix()}'\n" for g in groups), encoding='utf-8')
+        listing.write_text(''.join(f"file '{clip.as_posix()}'\n" for clip in clips), encoding='utf-8')
         silent = tmp / 'silent.mp4'
         run([FF, '-hide_banner', '-loglevel', 'error', '-y', '-f', 'concat', '-safe', '0',
              '-i', str(listing), '-map', '0:v:0', '-c', 'copy', str(silent)])
@@ -204,7 +188,7 @@ def main():
              '-metadata', 'title=Spartak', '-movflags', '+faststart', str(completed)])
         completed.replace(dest)  # keep the previous export intact if rendering fails
         print(f'Saved {dest} — {duration:.3f}s, {total_frames} frames, {W}x{H}, {FPS}fps', flush=True)
-        print('Cuts and transition midpoints follow the music markers within one half-frame.', flush=True)
+        print('Every cut follows a music marker within one half-frame; photos never overlap.', flush=True)
 
 
 if __name__ == '__main__':
