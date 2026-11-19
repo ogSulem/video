@@ -6,11 +6,13 @@ and OpenCV. Afterwards run refine_people_masks.py for the final masks.
 No face generation or face replacement is used. All RGB pixels remain the
 provided photographs; the masks only select the foreground.
 """
+import argparse
 from pathlib import Path
 import cv2
 import mediapipe as mp
 import numpy as np
 from PIL import Image, ImageFilter, ImageOps
+from process_photos import NEW_PHOTOS
 
 BASE = Path(__file__).resolve().parents[1]
 OUT = BASE / "assets" / "intro_masks_initial"
@@ -26,9 +28,15 @@ REFINED = {"IMG_6782", "IMG_7149"}
 
 
 def main():
-    OUT.mkdir(parents=True, exist_ok=True)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--only-new', action='store_true', help='prepare only the four newly added photos')
+    parser.add_argument('--output', type=Path, default=OUT)
+    args = parser.parse_args()
+    args.output.mkdir(parents=True, exist_ok=True)
     with mp.solutions.selfie_segmentation.SelfieSegmentation(model_selection=0) as model:
         for path in sorted((BASE / "originals").glob("*.jpeg")):
+            if args.only_new and path.name not in NEW_PHOTOS:
+                continue
             im = ImageOps.exif_transpose(Image.open(path)).convert("RGB")
             im.thumbnail((768, 1024), Image.Resampling.LANCZOS)
             w, h = im.size
@@ -178,7 +186,7 @@ def main():
                     cutoff = round(np.interp(yy*1024/h, ys, xs)*w/768)
                     alpha[yy, cutoff:] = 0
 
-            Image.fromarray(alpha, "L").filter(ImageFilter.GaussianBlur(.65)).save(OUT / f"{path.stem}.png", optimize=True)
+            Image.fromarray(alpha, "L").filter(ImageFilter.GaussianBlur(.65)).save(args.output / f"{path.stem}.png", optimize=True)
             print(f"mask: {path.stem}", flush=True)
 
 

@@ -8,8 +8,8 @@ import sys
 import numpy as np
 from scipy.signal import correlate, fftconvolve
 from PIL import Image, ImageDraw, ImageOps, ImageStat
-from intro_design import ACCENT_FRAMES, BASE, FPS, H, MUSIC_ACCENTS, SCENES, W, title_layer
-from render_intro import FF, GROUP_SIZE, MUSIC, validate
+from intro_design import ACCENT_FRAMES, BASE, FPS, H, MUSIC_ACCENTS, MUSIC_START, SCENES, W, title_layer
+from render_intro import FF, MUSIC, hard_cut_before, validate
 from analyze_music import find_accents
 
 
@@ -18,7 +18,7 @@ def ff(*args, check=True):
                           stderr=subprocess.PIPE, check=check)
 
 
-def decoded_mono(path, sr=16000, seconds=61):
+def decoded_mono(path, sr=16000, seconds=72):
     audio = ff('-v', 'error', '-i', path, '-t', seconds, '-vn', '-ac', '1',
                '-ar', sr, '-f', 'f32le', '-').stdout
     return np.frombuffer(audio, dtype='<f4').astype(np.float64)
@@ -28,10 +28,12 @@ def verify_audio_alignment(video):
     sr = 16000
     source, output = decoded_mono(MUSIC), decoded_mono(video)
     maxlag = round(.2 * sr)
-    for start in (5.2, 20.0, 39.0, 56.0):
+    # The first window straddles the opening's cut and the drum attack.
+    for start in (2.9, 8.0, 25.0, 44.0, 62.0):
         first = round(start * sr)
+        source_first = round((start + MUSIC_START) * sr)
         size = round(1.5 * sr)
-        ref = source[first:first+size]
+        ref = source[source_first:source_first+size]
         candidate = output[first-maxlag:first+size+maxlag]
         if len(ref) != size or len(candidate) != size + 2*maxlag:
             raise ValueError('Audio is unexpectedly short')
@@ -85,7 +87,7 @@ def verify_transitions_and_contact_sheet(video):
 
     for i, b in enumerate(ACCENT_FRAMES[:-1], start=1):
         shot = SCENES[i]
-        if i % GROUP_SIZE == 0:
+        if hard_cut_before(i):
             # Groups meet on a hard cut; no xfade is applied at this boundary.
             diffs = {n: np.abs(images[n].astype('float32') - images[n-1]).mean()
                      for n in range(b-3, b+4)}
@@ -120,7 +122,7 @@ def verify_transitions_and_contact_sheet(video):
     sheet.save(qc/'intro_contact_sheet.jpg', quality=90)
 
     # Before, on and after each transition. Used for manual inspection, too.
-    transitions = Image.new('RGB', (width*3, (height+label)*16), (8,11,12))
+    transitions = Image.new('RGB', (width*3, (height+label)*(len(ACCENT_FRAMES)-1)), (8,11,12))
     draw = ImageDraw.Draw(transitions)
     for i, b in enumerate(ACCENT_FRAMES[:-1]):
         for col, n in enumerate((b-5,b,b+5)):
@@ -150,7 +152,7 @@ def main():
         for p in originals:
             if hashlib.sha256(p.read_bytes()).digest() != hashlib.sha256((upload/p.name).read_bytes()).digest():
                 raise ValueError(f'Original does not match upload: {p.name}')
-        print('Original SHA-256 hashes match all 16 uploads.')
+        print(f'Original SHA-256 hashes match all {len(originals)} uploads.')
     print(f'{len(originals)} originals and full-resolution processed images; all included in edit.')
 
     expected = sum(s.frames for s in SCENES)/FPS
@@ -191,7 +193,7 @@ def main():
         raise ValueError('Music transient/grid analysis differs from the edit markers')
     print(f'Music markers rechecked: {sum(detected for _, _, detected in measured)} transient matches and '
           f'{sum(not detected for _, _, detected in measured)} grid estimate; '
-          f'maximum frame quantization error {max(abs(frame/FPS-t)*1000 for (t,_,_),frame in zip(measured,ACCENT_FRAMES)):.1f} ms.')
+          f'maximum frame quantization error {max(abs(frame/FPS-(t-MUSIC_START))*1000 for (t,_,_),frame in zip(measured,ACCENT_FRAMES)):.1f} ms.')
     print('Checking encoded audio against source:')
     verify_audio_alignment(video)
     print('Checking encoded transitions:')

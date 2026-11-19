@@ -14,8 +14,9 @@ from pathlib import Path
 
 import imageio_ffmpeg
 from intro_design import (
-    ACCENT_FRAMES, BASE, FPS, H, MUSIC_ACCENTS, SCENES, W, build_scene,
+    ACCENT_FRAMES, BASE, FPS, H, MUSIC_ACCENTS, MUSIC_START, SCENES, W, build_scene,
 )
+from process_photos import NEW_PHOTOS
 
 FF = shutil.which("ffmpeg") or imageio_ffmpeg.get_ffmpeg_exe()
 MUSIC = BASE / 'audio' / 'gta 4 — main theme.m4a'
@@ -23,6 +24,15 @@ MUSIC_SHA256 = 'd7bd9c1928ea5c264f0ea524ef11fc86127915fe292a7340a7b76176c33e900c
 TRANSITION_FRAMES = 8
 HALF_TRANSITION = TRANSITION_FRAMES // 2
 GROUP_SIZE = 5
+
+
+def hard_cut_before(index):
+    """Keep the opening entirely on screen until the first musical attack.
+
+    Later hard cuts divide rendering into manageable groups. Other boundaries
+    use the incoming scene's eight-frame dissolve or slide.
+    """
+    return index == 1 or (index > 1 and (index - 1) % GROUP_SIZE == 0)
 
 
 def run(args):
@@ -37,12 +47,16 @@ def validate():
         raise FileNotFoundError(MUSIC)
     if hashlib.sha256(MUSIC.read_bytes()).hexdigest() != MUSIC_SHA256:
         raise ValueError('The music file has changed; remeasure the edit markers before rendering.')
-    if len(SCENES) != len(MUSIC_ACCENTS) or len(SCENES) != 17:
-        raise ValueError('Expected one opening and sixteen photo scenes')
+    if len(SCENES) != len(MUSIC_ACCENTS) or len(SCENES) != 21:
+        raise ValueError('Expected one opening and twenty photo scenes')
+    if SCENES[0].photo is not None or SCENES[0].frames != round(3.5 * FPS) or SCENES[1].split != 'cut':
+        raise ValueError('The Spartak opening must cut to the first photo at 3.5 seconds')
+    if {s.photo for s in SCENES[1:5]} != {Path(name).stem for name in NEW_PHOTOS}:
+        raise ValueError('The four new photos must immediately follow the opening')
     elapsed = 0
     for s, frame, accent in zip(SCENES, ACCENT_FRAMES, MUSIC_ACCENTS):
         elapsed += s.frames
-        if elapsed != frame or abs(frame / FPS - accent) > .5 / FPS + 1e-9:
+        if elapsed != frame or abs(frame / FPS - (accent - MUSIC_START)) > .5 / FPS + 1e-9:
             raise ValueError(f'Music marker out of frame tolerance: {s.key}')
         if s.frames < TRANSITION_FRAMES * 2:
             raise ValueError(f'Scene too short for its transition: {s.key}')
@@ -56,8 +70,8 @@ def validate():
                 raise FileNotFoundError(path)
     originals = {p.stem for p in (BASE / 'originals').glob('*.jpeg')}
     used = [s.photo for s in SCENES if s.photo]
-    if len(used) != 16 or len(set(used)) != 16 or set(used) != originals:
-        raise ValueError('All sixteen original photos must appear exactly once')
+    if len(used) != 20 or len(set(used)) != 20 or set(used) != originals:
+        raise ValueError('All twenty original photos must appear exactly once')
     font = BASE / 'assets' / 'fonts' / 'Anton-Regular.ttf'
     if not font.is_file():
         raise FileNotFoundError(font)
@@ -113,6 +127,8 @@ def render_scene(scene, index, output, art, head, tail):
 
 
 def render_group(shots, clips, output, group_index):
+    if any(shot.split == 'cut' for shot in shots[1:]):
+        raise ValueError('A hard cut must begin a separate rendering group')
     cmd = [FF, '-hide_banner', '-loglevel', 'error', '-y', '-filter_complex_threads', '1']
     for clip in clips:
         cmd += ['-i', str(clip)]
@@ -153,16 +169,17 @@ def main():
         clips = []
         for i, scene in enumerate(shots):
             clip = tmp / f'shot_{i:02d}.mp4'
-            head = HALF_TRANSITION if i % GROUP_SIZE else 0
-            tail = HALF_TRANSITION if i + 1 < len(shots) and (i + 1) % GROUP_SIZE else 0
+            head = HALF_TRANSITION if i > 0 and not hard_cut_before(i) else 0
+            tail = HALF_TRANSITION if i + 1 < len(shots) and not hard_cut_before(i + 1) else 0
             print(f'Rendering {i+1:02}/{len(shots)} {scene.key} ({scene.frames/FPS:.3f}s)', flush=True)
             render_scene(scene, i, clip, tmp / 'art', head, tail)
             clips.append(clip)
         groups = []
         total_frames = 0
-        for k in range(0, len(shots), GROUP_SIZE):
-            group = tmp / f'group_{k//GROUP_SIZE:02d}.mp4'
-            total_frames += render_group(shots[k:k+GROUP_SIZE], clips[k:k+GROUP_SIZE], group, k//GROUP_SIZE)
+        boundaries = [0] + [i for i in range(1, len(shots)) if hard_cut_before(i)] + [len(shots)]
+        for group_index, (start, end) in enumerate(zip(boundaries, boundaries[1:])):
+            group = tmp / f'group_{group_index:02d}.mp4'
+            total_frames += render_group(shots[start:end], clips[start:end], group, group_index)
             groups.append(group)
         listing = tmp / 'list.txt'
         listing.write_text(''.join(f"file '{g.as_posix()}'\n" for g in groups), encoding='utf-8')
@@ -173,17 +190,21 @@ def main():
         dest = (BASE.parent / '.qc' / 'intro_test.mp4' if args.test_scenes
                 else BASE / 'output' / 'spartak_intro.mp4')
         dest.parent.mkdir(exist_ok=True)
-        # The supplied file is already loud. Fixed attenuation leaves headroom
-        # for inter-sample and AAC peaks; the original dynamics are preserved.
-        # The full source is longer than the video, so the last 2 s fade out.
-        audio_filter = (f'atrim=start=0:duration={duration:.9f},asetpts=PTS-STARTPTS,'
-                        f'volume=-5dB,afade=t=out:st={max(0, duration-2):.9f}:d=2,aresample=48000')
+        # Trim the lead-in so the first repeated percussion attack (4.840 s
+        # in the source) lands on the first photo at 3.500 s. A brief fade-in
+        # prevents a click at the trim point; it does not affect the attack.
+        # Fixed attenuation leaves headroom without altering the dynamics.
+        audio_filter = (f'atrim=start={MUSIC_START:.9f}:duration={duration:.9f},asetpts=PTS-STARTPTS,'
+                        f'afade=t=in:st=0:d=0.08,volume=-5dB,'
+                        f'afade=t=out:st={max(0, duration-2):.9f}:d=2,aresample=48000')
+        completed = tmp / 'completed.mp4'
         run([FF, '-hide_banner', '-loglevel', 'error', '-y', '-i', str(silent), '-i', str(MUSIC),
              '-map', '0:v:0', '-map', '1:a:0', '-filter:a', audio_filter, '-c:v', 'copy',
              '-c:a', 'aac', '-b:a', '192k', '-ac', '2', '-t', f'{duration:.9f}',
-             '-metadata', 'title=Spartak', '-movflags', '+faststart', str(dest)])
+             '-metadata', 'title=Spartak', '-movflags', '+faststart', str(completed)])
+        completed.replace(dest)  # keep the previous export intact if rendering fails
         print(f'Saved {dest} — {duration:.3f}s, {total_frames} frames, {W}x{H}, {FPS}fps', flush=True)
-        print('Transitions are centred on the measured music accents, within one half-frame.', flush=True)
+        print('Cuts and transition midpoints follow the music markers within one half-frame.', flush=True)
 
 
 if __name__ == '__main__':

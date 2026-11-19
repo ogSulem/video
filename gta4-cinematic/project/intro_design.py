@@ -17,20 +17,22 @@ W, H, FPS = 1920, 1080, 24
 PAPER = (237, 232, 218)
 AMBER = (201, 157, 107)
 
-# Phrase accents in the supplied, slowed track. Most were matched against the
-# same percussive transient; 45.0252 is the corresponding rhythmic-grid point
-# in a quieter/changed bar. The last marker is the end of the music excerpt.
-# At 24 fps, each accent can be represented only to the nearest 1/24 second.
+# Music source time (not output time). The first repeated drum attack occurs
+# at 4.840 s; starting at 1.340 s places it exactly at 3.500 s / frame 84.
+# Three half-phrase accents give the four new photographs a brisk entrance;
+# subsequent cuts follow the full phrase. 45.0252 is a quieter grid estimate.
+# The last marker is the end of the excerpt, not another picture.
+MUSIC_START = 1.3400
 MUSIC_ACCENTS = (
-    4.8400, 8.4932, 12.1464, 15.7995, 19.4528, 23.1060,
-    26.7591, 30.4123, 34.0654, 37.7186, 41.3717, 45.0252,
-    48.6781, 52.3312, 55.9845, 59.6376, 63.2910,
+    4.8400, 6.6788, 8.4932, 10.3320, 12.1463, 15.7995, 19.4528,
+    23.1059, 26.7591, 30.4123, 34.0654, 37.7185, 41.3717, 45.0252,
+    48.6781, 52.3312, 55.9844, 59.6376, 63.2910, 66.9441, 70.5973,
 )
-ACCENT_FRAMES = tuple(round(t * FPS) for t in MUSIC_ACCENTS)
+ACCENT_FRAMES = tuple(round((t - MUSIC_START) * FPS) for t in MUSIC_ACCENTS)
 SCENE_DURATIONS = tuple(b - a for a, b in zip((0,) + ACCENT_FRAMES, ACCENT_FRAMES))
 # Complex group/seat/arm poses remain inside intact angled photo panels rather
 # than using an imperfect mask that could make limbs or bodies look broken.
-PHOTO_PANELS = {"drive", "party", "escape", "longnight"}
+PHOTO_PANELS = {"park", "drive", "party", "escape", "longnight"}
 
 
 @dataclass(frozen=True)
@@ -45,27 +47,32 @@ class Scene:
     split: str = "fade"
 
 
-# One title card and all sixteen photographs. The last image fades out; there
-# is no separate GTA title card. Scene durations are quantized independently,
-# avoiding cumulative drift from rounding a constant number of frames per beat.
+# One title card and all twenty photographs: the four new ones first, then
+# the previous sixteen. The title cuts directly to the first photo on the
+# musical accent; the last photo fades out with no separate closing card.
+# Quantize absolute markers to avoid cumulative rounding drift.
 SCENES = [
     Scene("opening", None, "harbor_blue_hour", "right", SCENE_DURATIONS[0]),
-    Scene("arrival", "IMG_6782", "harbor_blue_hour", "right", SCENE_DURATIONS[1], .78, split="slideleft"),
-    Scene("work", "IMG_7373", "industrial_dawn", "left", SCENE_DURATIONS[2], .67, split="fade"),
-    Scene("street", "IMG_20191118_130227_Original", "diner_night", "right", SCENE_DURATIONS[3], .66, split="slideright"),
-    Scene("drive", "IMG_6871", "rain_street", "left", SCENE_DURATIONS[4], .80, split="fade"),
-    Scene("night", "IMG_7149", "rain_street", "right", SCENE_DURATIONS[5], .57, split="slideleft"),
-    Scene("party", "IMG_20210101_003521_Original", "diner_night", "left", SCENE_DURATIONS[6], .65, split="fade"),
-    Scene("bond", "IMG_6919", "subway_platform", "right", SCENE_DURATIONS[7], .95, split="slideleft"),
-    Scene("loyalty", "IMG_6864", "diner_night", "left", SCENE_DURATIONS[8], .80, split="slideright"),
-    Scene("together", "IMG_6923", "rain_street", "right", SCENE_DURATIONS[9], .94, split="fade"),
-    Scene("rules", "IMG_6853", "subway_platform", "left", SCENE_DURATIONS[10], .65, split="slideleft"),
-    Scene("crew", "IMG_6854", "diner_night", "right", SCENE_DURATIONS[11], .70, split="fade"),
-    Scene("escape", "IMG_6868", "harbor_blue_hour", "left", SCENE_DURATIONS[12], .85, split="slideright"),
-    Scene("freedom", "IMG_6859", "rain_street", "right", SCENE_DURATIONS[13], .72, split="fade"),
-    Scene("longnight", "IMG_6851", "subway_platform", "left", SCENE_DURATIONS[14], .95, split="slideleft"),
-    Scene("smoke", "IMG_6759", "industrial_dawn", "right", SCENE_DURATIONS[15], .69, split="fade"),
-    Scene("portrait", "IMG_6779", "diner_night", "left", SCENE_DURATIONS[16], .70, split="slideright"),
+    Scene("nightcap", "IMG_6847", "rain_street", "right", SCENE_DURATIONS[1], .72, split="cut"),
+    Scene("bench", "IMG_6515", "subway_platform", "left", SCENE_DURATIONS[2], .83, split="fade"),
+    Scene("park", "IMG_20200819_205213_Original", "diner_night", "left", SCENE_DURATIONS[3], .75, split="slideleft"),
+    Scene("jacket", "IMG_6090", "industrial_dawn", "right", SCENE_DURATIONS[4], .70, split="fade"),
+    Scene("arrival", "IMG_6782", "harbor_blue_hour", "right", SCENE_DURATIONS[5], .78, split="slideleft"),
+    Scene("work", "IMG_7373", "industrial_dawn", "left", SCENE_DURATIONS[6], .67, split="fade"),
+    Scene("street", "IMG_20191118_130227_Original", "diner_night", "right", SCENE_DURATIONS[7], .66, split="slideright"),
+    Scene("drive", "IMG_6871", "rain_street", "left", SCENE_DURATIONS[8], .80, split="fade"),
+    Scene("night", "IMG_7149", "rain_street", "right", SCENE_DURATIONS[9], .57, split="slideleft"),
+    Scene("party", "IMG_20210101_003521_Original", "diner_night", "left", SCENE_DURATIONS[10], .65, split="fade"),
+    Scene("bond", "IMG_6919", "subway_platform", "right", SCENE_DURATIONS[11], .95, split="slideleft"),
+    Scene("loyalty", "IMG_6864", "diner_night", "left", SCENE_DURATIONS[12], .80, split="slideright"),
+    Scene("together", "IMG_6923", "rain_street", "right", SCENE_DURATIONS[13], .94, split="fade"),
+    Scene("rules", "IMG_6853", "subway_platform", "left", SCENE_DURATIONS[14], .65, split="slideleft"),
+    Scene("crew", "IMG_6854", "diner_night", "right", SCENE_DURATIONS[15], .70, split="fade"),
+    Scene("escape", "IMG_6868", "harbor_blue_hour", "left", SCENE_DURATIONS[16], .85, split="slideright"),
+    Scene("freedom", "IMG_6859", "rain_street", "right", SCENE_DURATIONS[17], .72, split="fade"),
+    Scene("longnight", "IMG_6851", "subway_platform", "left", SCENE_DURATIONS[18], .95, split="slideleft"),
+    Scene("smoke", "IMG_6759", "industrial_dawn", "right", SCENE_DURATIONS[19], .69, split="fade"),
+    Scene("portrait", "IMG_6779", "diner_night", "left", SCENE_DURATIONS[20], .70, split="slideright"),
 ]
 
 
@@ -142,8 +149,10 @@ def cutout(scene: Scene) -> Image.Image:
         # Preserve difficult overlapping figures/props as an intact graphic
         # photo panel rather than cutting off limbs or inventing missing pixels.
         image = Image.open(BASE / "assets" / "cinematic_16x9" / f"{scene.photo}_16x9.jpg").convert("RGB")
-        panel_w = 1280
-        center = {"escape": (.05, .5), "party": (.33, .5)}.get(scene.key, (.5, .5))
+        # The new night-street image includes a second person at the edge;
+        # its wider panel preserves the photographed group and the raised arm.
+        panel_w = 1450 if scene.key == "park" else 1280
+        center = {"park": (.02, .5), "escape": (.05, .5), "party": (.33, .5)}.get(scene.key, (.5, .5))
         photo = ImageOps.fit(image, (panel_w, H), method=Image.Resampling.LANCZOS, centering=center).convert("RGBA")
         layer = Image.new("RGBA", (W, H))
         x = 0 if scene.side == "left" else W-panel_w
@@ -233,7 +242,7 @@ def main():
     import argparse
     p=argparse.ArgumentParser();p.add_argument("--examples",action="store_true");args=p.parse_args()
     out=BASE.parent/".qc"/"intro_design";out.mkdir(parents=True,exist_ok=True)
-    scenes=[SCENES[i] for i in (0,1,2,4,5,6,7,8,9,10,11,12,13,14,15,16)] if args.examples else SCENES
+    scenes=SCENES[:7] + SCENES[9::2] if args.examples else SCENES
     thumbs=[]
     for scene in scenes:
         i=SCENES.index(scene);bg,fg,title=build_scene(scene,i,out)
